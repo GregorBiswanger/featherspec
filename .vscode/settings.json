@@ -1,0 +1,7 @@
+{
+  "chat.useAgentsMdFile": true,
+  "chat.useClaudeMdFile": false,
+  "chat.instructionsFilesLocations": { ".claude/rules": true },
+  "chat.agentSkillsLocations": { ".claude/skills": true },
+  "chat.agentFilesLocations": { ".github/agents": true, ".claude/agents": true }
+}
