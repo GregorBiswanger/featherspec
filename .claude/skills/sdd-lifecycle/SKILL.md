@@ -22,6 +22,11 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
 
 ## Rules
 
+> These restate the *Spec lifecycle* policy from `AGENTS.md` on purpose: this skill is the one
+> that performs the moves and deletions, so the safety rules must be in front of the model at
+> the moment it acts. `AGENTS.md` stays authoritative — if the two ever diverge, follow it and
+> fix this list.
+
 - Spec files are Markdown, written in the language set by `DocLanguage` in `AGENTS.md`.
 - Lifecycle folders: `.specs/backlog/` (ideas), `.specs/active/` (in progress),
   `.specs/done/` (implemented, acceptance criteria satisfied).

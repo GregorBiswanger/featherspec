@@ -116,7 +116,8 @@ are workflows with side effects, so they run only when you invoke them, never au
 
 ## How the two stay in sync
 
-The rule: **no rule and no workflow is written down twice.**
+The rule: **no rule and no workflow is written down twice** — apart from two reinforcements
+listed below, which are deliberate and documented.
 
 - **`AGENTS.md` is the only place mutable state lives** — `DocLanguage`, the `architecture:`
   snapshot, and *Style & Output Preferences*. Every command that changes those writes to
@@ -124,6 +125,24 @@ The rule: **no rule and no workflow is written down twice.**
 - **Rules and skills are single files both tools read.** No `.github/instructions/`, no
   `.github/prompts/`, no `.github/copilot-instructions.md` — they would only duplicate what
   `.claude/rules/` and `.claude/skills/` already provide.
+- **`AGENTS.md` states policy; rule files state craft.** `AGENTS.md` defines the spec
+  lifecycle and the Memory Bank file set. `.claude/rules/specs.md` and
+  `.claude/rules/memory-bank.md` cover only how to *write* those files, and link to
+  `AGENTS.md` for the policy. `.specs/README.md` is orientation and links rather than
+  restating.
+
+### The two documented exceptions
+
+Both exist because a path-scoped rule loads only when a **matching file is read**, which can
+be too late for a skill that is creating or moving that very file:
+
+| Reinforcement | Where | Why |
+| --- | --- | --- |
+| Spec essentials (`DocLanguage`, the `**Status:**` line, the section skeleton) | `sdd-specify/SKILL.md` | a brand-new spec has not been read, so `.claude/rules/specs.md` may not have loaded yet |
+| Spec lifecycle safety rules (one folder at a time, delete the original, duplicate check) | `sdd-lifecycle/SKILL.md` | this skill performs the moves and deletions; the safety rules must be in front of the model as it acts |
+
+In both cases `AGENTS.md` remains authoritative: if a copy ever diverges, fix the copy. Do not
+"clean up" these two by deleting them.
 
 ### Deliberate constraints in the shared skills
 
@@ -135,17 +154,10 @@ denominator. Each constraint has a reason:
 - **No `$ARGUMENTS` / `$0` / `$1`.** Same reason. Skills say "the user may name a spec path
   after the command; if none is given, list the candidates and ask." Both tools append the
   user's trailing text to the invocation, so the model still sees it.
-- **`name` equals the directory name.** Required by VS Code (mismatch = silent load failure)
-  and harmless in Claude Code.
+- **`name` equals the directory name.** Required by VS Code (a mismatch means the skill is not
+  loaded) and harmless in Claude Code.
 
 A comment at the top of each `SKILL.md` restates this so nobody reintroduces the syntax later.
-
-### The path-scoped-rule caveat
-
-`.claude/rules/*.md` load when a **matching file is read**, not on every call. When
-`/sdd-specify` creates a brand-new spec, the `.specs/**` rule (`specs.md`) may not have
-triggered yet, so `/sdd-specify` restates the essentials (`DocLanguage`, the `**Status:**`
-line, the section skeleton) itself. Do not "clean up" that duplication.
 
 ## Adding your own skills and rules
 

@@ -5,6 +5,10 @@ paths:
 
 # Memory Bank writing rules
 
+The Memory Bank file list, each file's purpose, and the size limit on `activeContext.md` are
+defined in `AGENTS.md` (loaded every session). These rules cover only what is specific to
+**writing Memory Bank files**:
+
 - Write in the language specified by `DocLanguage` in `AGENTS.md`.
 - Keep entries concise, factual, and actionable.
 - If architecture changes, update `systemPatterns.md` and record "Changed Recently" in `activeContext.md`.
@@ -16,8 +20,8 @@ changelog, not a wiki, and not a second spec. It must answer in 30 seconds: *wha
 working on, which spec is authoritative, what was recently decided/changed, what is next, and
 what does the agent need to know right now?*
 
-**Keep it to max 1–2 screen pages.** If it grows longer, information belongs in a more
-permanent file.
+If it outgrows the size limit stated in `AGENTS.md`, the surplus belongs in a more permanent
+file — see the table below.
 
 ### Structure
 

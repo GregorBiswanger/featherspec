@@ -1,17 +1,13 @@
 # Specs
 
-Specs live under `.specs/` and are organized by lifecycle stage:
+Specs live here, one folder per lifecycle stage:
 
 - `.specs/backlog/` — ideas and not-yet-started specs
 - `.specs/active/` — specs currently being implemented
 - `.specs/done/` — implemented specs with passing acceptance criteria
 
-Each spec declares its status near the top:
+The normative rules — the status vocabulary, the one-folder-at-a-time rule, and the move
+procedure — are defined in [`AGENTS.md`](../AGENTS.md) under *Spec lifecycle*. Do not restate
+them here; that file is the single source of truth and is loaded in every session.
 
-`**Status:** Draft | In Progress | Implemented | Deprecated`
-
-A spec exists in **exactly one** lifecycle folder at a time. Use `/sdd-lifecycle` to move
-specs and update their status; it deletes the original after moving so no duplicates remain.
-
-The documentation language is controlled by `DocLanguage` in `AGENTS.md`
-(default English until `/sdd-setup` sets it).
+Use `/sdd-specify` to create a spec and `/sdd-lifecycle` to change its status or move it.
