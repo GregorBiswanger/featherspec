@@ -25,11 +25,11 @@ that both tools read. Only genuinely tool-specific things stay separate.
 | Artifact | Claude Code | VS Code Copilot | Caveats |
 | --- | --- | --- | --- |
 | `AGENTS.md` (constitution) | via `@AGENTS.md` import in `CLAUDE.md` | native, [`chat.useAgentsMdFile`] (default on) | the single source of truth for both |
-| `CLAUDE.md` | native | native, `chat.useClaudeMdFile` — **off** here on purpose | Copilot would not expand Claude's `@` import anyway; we point Copilot straight at `AGENTS.md` |
-| `.claude/rules/*.md` (`paths:`) | native, loads when a matching file is read | native — reads `paths:` instead of `applyTo:`; defaults to `**` when omitted | **not** a default location for a *workspace* `.claude/rules`; `.vscode/settings.json` enables it |
-| `.claude/skills/<name>/SKILL.md` | native, `/<name>` | native — `.claude/skills` is a default project-skills location, invoked as `/<name>` | directory name **must** equal frontmatter `name`, else it silently fails to load in VS Code |
-| `.github/agents/*.agent.md` | — (kept Copilot-only, see below) | native, `chat.agentFilesLocations` (default includes `.github/agents`) | a Copilot custom agent is a *selectable persona* |
-| `hooks` in `.claude/settings.json` | native (with matchers) | native — parses Claude's format | VS Code **ignores matcher values**; a shared hook must filter on `tool_name` in the script |
+| `CLAUDE.md` | native | native, `chat.useClaudeMdFile` (default on) — **off** here on purpose | we point Copilot straight at `AGENTS.md`, so the one-line import file is redundant for it |
+| `.claude/rules/*.md` (`paths:`) | native, loads when a matching file is read | native — reads `paths:` instead of `applyTo:`; defaults to `**` when omitted | a **default** workspace location, so it works with no settings change; `.vscode/settings.json` states it explicitly to document the dependency and protect users who disabled it in their profile |
+| `.claude/skills/<name>/SKILL.md` | native, `/<name>` | native — `.claude/skills` is a default project-skills location, invoked as `/<name>` | frontmatter `name` **must match the parent directory name**, or the skill is not loaded |
+| `.github/agents/*.agent.md` | — (kept Copilot-only, see below) | native — `.github/agents` is a default location (`chat.agentFilesLocations`) | a Copilot custom agent is a *selectable persona* |
+| `hooks` in `.claude/settings.json` | native (with matchers) | reads `.claude/settings.json`, `.claude/settings.local.json` and `~/.claude/settings.json`; parses Claude's format | VS Code **ignores matcher values** — hooks run on all tool invocations, so a shared hook must filter on `tool_name` in the script |
 
 Sources: VS Code [custom instructions], [agent skills], [custom agents], [hooks], and the
 [settings reference]; Claude Code [skills] and [memory/rules].
@@ -39,8 +39,8 @@ Sources: VS Code [custom instructions], [agent skills], [custom agents], [hooks]
 | Artifact | Claude Code | VS Code Copilot |
 | --- | --- | --- |
 | Slash-command *prompt* files | `.claude/commands/*.md` | `.github/prompts/*.prompt.md` (different folder *and* extension) — **FeatherSpec uses skills instead, so it ships neither** |
-| `` !`shell` `` injection, `$ARGUMENTS`, `$0`/`$1` | supported | **not** supported (would appear as literal text) — so the shared skills use neither |
-| Everything in `.claude/settings.json` except `hooks` (`autoMemoryEnabled`, `permissions`, …) | native | ignored |
+| `` !`shell` `` injection, `$ARGUMENTS`, `$0`/`$1` | supported | **not** supported — the documented mechanism is `${input:…}` — so the shared skills use neither |
+| Everything in `.claude/settings.json` except `hooks` (`autoMemoryEnabled`, `permissions`, …) | native | no documented support (treat as ignored) |
 | MCP servers | `.mcp.json`, root key `mcpServers` | `.vscode/mcp.json`, root key `servers` |
 | Auto memory | `~/.claude/projects/<project>/memory/` | no equivalent |
 | Output styles, plugins/marketplaces | Claude-specific | Copilot-specific |
@@ -87,11 +87,10 @@ README.md, LICENSE
 
 ### GitHub Copilot (VS Code)
 
-1. Use Copilot in **Agent mode** — skills and the custom agent are surfaced there. (Per the
-   docs, skills are "available in chat and agent mode"; Agent mode is where the workflow steps
-   actually run tools.)
-2. `AGENTS.md` is read automatically (`chat.useAgentsMdFile`). The shipped `.vscode/settings.json`
-   enables the `.claude/rules` and `.claude/skills` locations.
+1. Use Copilot in **Agent mode**. The docs list skills as "available in chat and agent mode";
+   Agent mode is the one where these workflows can actually run tools and edit files.
+2. `AGENTS.md`, `.claude/rules`, and `.claude/skills` are all default locations, so this works
+   on a fresh clone. The shipped `.vscode/settings.json` restates them explicitly.
 3. Optionally select the **SpecDrivenAgent** persona from the agent picker, then run
    `/sdd-overview` or `/sdd-setup`.
 
@@ -223,9 +222,10 @@ remove the key). Copilot ignores this setting entirely.
   otherwise identical; neither file reads the other, and no setting relocates them.
 - **Hooks:** a `hooks` block in `.claude/settings.json` is read by both tools, but VS Code
   **ignores matcher values** (hooks fire on every tool invocation), so any shared hook must
-  filter on `tool_name` inside the script. Note also that the documented default of VS Code's
-  `chat.hookFilesLocations` differs between two official pages; the substance (`.claude/settings.json`
-  is read) holds regardless.
+  filter on `tool_name` inside the script. VS Code also uses camelCase hook inputs
+  (`tool_input.filePath`) and its own tool names, where Claude Code uses snake_case
+  (`tool_input.file_path`) — a shared hook has to handle both. Hooks are a Preview feature in
+  VS Code; if yours do not fire, check the `chat.useClaudeHooks` setting.
 
 ## Troubleshooting
 
@@ -235,8 +235,8 @@ remove the key). Copilot ignores this setting entirely.
 | Verify what actually loaded (VS Code Copilot) | right-click in the Chat view → **Diagnostics** — lists every loaded agent, skill, and instruction file with load status |
 | Manage / inspect Claude Code memory | `/memory` |
 | Something in the setup looks broken (Claude Code) | `/doctor` |
-| A `.claude/rules` rule did not apply | Confirm a **matching file was read** (rules load on read). In VS Code, confirm `.vscode/settings.json` enables `.claude/rules`. |
-| A skill does not appear in VS Code | Confirm the **directory name equals the `name` frontmatter**, and that you are in Agent mode. |
+| A `.claude/rules` rule did not apply | Confirm a **matching file was read** (rules load on read). In VS Code, confirm nothing set `.claude/rules` to `false` in `chat.instructionsFilesLocations`. |
+| A skill does not appear in VS Code | Confirm the **`name` frontmatter equals the parent directory name** (a mismatch means it is not loaded), and that `name` uses only lowercase letters, numbers, and hyphens — invalid characters make it fail to load silently. |
 
 ## Committing to one tool later
 
