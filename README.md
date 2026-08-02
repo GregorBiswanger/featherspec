@@ -63,7 +63,8 @@ CLAUDE.md                          one line: @AGENTS.md
 .claude/
   rules/*.md                       SHARED path-scoped rules (paths:)
   skills/sdd-*/SKILL.md            SHARED workflows (/sdd-* in both tools)
-  settings.json                    Claude-only keys (autoMemoryEnabled); Copilot ignores them
+  settings.json                    SHARED, version-controlled Claude settings
+                                   (settings.local.json is local and git-ignored)
 
 .github/
   agents/SpecDrivenAgent.agent.md  Copilot-only persona (see "Selecting the agent")
@@ -73,7 +74,7 @@ CLAUDE.md                          one line: @AGENTS.md
 .specs/                            shared data: backlog/ active/ done/  (+ README)
 .memory-bank/                      shared data: projectbrief, systemPatterns,
                                                 activeContext, techContext
-README.md, LICENSE
+README.md, LICENSE, .gitignore
 ```
 
 ## Quick start
@@ -219,6 +220,16 @@ project context. Four files:
 **Hard rule:** `activeContext.md` stays under **two screen pages**. It is a working/handoff
 context, not a changelog or a second spec. If it grows, the content belongs in a more permanent
 file — link and summarize instead of duplicating.
+
+### Shared vs. local configuration
+
+`.claude/settings.json` is **shared**: it is version-controlled and applies to everyone who
+clones the repository. `.claude/settings.local.json` is **local** — Claude Code writes it when
+you grant a permission with "don't ask again", so it holds machine- and user-specific rules,
+and VS Code reads hooks from it too. Committing it would push your personal permission set
+onto the whole team. The shipped `.gitignore` therefore excludes it, along with
+`CLAUDE.local.md` (the documented local-only memory variant, which VS Code also detects).
+Put anything the team should share in `.claude/settings.json` and `AGENTS.md`.
 
 ### Auto memory is off on purpose
 

@@ -1,0 +1,4 @@
+# Local, machine-specific agent configuration — never commit
+.claude/settings.local.json
+CLAUDE.local.md
+.github/copilot/settings.local.json
