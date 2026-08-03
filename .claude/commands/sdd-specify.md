@@ -58,8 +58,16 @@ First read the ground you already stand on, so you never ask for it:
 
 - Spec filenames in `.specs/backlog/`, `.specs/active/`, `.specs/done/` — for the next number,
   to avoid duplicating an existing spec, and to link a related one.
-- `.memory-bank/techContext.md`, `.memory-bank/systemPatterns.md`, and the `architecture:`
-  snapshot in `AGENTS.md` — stack, patterns and boundaries are known; do not ask for them.
+- `.memory-bank/techContext.md`, `.memory-bank/systemPatterns.md`, `.memory-bank/activeContext.md`,
+  and the `architecture:` snapshot in `AGENTS.md` — stack, patterns, current focus and
+  boundaries are known; do not ask for them.
+- **If this touches existing code, read the code before you ask anything.** Those Markdown files
+  describe the system; they are not the system, and they drift. Find the modules, functions and
+  tests the change would reach, and the contracts they already imply — validation, ordering,
+  error shape, persisted format. Bring back a digest of about 15 lines; do not paste file
+  contents into the interview. Then interview about the **delta** against the as-is, not against
+  a blank page, and record what you found in the spec's *Technical notes* so the plan does not
+  have to rediscover it. Ask the user only for intent and the tacit rules the code cannot tell you.
 
 Then classify silently: goal and problem · product/feature type · users and roles · domain
 complexity · technical complexity · data involvement · UI/UX relevance · integrations ·
@@ -101,6 +109,11 @@ Question budget:
 | Normal feature | 8–12 |
 | Complex feature | 12–16 |
 | Critical enterprise / compliance / AI feature | 14–20 |
+
+A spec covers **one slice you can build and get feedback on**. If the interview reaches the top
+of this table, the honest answer is usually that this is two or three specs — say so and offer
+to split before writing anything, naming the smallest slice that could be shipped and learned
+from first. A spec that outruns the next feedback signal is a plan pretending to be certainty.
 
 Announce the plan in two or three sentences before the first question — expected number, which
 areas you will cover and why, and that you will shorten or extend as needed. If the user asks
@@ -147,7 +160,7 @@ record as an assumption · *optional* → record as an open point or drop it.
 | Goal | Which concrete problem should this solve, and how would you notice it got better? |
 | Users | Who mainly uses this, and what role or permission do they have? |
 | Flow | Describe the ideal flow from the user's point of view in 3–7 steps. |
-| Scope | What should this first version deliberately *not* do yet? |
+| Scope | What should this first version deliberately *not* do yet — and for each, why not: not now, not ever, or needs a decision first? |
 | Rules | Are there rules, limits, calculations or exceptions that must hold? |
 | Data | Which data is needed, where does it come from, and which fields are mandatory or sensitive? |
 | Errors | What should happen when data is missing or invalid, or a system is unreachable? |
@@ -167,6 +180,9 @@ Before writing, check: goal understandable · benefit explained · users and rol
 delimited · rules testable · acceptance criteria present · relevant error cases named ·
 relevant data described · relevant technical constraints named · open questions visible · no
 filler sections.
+
+Then walk the five criterion shapes once. Most missing criteria live in the *state* and
+*unwanted behaviour* rows — those are the two categories prose requirements almost always miss.
 
 ## Step 5 — Write the spec file
 
@@ -198,6 +214,8 @@ consecutively so there are no gaps. Headings in `DocLanguage`.
 ## 4. Scope
 ### In scope
 ### Out of scope
+<!-- one bullet per exclusion, each ending in "— because <reason>" -->
+<!-- an exclusion without a reason reads as an oversight, and the next agent builds it anyway -->
 ## 5. Functional flow
 ## 6. Business rules
 ## 7. Functional requirements
@@ -210,20 +228,37 @@ consecutively so there are no gaps. Headings in `DocLanguage`.
 ## 14. Acceptance criteria
 ## 15. Technical notes for developers or AI agents
 ## 16. Assumptions
+<!-- one row each: | A-001 | What we assume | Why we believe it | What breaks if it is wrong | -->
+<!-- an assumption with an empty "why" column is a guess: ask instead, or move it to Open points -->
 ## 17. Open points
 ## 18. Definition of Ready
 ## 19. Definition of Done
 ## 20. Recommended next steps
 ```
 
-**Acceptance criteria** get stable IDs and a testable shape:
+**Acceptance criteria** get stable IDs and one of five shapes. Pick the shape that fits the
+requirement; combine them when a requirement needs it:
 
 ```
-AC-001: Given <starting point>, when <action>, then <expected result>.
+AC-001  The system shall <response>.                                    (always true)
+AC-002  When <trigger>, the system shall <response>.                    (event)
+AC-003  While <state holds>, the system shall <response>.               (state)
+AC-004  If <fault or misuse>, then the system shall <response>.         (unwanted behaviour)
+AC-005  Where <option or config is present>, the system shall <response>. (optional feature)
 ```
 
-Every must-requirement traces to at least one criterion, and every criterion is checkable by a
-person or a test.
+A Given/When/Then scenario may be added under a criterion to pin one concrete run down — it
+*illustrates* a criterion, it never replaces one. Forcing an always-true invariant or a
+state-long rule into an event shape narrows it, and the narrowed version is what gets built.
+
+**Vocabulary.** Use **shall** for anything binding; *should* is non-binding and appears in no
+criterion. Reject any criterion containing: typically · usually · appropriate · sufficient ·
+performant · user-friendly · fast · robust · as needed · etc. · and/or — or a passive verb with
+no actor. If you cannot say what observation would prove a criterion **false**, it is not a
+criterion: move it to *Open points* and say so at hand-off.
+
+Every must-requirement traces to at least one criterion. Prefer criteria a test can decide; when
+only a person can decide one, say who checks what.
 
 **Definition of Ready** — the spec is ready when goal and problem are unambiguous, user role
 and business value are clear, scope and out-of-scope are documented, business rules are

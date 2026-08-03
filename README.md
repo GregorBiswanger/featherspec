@@ -21,7 +21,7 @@ criteria, then into a **plan** of baby steps — and only then writes code. Spec
 and progress all live on disk as Markdown in your repository, so the next session, the next
 teammate, and the next tool pick up exactly where you left off.
 
-Eight `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
+Nine `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
 GitHub Copilot, because both tools execute the **same files**.
 
 ---
@@ -85,16 +85,28 @@ That is the entire installation. Nothing to build, nothing to run.
 
 ```mermaid
 flowchart LR
-  S["💬 /sdd-specify<br/>interview → spec"] --> P["🗺️ /sdd-plan<br/>spec → baby steps"]
-  P --> I["⚙️ implement<br/>step by step"]
-  I --> C["✅ /sdd-compile<br/>readiness check"]
+  S["💬 /sdd-specify<br/>interview → spec"] --> K["🔍 /sdd-clarify<br/>adversarial pass"]
+  K --> P["🗺️ /sdd-plan<br/>spec → baby steps"]
+  P --> R["👀 you read the plan<br/>cheapest review there is"]
+  R --> I["⚙️ implement<br/>step by step"]
+  I --> C["✅ /sdd-compile<br/>verdict + evidence"]
   C --> L["📦 /sdd-lifecycle<br/>spec → done/"]
   L -.->|next iteration| S
 ```
 
 The spec says **what and why**. The plan says **how**, in steps small enough to verify one at a
 time. Both are files, both are versioned, and a traceability table connects every acceptance
-criterion to the steps and the code paths that fulfil it.
+criterion to the steps, the code paths and the **test** that fulfil it.
+
+Two of those boxes are not commands, and that is the point. `/sdd-clarify` reads your finished
+spec as a stranger would — it cannot use the conversation that wrote it, which is precisely why
+it finds what that conversation missed. And the plan review is yours: a wrong step costs
+hundreds of lines, a wrong line costs one, so a 200-line plan is the cheapest thing you will
+read all cycle.
+
+Not every change deserves this. A typo, a config value, a one-line fix with an obvious test:
+take the fast path, say that you took it, and move on. The ceremony serves the method; it is
+not the method.
 
 ---
 
@@ -135,11 +147,30 @@ That last rule is the point of the whole exercise. It is a **product decision** 
 guess it, and no developer should invent it. In the spec it becomes a testable criterion:
 
 ```text
-AC-004: Given a bill of 100 split across 3 people, when the split is calculated,
-        then the three amounts sum to exactly 100.00.
+AC-004: The service shall return per-person amounts that sum to the bill total exactly.
 ```
 
-### ③ Let the agent plan the how
+Note the shape. That rule is always true — it has no trigger and no starting point, so writing
+it as "given a bill of 100 across 3 people, when…" would quietly shrink an invariant into one
+example, and one example is what would get built. Criteria come in five shapes for exactly this
+reason: always-true, event, state, unwanted behaviour, optional feature.
+
+### ③ Let a second pair of eyes attack the spec
+
+```text
+/sdd-clarify
+```
+
+This reads your finished spec **as a stranger** — no conversation history, no benefit of the
+doubt — and returns four lists: contradictions, terms you used in two senses, criteria nothing
+can decide, and failure modes you never named. It does not fix them. It ends with one question:
+the thing whose being wrong would cost the most.
+
+Thirty seconds of reading here is the cheapest ambiguity you will ever remove. Left alone, every
+one of those gaps gets silently resolved by the planner's best guess and hardened into numbered
+steps.
+
+### ④ Let the agent plan the how
 
 ```text
 /sdd-plan Build it as a minimal HTTP service on Node.js with the built-in http module, no
@@ -151,31 +182,51 @@ This writes `0001-bill-splitter.plan.md` right next to the spec: numbered baby s
 (`T-001`, `T-002`, …), each with a `Verify:` line you can actually run, plus a traceability
 table and a session-handoff block. Then it **stops** — planning never touches code.
 
-### ④ Implement, step by step
+### ⑤ Read the plan
+
+Now open `0001-bill-splitter.plan.md` and actually read it. This is the highest-value review
+minute in the whole cycle, and it is the one everybody skips.
+
+You are not hunting for defects. You are checking that you and the agent agree on the **why**
+and on the **order** — that step three really does depend on step two, that nothing important
+is missing, that the risky part comes first. A wrong step produces hundreds of wrong lines; a
+wrong line produces one. Two hundred lines of plan beats two thousand lines of diff.
+
+Say which steps look wrong before anything is implemented.
+
+### ⑥ Implement, step by step
 
 ```text
 Implement T-001.
 ```
 
-The agent does one focused change, runs its `Verify:` line, ticks the box in the plan, and
-records which files it touched — in the same change set as the code. Repeat until the steps are
-done. Close a session mid-way and the next one resumes from the plan file, not from your memory.
+The agent does one focused change, runs its `Verify:` line, and writes the result into the
+step's `Verified:` field — the command it ran and what came back — before it ticks the box.
+No recorded run, no tick: that one rule is what keeps a plan from becoming a list of good
+intentions. It records which files it touched in the same change set as the code. Repeat until
+the steps are done. Close a session mid-way and the next one resumes from the plan file, not
+from your memory.
 
-### ⑤ Check it against your own criteria
+### ⑦ Check it against your own criteria
 
 ```text
 /sdd-compile
 ```
 
-You get a readiness brief: every acceptance criterion marked satisfied or pending *with
-evidence*, open plan steps, whether the docs are in sync, and the next three actions. Tests run
-as part of it.
+You get a readiness brief that opens with a verdict — `READY`, `NOT READY`, or `NOT READY —
+unverified` — followed by every acceptance criterion marked satisfied or pending *with
+evidence*, the open plan steps, whether the docs are in sync, and the next three actions.
+
+Evidence means a test name and its output, or a command and its output. Not a step number, and
+not a sentence describing the code. If the suite did not run, the verdict is `unverified` no
+matter how good the criteria look — an agent grading its own homework is the one thing this
+brief exists to prevent.
 
 The important discipline: you check against **the criteria you wrote**, not against a gut
 feeling. If "actually I'd also like X" comes up now, that is not a bug — it was never in the
 spec. That is the next iteration.
 
-### ⑥ Close the loop
+### ⑧ Close the loop
 
 ```text
 /sdd-lifecycle
@@ -187,15 +238,16 @@ runs faster because the context is already written down.
 
 ---
 
-## The eight commands
+## The nine commands
 
 | Command | What it does |
 | --- | --- |
 | `/sdd-overview` | Where am I? Workflow map, current spec status, command list |
 | `/sdd-setup` | One-time wizard: doc language, Memory Bank, first architecture snapshot |
 | `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec |
+| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, missing failure modes |
 | `/sdd-plan` | Spec → a persisted plan of baby steps, with research and traceability |
-| `/sdd-compile` | Readiness check: tests, acceptance criteria, docs sync |
+| `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
 | `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` |
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
@@ -210,26 +262,37 @@ New to it? Just run `/sdd-overview`.
 AGENTS.md              the constitution — rules, doc language, architecture snapshot
 CLAUDE.md              one line: @AGENTS.md
 
-.claude/commands/      the eight workflow bodies (Claude runs them directly)
+.claude/commands/      the nine workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
+.claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       one-line loaders so Copilot reaches the same bodies
+.github/agents/        the Copilot persona — a pointer at AGENTS.md, nothing more
+.vscode/settings.json  tells Copilot where to find .claude/rules and .github/prompts
 
-.specs/                backlog/ · active/ · done/   — specs + their plan files
+.specs/                backlog/ · active/ · done/   — specs + their plan files (ships empty)
 .memory-bank/          projectbrief · systemPatterns · techContext · activeContext
+docs/history/          how FeatherSpec itself was built — delete it in your project
 ```
 
-Everything mutable lives in `AGENTS.md` and the two data folders. No rule and no workflow is
-written down twice — that is the design, and it is why both tools stay in sync for free.
+Everything mutable lives in `AGENTS.md` and the two data folders. Workflow bodies exist exactly
+once, under `.claude/commands/`; `.github/prompts/` holds one-line pointers to them.
+
+There is one deliberate exception, and it is labelled everywhere it occurs: a path-scoped rule
+only loads once a matching file has been **read**, so a brand-new spec or plan would be written
+without its rule in context. The commands that create those files restate three essentials
+inline, and each rule file says why. Don't "clean up" that duplication — it is load-bearing.
+Where a copy exists, it names `AGENTS.md` as the winner.
 
 ---
 
 ## Why one template for two tools
 
-- **VS Code Copilot reads most of Claude Code's configuration natively** — `AGENTS.md`,
-  `.claude/rules/`, hooks in `.claude/settings.json`. FeatherSpec leans on that overlap instead
-  of maintaining two copies.
+- **VS Code Copilot reads most of Claude Code's configuration.** `AGENTS.md` natively, via
+  `chat.useAgentsMdFile`; `.claude/rules/` once the shipped `.vscode/settings.json` enables it —
+  it is *not* a default Copilot location, so keep that file if you move these folders into
+  another project. FeatherSpec leans on the overlap instead of maintaining two copies.
 - **Workflows are commands, not skills.** A skill advertises itself to the model on every
-  request; a command is only ever run when *you* type it. Eight workflows sitting in every
+  request; a command is only ever run when *you* type it. Nine workflows sitting in every
   system prompt is a cost with no upside here.
 - **Only the entry point differs.** `.claude/commands/<name>.md` holds the body;
   `.github/prompts/<name>.prompt.md` is a one-line pointer to it. One file to edit, two tools

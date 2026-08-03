@@ -41,8 +41,13 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   spec. A spec has its own status vocabulary (`Draft | In Progress | Implemented | Deprecated`);
   the plan has its own (`Not started | In Progress | Blocked | Done`). Do not overwrite one with
   the other.
-- **Before `done/`:** check the plan too — every step ticked, the traceability table filled with
-  real code paths. If steps are still open, say so and let the user decide before moving.
+- **Before `done/`:** check the plan too — every step ticked **and its `Verified:` field
+  filled**, the traceability table filled with real code paths and a test per criterion. Ask
+  for the evidence: a `/sdd-compile` brief whose verdict is `READY`, or the `Verified:` lines
+  themselves. Ticked boxes with no recorded run are not evidence — name the criteria that lack
+  it and stop. If steps are still open, say so and let the user decide before moving.
+- **No plan beside the spec?** Ask why and record the answer in the spec. A deliberate fast
+  path is fine; a forgotten plan is not.
 
 ## Default behavior
 
