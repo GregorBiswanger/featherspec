@@ -74,9 +74,12 @@ First read the ground you already stand on, so you never ask for it:
 
 - Spec filenames in `.specs/backlog/`, `.specs/active/`, `.specs/done/` — for the next number,
   to avoid duplicating an existing spec, and to link a related one.
-- `.memory-bank/techContext.md`, `.memory-bank/systemPatterns.md`, `.memory-bank/activeContext.md`,
-  and the `architecture:` snapshot in `AGENTS.md` — stack, patterns, current focus and
-  boundaries are known; do not ask for them.
+- `.memory-bank/projectbrief.md`, `.memory-bank/techContext.md`, `.memory-bank/systemPatterns.md`,
+  `.memory-bank/activeContext.md`, and the `architecture:` snapshot in `AGENTS.md` — mission,
+  users, success criteria, stack, patterns, current focus and boundaries are known; do not ask
+  for them. The brief pre-fills the *Goal*, *Users* and *Benefit* blocks — interview only the
+  delta against it, and if an answer contradicts the brief, say so: either the brief is stale
+  or the idea redefines the product, and the user decides which.
 - **If this touches existing code, read the code before you ask anything.** Those Markdown files
   describe the system; they are not the system, and they drift. Find the modules, functions and
   tests the change would reach, and the contracts they already imply — validation, ordering,
@@ -115,6 +118,8 @@ Only when the idea triggers them:
 | Many users, large data volumes, real time, batch, high load | performance, scaling, observability |
 | LLMs, agents, RAG, classification, generation, automation | model behaviour, guardrails, context data, human-in-the-loop |
 | Production-critical processes, monitoring, support, rollback, migration | operations |
+| Rule-driven automation without AI — jobs, schedules, event chains | triggers, states, exception handling |
+| Reports, analytics, search over data | data sources, filters, sorting, accuracy |
 | Existing system (brownfield) | architecture context, constraints, migration |
 
 Question budget:
@@ -293,8 +298,8 @@ are clarified or marked as assumptions, and open questions are visible.
 **Definition of Done** — implementation is done when all must-requirements are built, all
 acceptance criteria pass, tests were added and run green, no out-of-scope functionality was
 added, security and privacy requirements are met, error handling and relevant logging exist,
-assumptions were verified or documented, and docs plus the architecture snapshot were updated
-where needed.
+assumptions were verified or documented, docs plus the architecture snapshot were updated
+where needed, and the user — or the acceptor the spec names — accepted the result.
 
 ## Step 6 — Hand off
 

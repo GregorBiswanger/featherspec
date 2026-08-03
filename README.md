@@ -275,7 +275,6 @@ CLAUDE.md              one line: @AGENTS.md
 
 .specs/                backlog/ · active/ · done/   — specs + their plan files (ships empty)
 .memory-bank/          projectbrief · systemPatterns · techContext · activeContext
-docs/history/          how FeatherSpec itself was built — delete it in your project
 ```
 
 Everything mutable lives in `AGENTS.md` and the two data folders. Workflow bodies exist exactly
@@ -316,6 +315,7 @@ Everything beyond this page lives in the **[Wiki](https://github.com/GregorBiswa
 | --- | --- |
 | [Getting Started](https://github.com/GregorBiswanger/featherspec/wiki/Getting-Started) | Setup for both tools, verifying what actually loaded |
 | [Commands](https://github.com/GregorBiswanger/featherspec/wiki/Commands) | Every `/sdd-*` command in detail |
+| [Specify Method](https://github.com/GregorBiswanger/featherspec/wiki/Specify-Method) | The interview model behind `/sdd-specify` — origin and deliberate deviations |
 | [Specs & Plans](https://github.com/GregorBiswanger/featherspec/wiki/Specs-and-Plans) | Document structure, lifecycle, traceability |
 | [Memory Bank](https://github.com/GregorBiswanger/featherspec/wiki/Memory-Bank) | The four files and what belongs in each |
 | [Interop Matrix](https://github.com/GregorBiswanger/featherspec/wiki/Interop-Matrix) | What Copilot reads from `.claude/`, with sources |

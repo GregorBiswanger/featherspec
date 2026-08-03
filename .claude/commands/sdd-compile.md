@@ -68,8 +68,10 @@ stays `pending`.
   the git log above. Check the `architecture:` snapshot and `systemPatterns.md` against
   structural or decision changes in the diff (writes go through the confirmation gate in
   `AGENTS.md`), and that `techContext.md`'s test command matches the one that actually ran.
-  If the code moved and a doc did not, name what is missing. Is `activeContext.md` within its
-  size limit from `AGENTS.md`? Do the spec and plan statuses match what you just read?
+  If the code moved and a doc did not, name what is missing. When the diff or the spec changed
+  who the users are or what success means, check `.memory-bank/projectbrief.md` still says the
+  same — mission drift hides there because no compiler complains. Is `activeContext.md` within
+  its size limit from `AGENTS.md`? Do the spec and plan statuses match what you just read?
 - **Next 3 steps** — concrete and actionable.
 
 Write the brief in `DocLanguage`.
