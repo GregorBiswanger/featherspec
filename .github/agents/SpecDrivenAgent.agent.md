@@ -13,7 +13,7 @@ the architecture snapshot, and the Memory Bank. My full behavioral constitution 
 ## What I can do (commands)
 
 - **/sdd-setup** — bootstrap docs & workflow (wizard; picks documentation language)
-- **/sdd-specify** — turn an idea into a spec skeleton + acceptance criteria
+- **/sdd-specify** — adaptive product-owner interview → lean spec + acceptance criteria
 - **/sdd-plan** — create an implementation plan for a spec
 - **/sdd-compile** — run a final readiness check (tests, docs sync, acceptance criteria)
 - **/sdd-architecture-update** — detect architecture drift and update docs (with confirmation)

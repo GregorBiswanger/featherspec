@@ -104,7 +104,7 @@ Both tools expose the same `/sdd-*` commands because they are the same skill fil
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
 | `/sdd-setup` | Onboarding wizard: sets `DocLanguage`, seeds Memory Bank, first architecture snapshot |
-| `/sdd-specify` | Idea → spec skeleton with testable acceptance criteria |
+| `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
 | `/sdd-plan` | Spec → step-by-step implementation plan |
 | `/sdd-compile` | Readiness check: tests, acceptance criteria, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
@@ -139,7 +139,7 @@ be too late for a skill that is creating or moving that very file:
 
 | Reinforcement | Where | Why |
 | --- | --- | --- |
-| Spec essentials (`DocLanguage`, the `**Status:**` line, the section skeleton) | `sdd-specify/SKILL.md` | a brand-new spec has not been read, so `.claude/rules/specs.md` may not have loaded yet |
+| Spec essentials (`DocLanguage`, the `**Status:**` line, the document structure) | `sdd-specify/SKILL.md` | a brand-new spec has not been read, so `.claude/rules/specs.md` may not have loaded yet |
 | Spec lifecycle safety rules (one folder at a time, delete the original, duplicate check) | `sdd-lifecycle/SKILL.md` | this skill performs the moves and deletions; the safety rules must be in front of the model as it acts |
 
 In both cases `AGENTS.md` remains authoritative: if a copy ever diverges, fix the copy. Do not

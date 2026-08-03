@@ -159,7 +159,7 @@ read by both assistants:
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
 | `/sdd-setup` | Onboarding wizard: `DocLanguage`, seed Memory Bank, first architecture snapshot |
-| `/sdd-specify` | Idea → spec skeleton with testable acceptance criteria |
+| `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
 | `/sdd-plan` | Spec → step-by-step implementation plan |
 | `/sdd-compile` | Readiness check: tests, acceptance criteria, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |

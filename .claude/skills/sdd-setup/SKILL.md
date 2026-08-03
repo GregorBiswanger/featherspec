@@ -48,7 +48,7 @@ commands guide exactly this workflow.
 ## Overview: when to use which command
 
 - `/sdd-setup`: one-time onboarding — sets `DocLanguage`, prepares the Memory Bank and spec folders, initializes the first architecture snapshot.
-- `/sdd-specify`: concretize a new feature/idea into a spec with clear acceptance criteria under `.specs/`.
+- `/sdd-specify`: adaptive product-owner interview that turns a feature/idea into a lean, testable spec under `.specs/`.
 - `/sdd-plan`: produce a step-by-step implementation plan for an existing spec.
 - `/sdd-architecture-update`: reconcile the architecture snapshot with the real repo after structural change (with confirmation).
 - `/sdd-lifecycle`: maintain spec status and move specs between `backlog/`, `active/`, `done/`.

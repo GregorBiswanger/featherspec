@@ -38,7 +38,7 @@ If `DocLanguage` is still the default and the Memory Bank looks unseeded, sugges
 ## Commands
 
 - **/sdd-setup** — onboarding wizard: sets `DocLanguage`, seeds the Memory Bank, captures the first architecture snapshot.
-- **/sdd-specify** — turn an idea into a spec skeleton with testable acceptance criteria.
+- **/sdd-specify** — adaptive product-owner interview that turns an idea into a lean, testable spec.
 - **/sdd-plan** — create a step-by-step implementation plan for a spec.
 - **/sdd-compile** — final readiness check: tests, acceptance criteria, docs sync.
 - **/sdd-architecture-update** — detect architecture drift and update the snapshot + Memory Bank (confirmation gate).
