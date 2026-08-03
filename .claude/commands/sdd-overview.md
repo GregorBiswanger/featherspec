@@ -30,20 +30,17 @@ If `DocLanguage` is still the default and the Memory Bank looks unseeded, sugges
 
 ## Operating protocol (SDD)
 
-1. **Specify** — goals, constraints, testable acceptance criteria (spec-first).
-2. **Plan** — small, verifiable steps; ask at most one targeted question if needed.
-3. **Act** — minimal diffs, verify (tests/build).
-4. **Document** — sync the `architecture:` snapshot in `AGENTS.md` and `.memory-bank/*`.
+State the protocol exactly as `AGENTS.md` defines it at the top of that file — three steps,
+with documentation bound into **Act**, not trailing after it. Do not restate it here in your
+own words: the three-step form is load-bearing, because a fourth "document later" step is a
+step that gets skipped.
 
 ## Commands
 
-- **/sdd-setup** — onboarding wizard: sets `DocLanguage`, seeds the Memory Bank, captures the first architecture snapshot.
-- **/sdd-specify** — adaptive product-owner interview that turns an idea into a lean, testable spec.
-- **/sdd-plan** — write a spec's plan file: researched baby steps, resumable state, traceability.
-- **/sdd-compile** — final readiness check: tests, acceptance criteria, docs sync.
-- **/sdd-architecture-update** — detect architecture drift and update the snapshot + Memory Bank (confirmation gate).
-- **/sdd-lifecycle** — manage spec status and moves between `backlog/`, `active/`, `done/`.
-- **/sdd-style-update** — capture coding style preferences into `AGENTS.md`.
+List the `/sdd-*` commands from the **Commands** table in `AGENTS.md`, in `DocLanguage`. That
+table is the single machine-facing roster; do not keep a second copy here, and do not invent
+descriptions of your own.
 
-Recommended flow: `/sdd-specify` → `/sdd-plan` → implement → `/sdd-compile` → `/sdd-lifecycle`.
-Run `/sdd-architecture-update` whenever the structure changes.
+Recommended flow: `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → **read the plan** → implement
+→ `/sdd-compile` → `/sdd-lifecycle`. Run `/sdd-architecture-update` whenever the structure
+changes. Small enough to need no spec? Say so and take the fast path from `AGENTS.md`.

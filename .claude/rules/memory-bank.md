@@ -13,6 +13,11 @@ defined in `AGENTS.md` (loaded every session). These rules cover only what is sp
 - Keep entries concise, factual, and actionable.
 - If architecture changes, update `systemPatterns.md` and record "Changed Recently" in `activeContext.md`.
 
+> Note: path-scoped rules load when a matching file is **read**. A brand-new Memory Bank file
+> has not been read yet, so this rule would not be loaded when `/sdd-setup` creates one — which
+> is why that command is instructed to read this file first rather than carry its own copy of
+> the structure. `AGENTS.md` stays authoritative for the file list and the size limit.
+
 ## Rules for `activeContext.md`
 
 `activeContext.md` is a **short, current working and handoff context** for the agent — not a
@@ -24,6 +29,11 @@ If it outgrows the size limit stated in `AGENTS.md`, the surplus belongs in a mo
 file — see the table below.
 
 ### Structure
+
+This is the **only** definition of the file's shape; commands that create it point here.
+
+Three metadata lines first — `Last updated: <date>`, `Current branch: <branch>`,
+`Current phase: specify | plan | act` — then these sections:
 
 - **Now** — one sentence: current goal of this session/work track.
 - **Active Spec** — link to the relevant spec file(s), current task ID, acceptance criteria in focus.
@@ -37,10 +47,13 @@ file — see the table below.
 
 1. At the end of each relevant coding session.
 2. After an important decision.
-3. After a phase transition: Requirements → Design → Tasks → Implementation → Validation.
+3. After a phase transition (specify → plan → act) or a lifecycle move (backlog → active → done).
 4. Before a context reset or new agent session.
 5. After a bugfix with regression risk.
 6. **Always** when switching from one active spec to another.
+
+**Refresh the `Last updated` line on every one of these.** A date that was set once and never
+touched again is worse than no date: it makes a stale file look current.
 
 ### What does NOT belong here
 
@@ -48,13 +61,14 @@ Move the following to the correct file instead of adding it to `activeContext.md
 
 | Content | Correct file |
 |---|---|
-| Full requirements | spec `requirements.md` |
-| Full technical design | spec `design.md` or `systemPatterns.md` |
-| Full task list | spec `tasks.md` |
+| Full requirements | the spec under `.specs/` |
+| Full technical design | the spec, or `systemPatterns.md` if it is long-lived |
+| Full step list | the spec's `.plan.md` sibling |
 | Long-term architecture decisions | `systemPatterns.md` |
 | Tech stack, setup, dependencies | `techContext.md` |
 | Project vision, goals, scope | `projectbrief.md` |
-| Historical progress over weeks | a `progress.md` |
-| Stale todos | delete or move to `progress.md` |
+| Historical progress over weeks | nowhere — that is what git history is for |
+| Stale todos | delete them, or move the live ones to the plan's `Notes:` |
 
-**Do not duplicate. Link and summarize.**
+**Do not duplicate. Link and summarize.** Never route content into a file this template does
+not declare: the Memory Bank is these four files, and a spec's only companion is its `.plan.md`.

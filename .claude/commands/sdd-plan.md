@@ -33,9 +33,13 @@ steps to real code.
    and `.memory-bank/techContext.md` plus `systemPatterns.md`.
 2. **Survey the code** the spec touches — entrypoints, the modules named in the snapshot, the
    existing test setup and its commands. Plan against the repo as it is, not as it should be.
+   Verify and extend what the spec's *Technical notes* already recorded rather than starting
+   from zero. **If the survey contradicts the spec** — a criterion assumes behaviour the code
+   does not have, or ignores a caller it would break — stop, report the contradiction as a spec
+   defect, and switch to Mode C. Do not plan around a spec you have just refuted.
 3. **Research** what you would otherwise guess (see below).
 4. **Decompose into baby steps** (see below).
-5. **Write the plan file**, then report the first step and stop.
+5. **Write the plan file**, then hand it over for review and stop (see *Always* below).
 
 ## Research (do it, do not skip it)
 
@@ -56,11 +60,17 @@ A step is one focused change that can be finished and checked on its own:
 
 - **One concern per step** — a schema change, one endpoint, one component, one test suite.
 - **Small enough** to complete in one sitting and to read in one diff.
-- **Verifiable**: every step carries a `Verify:` line — a command to run, a test to add, or an
-  observable result. If you cannot state one, the step is too big or too vague; split it.
+- **Verifiable**: every step carries a `Verify:` line — a command whose output decides the step
+  (test, build, lint, script). Only where the domain genuinely has no machine check — visual
+  layout, wording, a third-party sandbox — write `manual: <what a person looks at>` and say why
+  no command can settle it. If you cannot state either, the step is too big or too vague; split it.
+- **Recorded**: the step's `Verified:` field stays empty until the `Verify:` line was actually
+  run. A tick without a recorded result is a claim, not a verification.
 - **Ordered so the repo keeps working** after every step; risky or blocking parts come first.
 - **Tied to the spec**: each step names the acceptance criteria it serves, every criterion is
   covered by at least one step, and pure scaffolding steps say so explicitly.
+
+If the step list runs long, the spec was probably two specs. Say so before writing the file.
 
 ## Plan file structure
 
@@ -95,7 +105,8 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
 
 - [ ] **Covers:** AC-001, AC-002
 - **Do:** what changes, in which files or modules
-- **Verify:** command to run / test to add / observable result
+- **Verify:** the command whose output decides this step (or `manual: …` plus the reason)
+- **Verified:** _(empty until it was actually run: date · command · result)_
 - **Notes:** _(filled while implementing: deviations, findings)_
 
 ### T-002 — <short imperative title>
@@ -103,13 +114,18 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
 - [ ] **Covers:** AC-003
 - **Do:** …
 - **Verify:** …
+- **Verified:** —
 - **Notes:** —
 
 ## Traceability
 
-| Acceptance criterion | Steps | Code / files | State |
-| --- | --- | --- | --- |
-| AC-001 | T-001, T-004 | _(filled when the step lands)_ | open |
+| Acceptance criterion | Steps | Code / files | Test | State |
+| --- | --- | --- | --- | --- |
+| AC-001 | T-001, T-004 | _(filled when the step lands)_ | _(the test that fails without the code)_ | open |
+
+`State` is one of `open | built | verified`. A criterion is `built` when the code exists and
+`verified` only when a recorded run proves it. If no test can decide it, write
+`manual: <who checked what>` in the `Test` cell — an empty cell means nobody checked.
 
 ## Session handoff
 
@@ -145,7 +161,12 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
 ## Always
 
 - Write the plan and every report in `DocLanguage`.
-- Planning itself does not change code: in Mode A and C, stop after writing the plan.
+- **Planning does not change code, and the plan is not yours to approve.** In Mode A and C, stop
+  after writing the file and hand it to the user: name the plan, say how many steps it has, name
+  the riskiest one, and say plainly that reading these steps now is cheaper than reading the diff
+  later — a wrong step costs hundreds of lines, a wrong line costs one. Ask which steps look
+  wrong before anything is implemented. Every other artifact here has a named reader; this one
+  is the most expensive to get wrong.
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

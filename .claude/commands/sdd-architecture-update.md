@@ -40,7 +40,9 @@ Before writing anything, ask:
 
 Only after confirmation:
 
-- Update the `architecture:` YAML in `AGENTS.md` (the only place it lives).
+- Update the `architecture:` YAML in `AGENTS.md` (the only place it lives), and set the
+  `# last reconciled:` comment inside that block to today's date — a snapshot with no date
+  cannot be told apart from one that was never checked.
 - Update `.memory-bank/systemPatterns.md` (patterns/decisions).
 - Update `.memory-bank/activeContext.md` (recent changes + next steps; keep to 1–2 pages).
 
