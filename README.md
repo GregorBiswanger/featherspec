@@ -30,7 +30,18 @@ GitHub Copilot, because both tools execute the **same files**.
 
 ### 1 · Get the template
 
-Click **[Use this template](https://github.com/GregorBiswanger/featherspec/generate)** on GitHub — or pull it into a folder:
+Click **[Use this template](https://github.com/GregorBiswanger/featherspec/generate)** on GitHub — or clone it:
+
+```bash
+git clone https://github.com/GregorBiswanger/featherspec.git my-project
+```
+
+The clone brings this repository's commit history along with a remote pointing back here. For
+your own project you want neither: delete the `.git` folder (`rm -rf .git`, or
+`Remove-Item -Recurse -Force .git` in PowerShell) and run `git init`.
+
+**Have Node.js?** Then `degit` saves you that cleanup — it downloads only the current file
+state, so there is no history and no `.git` folder to detach in the first place:
 
 ```bash
 npx degit GregorBiswanger/featherspec my-project
