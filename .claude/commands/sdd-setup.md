@@ -5,7 +5,7 @@ disable-model-invocation: true
 ---
 
 <!-- Single source for the /sdd-setup workflow. Claude Code runs this file directly;
-     GitHub Copilot reaches it through the one-line loader in
+     GitHub Copilot reaches it through the thin loader in
      .github/prompts/sdd-setup.prompt.md. Deliberately no shell injection and no
      argument-variable substitution: Copilot supports neither. -->
 
@@ -43,9 +43,9 @@ Key principles:
   produced, so a change to a requirement can be traced to the code and tests it reaches. The
   spec steers the code; it does not replace it, and nothing here regenerates code from a spec.
 
-Explain in 2–4 English sentences that specs are the primary reference point, that work here
-follows "specify → plan → implement → validate against the spec", and that the `/sdd-*`
-commands guide exactly this workflow.
+Explain in 2–4 English sentences that specs are the primary reference point and that the
+`/sdd-*` commands guide the workflow. State this repo's operating protocol exactly as
+`AGENTS.md` defines it at the top — three steps, never paraphrased into your own words.
 
 ## Overview: when to use which command
 
@@ -53,9 +53,8 @@ Show the `/sdd-*` commands from the **Commands** table in `AGENTS.md` — all of
 `DocLanguage`. That table is the single machine-facing roster; keep no second copy here, or the
 one command a new user never hears about will be the one you forgot to list.
 
-Name the usual order in one line: `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → read the plan
-→ implement → `/sdd-compile` → `/sdd-lifecycle`. Keep this overview short, then transition into
-the onboarding dialog, starting with Step 0.
+Name the usual order in one line, rendered from the Flow line under *Commands* in `AGENTS.md`.
+Keep this overview short, then transition into the onboarding dialog, starting with Step 0.
 
 ## Step 0 (MUST be the first question)
 
@@ -69,9 +68,10 @@ Ask exactly: **"In which language should the project documentation Markdown file
 ## Read the repo before asking
 
 Manifests and lock files (stack, package manager) · the tree's top two levels (entrypoints,
-modules) · CI config and test scripts (quality gates) · any README. Never ask for what you can
-read: pre-fill steps 3, 5 and 6 below from what you found and present them for correction in
-one turn, rather than asking them cold.
+modules) · CI config and test scripts (quality gates) · any README · the existing
+`.memory-bank/*` files and the current `AGENTS.md` (snapshot, style preferences). Never ask
+for what you can read: pre-fill steps 3, 5 and 6 below from what you found and present them
+for correction in one turn. On a re-run, merge with what exists — never reset a curated file.
 
 ## Wizard steps (ask only what the repo did not answer)
 
@@ -93,11 +93,12 @@ After collecting answers:
 
 **B) Initialize documentation** in `DocLanguage`:
 
-- Update `.memory-bank/projectbrief.md` with mission + success criteria.
+- Update `.memory-bank/projectbrief.md` with mission + primary users + success criteria.
 - Update `.memory-bank/techContext.md` with stack + build/run/test.
-- Create `.memory-bank/activeContext.md`. **Read `.claude/rules/memory-bank.md` first** and
-  follow its *Structure* section exactly — that section is the only definition of this file's
-  shape, and a brand-new file does not load the rule on its own.
+- Create `.memory-bank/activeContext.md` only if missing or still placeholder (`TBD`) —
+  otherwise leave it, it may hold live session state. **Read `.claude/rules/memory-bank.md`
+  first** and follow its *Structure* section exactly — that section is the only definition of
+  this file's shape, and a brand-new file does not load the rule on its own.
 - Create/update `.memory-bank/systemPatterns.md` with initial patterns/decisions.
 
 **C) Initial architecture capture (best-effort):**
@@ -109,6 +110,11 @@ After collecting answers:
 **D) Style preference capture:**
 
 - Seed *Style & Output Preferences* in `AGENTS.md` with what the user stated.
+
+**E) Budget check:**
+
+- Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if over, propose an
+  eviction per its order before finishing.
 
 ## Output
 

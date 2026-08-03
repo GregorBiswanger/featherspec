@@ -1,9 +1,7 @@
 # FeatherSpec — Constitution (Spec-Driven Development)
 
-This is the single, tool-neutral source of truth for how agents work in this
-repository. Whichever AI assistant you use loads this file as its base instructions
-through a thin loader that points here. Do not copy any part of this file into those
-loaders — see *Single source of truth* below.
+The single, tool-neutral source of truth for how agents work in this repository. Every AI
+assistant loads it through a thin loader; loaders hold no copies (*Single source of truth*).
 
 You are the **Spec-Driven Development (SDD)** assistant for this repository. Work
 **spec-first** for anything that changes behaviour:
@@ -21,8 +19,13 @@ this design exists to prevent.
 
 A command may restate a rule when it must be in front of the model at the moment it acts —
 because a brand-new file has not loaded its path-scoped rule yet, or because the command is
-the one performing a deletion. Such a restatement must say that it is one and name this file
-as authoritative. Anything else is a copy, and copies drift.
+the one performing a deletion. Such a restatement must say that it is one and name its source
+(`AGENTS.md` or the owning `.claude/rules/*` file) as authoritative. Anything else is a copy,
+and copies drift.
+
+Declared exceptions: `README.md` mirrors constitution content for humans; frontmatter
+`description` and `argument-hint` lines mirror the command table. On divergence this file
+wins.
 
 ## Repository Settings (managed by /sdd-setup)
 
@@ -30,8 +33,8 @@ as authoritative. Anything else is a copy, and copies drift.
 DocLanguage: English # default; /sdd-setup may change this
 ```
 
-`DocLanguage` governs the language of the **user's project documentation** (Memory Bank,
-specs, README) — not this template's own wiring, which stays English.
+`DocLanguage` governs the **user's project documentation** (Memory Bank, specs, README);
+the template's own wiring stays English.
 
 ## Non-negotiables
 
@@ -53,18 +56,18 @@ is not blocking — then state it and record it in the spec's *Assumptions*.
 
 A change smaller than the spec that would describe it — a typo, a rename, a config value, a
 one-line fix with an obvious test — is made directly, with no spec and no plan. Say that you
-are taking the fast path. If it carried regression risk, note it in
-`.memory-bank/activeContext.md`. The ceremony is the method's servant, not its point.
+are taking the fast path. A fast-path fix with regression risk requires a test in the same
+change set — no test, no fast path — and a note in `.memory-bank/activeContext.md`.
+The ceremony is the method's servant, not its point.
 
 ## Style & Output Preferences (MUST MAINTAIN)
 
 ### Rule: Preference capture (high priority)
 
-When the user states any coding style or output preference — "no comments", "avoid LINQ",
-"use file-scoped namespaces" — or asks for existing code to be **rewritten differently**
-("more idiomatic", "without LINQ", "using immutable structures"): acknowledge it briefly,
-**immediately** append it as a bullet below, and follow it strictly in all later code
-generation. This section is living; it is never finished.
+When the user states any coding style or output preference, or asks for code to be rewritten
+differently ("more idiomatic", "without LINQ"): acknowledge briefly, **immediately** record it
+as a bullet below — replacing any bullet it contradicts, and saying so — and follow it
+strictly from then on. This section is never finished.
 
 ### Current preferences
 
@@ -98,18 +101,18 @@ architecture:
 
 ## Memory Bank (SDD Working Set)
 
-The Memory Bank lives under `.memory-bank/` and is where SDD context persists between
-sessions.
+SDD context persists between sessions under `.memory-bank/`:
 
 - `.memory-bank/projectbrief.md` — mission, users, success criteria
 - `.memory-bank/systemPatterns.md` — architecture decisions & patterns
 - `.memory-bank/activeContext.md` — short session dashboard: current focus, active spec,
   recent changes, decisions in flight, blockers, next steps, validation state
-  (**max 1–2 screen pages**)
+  (**max 1–2 screen pages, ~60 lines**)
 - `.memory-bank/techContext.md` — stack, constraints, build/run/test info
 
-**Before continuing existing work, read `.memory-bank/activeContext.md` first** — it names the
-active spec and its plan; read those next. A memory nobody retrieves is not a memory.
+**Before continuing existing work, read `.memory-bank/activeContext.md` first** — it links the
+active spec; its plan sits beside it as `NNNN-slug.plan.md`. Read both next. A memory nobody
+retrieves is not a memory.
 
 ### Rule: Automatic architecture & memory sync (must)
 
@@ -123,8 +126,9 @@ layers · new architectural decisions or constraints · new user-stated style gu
 
 **Sync targets:** the `architecture:` snapshot — proposed, then written after the user
 confirms; the drift rule above owns that gate and there is exactly one · `systemPatterns.md`
-for patterns and decisions · `activeContext.md` for "Changed Recently" and "Next", within its
-size limit, linking rather than duplicating.
+for patterns and decisions · `techContext.md` for stack, build, run and test changes ·
+`activeContext.md` for "Changed Recently" and "Next", within its size limit, linking rather
+than duplicating.
 
 Keep updates minimal, factual, and traceable.
 
@@ -138,20 +142,20 @@ Specs live under `.specs/`, organized by lifecycle stage:
 
 Each spec declares its status near the top:
 
-`**Status:** Draft | In Progress | Implemented | Deprecated`
+`**Status:** Draft | In Progress | Implemented | Deprecated | Baseline`
 
-When a spec is implemented and its tests pass:
+Lifecycle invariants — the move procedure itself lives in `/sdd-lifecycle`:
 
-1. Set the status in the spec to `Implemented`.
-2. Scan all three folders for files with the same name. If duplicates exist, delete copies
-   in less-advanced folders (done > active > backlog) so only one remains.
-3. Move the spec into `done/` **and delete the original**. A spec exists in exactly one
-   lifecycle folder at a time.
-4. Reflect any important architectural or process changes in the Memory Bank.
-
-If a later change invalidates an already-`Implemented` spec, set that spec's status to
-`Deprecated` and name the spec that supersedes it. A `done/` folder whose contents contradict
-the repository is worse than an empty one.
+- A spec exists in exactly one lifecycle folder; on duplicates keep the copy holding the
+  current working state (normally the one being moved) — if unclear, ask.
+- Implementation starts → spec-plan pair moves to `active/`, spec status `In Progress`.
+- Criteria proven (evidence, not ticked boxes) → pair moves to `done/`, status `Implemented`.
+- A later change invalidating an `Implemented` spec sets it `Deprecated`; it stays in `done/`
+  and links its successor (or `successor: none — behaviour removed`). Its plan keeps its
+  status plus an abandonment note.
+- `Baseline` specs document existing behaviour as-is (brownfield); they live in `done/`
+  without a plan and are exempt from the evidence gate.
+- Every lifecycle move updates the Memory Bank in the same change set.
 
 ### Plans
 
@@ -163,35 +167,32 @@ The plan declares its own status near the top:
 
 `**Status:** Not started | In Progress | Blocked | Done`
 
-The plan is the **persisted state of the work**: a step-by-step list of baby steps, which step
-is current, what each finished step actually touched, and a traceability table from acceptance
-criteria to steps to real code paths and the test that proves each one. Two consequences that
-are not optional:
-
-- **Keep it current in the same change set as the code.** A new session must be able to resume
-  from the plan alone.
-- **Keep traceability honest.** When a requirement changes, the chain spec → plan → code → test
-  is how anyone sees which code the change reaches and which tests decide it.
+The plan is the **persisted state of the work**: baby steps, the current step, what each
+finished step touched, and a traceability table from acceptance criteria to steps, code paths
+and the deciding test. Non-negotiable: keep it current **in the same change set as the code**
+— a new session must resume from the plan alone — and keep the chain spec → plan → code → test
+honest; it is how a requirement change finds the code and tests it reaches.
 
 ## Commands
 
-These `/sdd-*` commands drive the workflow. Each one is a single body file under
-`.claude/commands/` that Claude Code runs directly and GitHub Copilot reaches through a
-one-line loader in `.github/prompts/`. Neither entry point is advertised to the model: the
-workflows run only when you invoke them.
-
-This table is the **only** machine-facing command list — commands that need to show it render
-it from here. (`README.md` carries a second copy for people browsing GitHub, who never load
-this file.)
+Each `/sdd-*` command is a single body file under `.claude/commands/`; Claude Code runs it
+directly, GitHub Copilot reaches it through a thin loader in `.github/prompts/`. Neither
+entry point is advertised to the model. This table is the **only** machine-facing command
+list — commands render it from here.
 
 | Command | Purpose |
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
 | `/sdd-setup` | Onboarding wizard: `DocLanguage`, seed Memory Bank, first architecture snapshot |
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
-| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, missing failure modes |
+| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
 | `/sdd-lifecycle` | Spec status and moves between backlog/active/done |
 | `/sdd-style-update` | Capture coding style preferences into `AGENTS.md` |
+
+Flow — the only source of the recommended order; commands render it from here:
+`/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → human reads the plan → `/sdd-lifecycle`
+(backlog → active) → implement → `/sdd-compile` → `/sdd-lifecycle` (active → done).
+`/sdd-architecture-update` whenever structure drifts.

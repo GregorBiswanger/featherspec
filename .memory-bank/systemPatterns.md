@@ -1,10 +1,12 @@
 # System Patterns
 
 ## Architectural style
-TBD
+
+See the `architecture:` snapshot in `AGENTS.md` — the only home of structure facts. This file
+holds the *why*: decisions and patterns.
 
 ## Key decisions
-- TBD
+- TBD — each entry: decision · date · source link (spec, plan or commit)
 
 ## Patterns
 - TBD

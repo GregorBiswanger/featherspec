@@ -1,6 +1,6 @@
 ---
 name: sdd-style-update
-description: Capture or reorganize coding style preferences in AGENTS.md.
+description: Capture coding style preferences into AGENTS.md.
 argument-hint: "[preference] (or list several)"
 ---
 

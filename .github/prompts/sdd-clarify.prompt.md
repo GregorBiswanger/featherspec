@@ -1,6 +1,6 @@
 ---
 name: sdd-clarify
-description: Adversarial pass over a finished spec — contradictions, ambiguity, untestable criteria, missing failure modes.
+description: Adversarial pass over a finished spec — contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes.
 argument-hint: "[path to spec]"
 ---
 

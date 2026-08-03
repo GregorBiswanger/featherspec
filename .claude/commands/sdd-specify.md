@@ -5,7 +5,7 @@ disable-model-invocation: true
 ---
 
 <!-- Single source for the /sdd-specify workflow. Claude Code runs this file directly;
-     GitHub Copilot reaches it through the one-line loader in
+     GitHub Copilot reaches it through the thin loader in
      .github/prompts/sdd-specify.prompt.md. Deliberately no shell injection and no
      argument-variable substitution: Copilot supports neither. -->
 
@@ -19,11 +19,27 @@ unnecessary follow-up questions.
 You do not walk through a fixed template. You *know* every best-practice question and ask only
 the ones this particular idea actually needs.
 
+## Revise an existing spec
+
+If the user names an existing spec (or `/sdd-clarify` findings to resolve): do **not** create
+a new file. Re-interview only the affected sections, update the same file in place, keep its
+number and `AC-` IDs stable, and record resolved items in *Open points*. A new file is only
+for a new slice of work. If the named path does not exist, list `.specs/` and ask — never
+invent a spec from a wrong path.
+
+## Baseline mode (brownfield)
+
+Asked to document existing behaviour instead of a change? Skip the interview. Survey the code
+(delegate to a subagent if your tool has them), then write the spec from observed behaviour:
+scope, business rules, error cases, acceptance criteria describing what *is*. Status
+`Baseline`, file goes directly to `.specs/done/`, no plan. Unknowns become *Open points*,
+never guesses. A Baseline still gets its `/sdd-clarify` pass (fresh context) — note it in the
+spec; an undecidable Baseline is a guess wearing a status.
+
 ## Language
 
 Run the **entire interview and the spec file** in the language set by `DocLanguage` in
-`AGENTS.md` (English until `/sdd-setup` changes it): questions, confirmations, section
-headings, document body. Only if the user explicitly asks to be interviewed in a different
+`AGENTS.md`: questions, confirmations, section headings, document body. Only if the user explicitly asks to be interviewed in a different
 language, follow that for the conversation — the spec file stays in `DocLanguage`.
 
 ## Interview rules (non-negotiable)
@@ -181,13 +197,15 @@ delimited · rules testable · acceptance criteria present · relevant error cas
 relevant data described · relevant technical constraints named · open questions visible · no
 filler sections.
 
-Then walk the five criterion shapes once. Most missing criteria live in the *state* and
-*unwanted behaviour* rows — those are the two categories prose requirements almost always miss.
+Then walk the five criterion shapes once — a checklist for gaps, not a quota; use only the
+shapes that fit. Most missing criteria live in the *state* and *unwanted behaviour* rows —
+those are the two categories prose requirements almost always miss.
 
 ## Step 5 — Write the spec file
 
 Restated here because path-scoped rules load when a matching file is **read**, and a brand-new
-spec has not been read yet:
+spec has not been read yet. `AGENTS.md` and `.claude/rules/specs.md` stay authoritative — if
+this ever diverges, follow them and fix this list:
 
 - Write the spec in `DocLanguage`.
 - Put `**Status:** Draft` directly under the H1.
@@ -201,7 +219,9 @@ three lifecycle folders; `slug` is a short ASCII kebab-case name derived from th
 ## Spec document structure
 
 Use only the sections this idea needs, drop the rest, and number the ones you keep
-consecutively so there are no gaps. Headings in `DocLanguage`.
+consecutively so there are no gaps. Headings in `DocLanguage`. Never drop *Scope* (incl.
+*Out of scope*), *Acceptance criteria* and *Assumptions* — if one is empty, keep it with a
+one-line reason: an absent negative space reads as permission.
 
 ```markdown
 # <Title>
@@ -251,11 +271,15 @@ A Given/When/Then scenario may be added under a criterion to pin one concrete ru
 *illustrates* a criterion, it never replaces one. Forcing an always-true invariant or a
 state-long rule into an event shape narrows it, and the narrowed version is what gets built.
 
-**Vocabulary.** Use **shall** for anything binding; *should* is non-binding and appears in no
-criterion. Reject any criterion containing: typically · usually · appropriate · sufficient ·
-performant · user-friendly · fast · robust · as needed · etc. · and/or — or a passive verb with
-no actor. If you cannot say what observation would prove a criterion **false**, it is not a
-criterion: move it to *Open points* and say so at hand-off.
+**Vocabulary** (restated from `.claude/rules/specs.md`, which stays authoritative — a
+brand-new spec has not loaded it). Use **shall** for anything binding; *should* is non-binding
+and appears in no criterion. Reject any criterion containing: typically · usually ·
+appropriate · sufficient · performant · user-friendly · fast · robust · as needed · etc. ·
+and/or — or a passive verb with no actor. If you cannot say what observation would prove a
+criterion **false**, it is not a criterion: move it to *Open points* and say so at hand-off.
+
+Criteria and requirements state observable behaviour, never technology. A criterion that stops
+being true when the framework is swapped is a constraint — move it to *Technical notes*.
 
 Every must-requirement traces to at least one criterion. Prefer criteria a test can decide; when
 only a person can decide one, say who checks what.
@@ -278,4 +302,8 @@ where needed.
   user should resolve.
 - Give a verdict: either the spec is sufficient for a first implementation, or name the
   missing pieces explicitly as blocking.
-- Tell the user to run `/sdd-plan` next.
+- Propose one commit of the spec file (git writes stay behind the Ask-first gate in
+  `AGENTS.md`) — an uncommitted spec is invisible to the next session's history checks.
+- Next command: `/sdd-clarify` whenever the spec carries assumptions, open points or
+  non-trivial scope — ideally in a fresh session, since this one wrote the spec.
+  Recommend `/sdd-plan` directly only for a trivial spec, and say why it qualifies.

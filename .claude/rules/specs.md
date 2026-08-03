@@ -9,9 +9,14 @@ The spec lifecycle itself — folder meanings, the status vocabulary, and the mo
 is defined in `AGENTS.md` (loaded every session). These rules cover only what is specific to
 **writing a spec file**:
 
-- Write specs in the language specified by `DocLanguage` in `AGENTS.md`
-  (default English until `/sdd-setup` sets it).
+- Write specs in the language specified by `DocLanguage` in `AGENTS.md`.
 - Keep acceptance criteria explicit and testable.
+- Acceptance criteria carry stable IDs (`AC-NNN`); never renumber them — steps and tests
+  reference them.
+- Binding criteria use **shall**. Reject any criterion containing: typically · usually ·
+  appropriate · sufficient · performant · user-friendly · fast · robust · as needed · etc. ·
+  the literal token "and/or" (plain "or" enumerations are fine) — or a passive verb with no
+  actor. A criterion nothing can prove false is not a criterion.
 - State the spec's status on a `**Status:**` line near the top, using the vocabulary from
   `AGENTS.md`.
 

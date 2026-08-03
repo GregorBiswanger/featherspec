@@ -18,6 +18,10 @@ cover only what is specific to **working inside a plan file**:
   you ran, and what it returned. An empty `Verified:` means the step is not done, however
   finished the code looks. This is the one rule that keeps the plan from becoming a record of
   intentions.
+- A test-adding step records its failing run first; the passing run lands with the
+  implementation. A test that was never red decides nothing. Name the AC ID in the test's
+  name or description, so the mapping survives outside the plan — and say in `Verified:`
+  *what* was red (failing assertion vs. missing module).
 - **Update the file the moment a step's state changes**, in the same change set as the code:
   tick the checkbox, fill `Verified:` and `Notes`, move `Current step`, refresh `Last updated`,
   and rewrite `Session handoff` so a fresh session can continue from the file alone.

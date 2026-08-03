@@ -9,6 +9,7 @@ TBD
 
 ## Active Spec
 - Spec: TBD
+- Plan: TBD
 - Current task: TBD
 - Acceptance criteria in focus: TBD
 

@@ -1,17 +1,10 @@
 # Specs
 
-Specs live here, one folder per lifecycle stage:
+Specs live here in lifecycle folders: `backlog/`, `active/`, `done/`. A spec's plan
+(`<same-name>.plan.md`) sits beside it.
 
-- `.specs/backlog/` — ideas and not-yet-started specs
-- `.specs/active/` — specs currently being implemented
-- `.specs/done/` — implemented specs with passing acceptance criteria
+Folder semantics, status vocabularies and the move invariants are defined in
+[`AGENTS.md`](../AGENTS.md) under *Spec & plan lifecycle* — the single source of truth,
+loaded in every session. Do not restate them here.
 
-A planned spec keeps its plan beside it as `<same-name>.plan.md` — the persisted step list and
-the traceability from acceptance criteria to code. The two files move together.
-
-The normative rules — the status vocabularies, the one-folder-at-a-time rule, and the move
-procedure — are defined in [`AGENTS.md`](../AGENTS.md) under *Spec & plan lifecycle*. Do not
-restate them here; that file is the single source of truth and is loaded in every session.
-
-Use `/sdd-specify` to create a spec, `/sdd-plan` to plan it, and `/sdd-lifecycle` to change its
-status or move it.
+Use `/sdd-specify` to create a spec, `/sdd-plan` to plan it, `/sdd-lifecycle` to move it.

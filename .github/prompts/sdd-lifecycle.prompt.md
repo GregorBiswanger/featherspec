@@ -1,7 +1,7 @@
 ---
 name: sdd-lifecycle
 description: Manage spec status and move specs between backlog/active/done.
-argument-hint: "[spec path] [newStatus: Draft|In Progress|Implemented|Deprecated]"
+argument-hint: "[spec path] [newStatus — vocabulary in AGENTS.md]"
 ---
 
 # /sdd-lifecycle

@@ -1,11 +1,11 @@
 ---
-description: Capture or reorganize coding style preferences in AGENTS.md.
+description: Capture coding style preferences into AGENTS.md.
 argument-hint: "[preference] (or list several)"
 disable-model-invocation: true
 ---
 
 <!-- Single source for the /sdd-style-update workflow. Claude Code runs this file directly;
-     GitHub Copilot reaches it through the one-line loader in
+     GitHub Copilot reaches it through the thin loader in
      .github/prompts/sdd-style-update.prompt.md. Deliberately no shell injection and no
      argument-variable substitution: Copilot supports neither. -->
 
@@ -21,8 +21,9 @@ preferences live. No loader file holds a copy.
 ## Steps
 
 1. If no preference was provided, ask the user for it.
-2. Normalize each into a short bullet, grouped by category (Comments, Naming, Formatting,
-   Framework Conventions, Testing, etc.).
-3. Apply the updates immediately to the *Style & Output Preferences* section in `AGENTS.md`
-   (append under the right heading, or create the heading).
-4. Confirm by showing the updated bullets. Apply them to all future code generation.
+2. Normalize each into a short bullet with a bold category prefix (`**Comments**: …`),
+   matching the section's existing format.
+3. Append it to the bullet list under *Current preferences* in `AGENTS.md` immediately.
+4. Check the file length against the cap in `.claude/rules/constitution.md`; if over, propose
+   an eviction per its order before finishing.
+5. Confirm by showing the updated bullets. Apply them to all future code generation.

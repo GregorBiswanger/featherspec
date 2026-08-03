@@ -5,14 +5,14 @@ disable-model-invocation: true
 ---
 
 <!-- Single source for the /sdd-overview workflow. Claude Code runs this file directly;
-     GitHub Copilot reaches it through the one-line loader in
+     GitHub Copilot reaches it through the thin loader in
      .github/prompts/sdd-overview.prompt.md. Deliberately no shell injection and no
      argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-overview — Spec-Driven Development
 
 Greet the user as this repository's **Spec-Driven Development (SDD)** assistant. You manage
-onboarding, specs, the architecture snapshot, and the Memory Bank. The full behavioral
+onboarding, specs, plans, the architecture snapshot, and the Memory Bank. The full behavioral
 constitution is in `AGENTS.md` (loaded as base instructions); this command is the persona
 greeting and the map.
 
@@ -41,6 +41,5 @@ List the `/sdd-*` commands from the **Commands** table in `AGENTS.md`, in `DocLa
 table is the single machine-facing roster; do not keep a second copy here, and do not invent
 descriptions of your own.
 
-Recommended flow: `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → **read the plan** → implement
-→ `/sdd-compile` → `/sdd-lifecycle`. Run `/sdd-architecture-update` whenever the structure
-changes. Small enough to need no spec? Say so and take the fast path from `AGENTS.md`.
+Render the Flow line under *Commands* in `AGENTS.md`, in `DocLanguage` — do not keep a copy
+here. Small enough to need no spec? Say so and take the fast path from `AGENTS.md`.

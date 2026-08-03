@@ -12,6 +12,9 @@ defined in `AGENTS.md` (loaded every session). These rules cover only what is sp
 - Write in the language specified by `DocLanguage` in `AGENTS.md`.
 - Keep entries concise, factual, and actionable.
 - If architecture changes, update `systemPatterns.md` and record "Changed Recently" in `activeContext.md`.
+- Date and link every decision entry in `systemPatterns.md` (spec, plan or commit) — an
+  undatable decision cannot be judged stale. Structure facts live only in the `architecture:`
+  snapshot; this file holds the why.
 
 > Note: path-scoped rules load when a matching file is **read**. A brand-new Memory Bank file
 > has not been read yet, so this rule would not be loaded when `/sdd-setup` creates one — which
@@ -36,7 +39,7 @@ Three metadata lines first — `Last updated: <date>`, `Current branch: <branch>
 `Current phase: specify | plan | act` — then these sections:
 
 - **Now** — one sentence: current goal of this session/work track.
-- **Active Spec** — link to the relevant spec file(s), current task ID, acceptance criteria in focus.
+- **Active Spec** — link to the spec file(s) and the `.plan.md`, current task ID, acceptance criteria in focus.
 - **Changed Recently** — only actual changes since the last update: files/modules affected, tests/checks run.
 - **Decisions in Flight** — short-lived decisions not yet permanent enough for `systemPatterns.md`.
 - **Blockers / Questions** — open items blocking progress.

@@ -5,14 +5,14 @@ disable-model-invocation: true
 ---
 
 <!-- Single source for the /sdd-plan workflow. Claude Code runs this file directly;
-     GitHub Copilot reaches it through the one-line loader in
+     GitHub Copilot reaches it through the thin loader in
      .github/prompts/sdd-plan.prompt.md. Deliberately no shell injection and no
      argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-plan — Implementation Plan
 
-The user may name a spec or plan path after the command. If none is given, list what sits under
-`.specs/` and ask which one to work on.
+The user may name a spec or plan path after the command. If none is given — or the named path
+does not exist — list what sits under `.specs/` and ask which one to work on.
 
 Planning produces a **file**. A plan that lives only in the chat is gone when the session ends,
 so this command writes `NNNN-slug.plan.md` next to its spec and keeps it as the persisted state of
@@ -33,19 +33,33 @@ steps to real code.
    and `.memory-bank/techContext.md` plus `systemPatterns.md`.
 2. **Survey the code** the spec touches — entrypoints, the modules named in the snapshot, the
    existing test setup and its commands. Plan against the repo as it is, not as it should be.
+   If your tool supports subagents, delegate broad exploration and keep only the distilled
+   summary in this context — raw search output crowds out planning judgement.
    Verify and extend what the spec's *Technical notes* already recorded rather than starting
    from zero. **If the survey contradicts the spec** — a criterion assumes behaviour the code
-   does not have, or ignores a caller it would break — stop, report the contradiction as a spec
-   defect, and switch to Mode C. Do not plan around a spec you have just refuted.
+   does not have, or ignores a caller it would break — stop and report the contradiction as a
+   spec defect: the spec is fixed first (`/sdd-specify` revise mode), then planning restarts.
+   Mode C applies only when a plan already exists. Do not plan around a spec you have just
+   refuted. Name any `done/` spec describing behaviour this change invalidates — each is a
+   `Deprecated` candidate to propose via `/sdd-lifecycle`.
 3. **Research** what you would otherwise guess (see below).
-4. **Decompose into baby steps** (see below).
-5. **Write the plan file**, then hand it over for review and stop (see *Always* below).
+4. **Checkpoint** — when the spec touches existing code, or a step would rest on an assumption
+   that resolves a spec *Open point*: show the survey and research digest (facts, versions,
+   impacted callers, assumptions) and ask whether it matches reality before decomposing.
+   Wrong research costs a whole plan; this is the cheapest moment to stop it. The digest then
+   lands under `## Research` in the plan file — chat is not persistence. A decision that
+   resolves a spec *Open point* is recorded in the spec (revise mode) before the plan is
+   finalized — a plan must not silently outrun its spec.
+5. **Decompose into baby steps** (see below).
+6. **Write the plan file**, then hand it over for review and stop (see *Always* below).
 
 ## Research (do it, do not skip it)
 
 Plan against current facts, not recollection. Use your web search or fetch capability whenever
 the spec involves a library, framework or API you cannot verify from the repo · version-specific
 behaviour · a protocol, standard or regulation · a pattern where your knowledge may be stale.
+Web lookups are network access — the Ask-first gate in `AGENTS.md` applies: name the lookups
+and get one yes for the whole research batch.
 
 - Check the version actually used in the repo (lock file, manifest) before trusting a doc page.
 - Prefer official documentation, release notes, and the project's own repository.
@@ -56,7 +70,9 @@ behaviour · a protocol, standard or regulation · a pattern where your knowledg
 
 ## Baby steps
 
-A step is one focused change that can be finished and checked on its own:
+Restates the step discipline from `.claude/rules/plans.md`, which stays authoritative — a
+brand-new plan has not loaded that path-scoped rule yet. A step is one focused change that
+can be finished and checked on its own:
 
 - **One concern per step** — a schema change, one endpoint, one component, one test suite.
 - **Small enough** to complete in one sitting and to read in one diff.
@@ -66,6 +82,8 @@ A step is one focused change that can be finished and checked on its own:
   no command can settle it. If you cannot state either, the step is too big or too vague; split it.
 - **Recorded**: the step's `Verified:` field stays empty until the `Verify:` line was actually
   run. A tick without a recorded result is a claim, not a verification.
+- **Red first**: when a step adds a test for a criterion, record its failing run in `Verified:`
+  before the implementation lands. A test that was never red decides nothing.
 - **Ordered so the repo keeps working** after every step; risky or blocking parts come first.
 - **Tied to the spec**: each step names the acceptance criteria it serves, every criterion is
   covered by at least one step, and pure scaffolding steps say so explicitly.
@@ -75,7 +93,8 @@ If the step list runs long, the spec was probably two specs. Say so before writi
 ## Plan file structure
 
 Restated here because path-scoped rules load when a matching file is **read**, and a brand-new
-plan has not been read yet:
+plan has not been read yet. `AGENTS.md` and `.claude/rules/plans.md` stay authoritative — if
+this ever diverges, follow them and fix this file:
 
 - Write the plan in `DocLanguage`.
 - Name it after its spec with a `.plan.md` suffix, in the **same lifecycle folder**:
@@ -97,6 +116,7 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
 
 ## Research
 
+- Survey: impacted files and callers, implicit contracts, assumptions this plan rests on
 - [Title](https://example.org/doc) — what it settled, retrieved <date>
 
 ## Steps
@@ -132,17 +152,24 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
 - **Done so far:** —
 - **Next action:** T-001
 - **Open decisions:** —
-- **Environment:** build, run and test commands needed to continue
+- **Baseline:** _(commit hash before the first step commit; set when work starts)_
+- **Environment:** deviations from `techContext.md` only — standard commands live there
 ````
 
 ## Mode B — resume an existing plan
 
 1. Read the plan first, then the spec. `Current step` and `Session handoff` say where the work
    stands — verify that against `git status --short` and the actual code before trusting it.
-2. Report in three lines: what is done, what is next, what blocks it.
+   If the pair still sits in `backlog/` or the spec still says `Draft` while work is starting,
+   propose the move to `active/` + `In Progress` first — `/sdd-lifecycle` performs it.
+2. Report in three lines: what is done, what is next, what blocks it. If
+   `activeContext.md`'s `Last updated` is older than the newest commit, say so — the
+   dashboard is stale.
 3. Continue from the next open step only when the user asks you to. After each finished step,
    update the plan **in the same change set**: tick the box, fill `Notes`, write the real paths
    into the traceability table, move `Current step`, refresh `Last updated` and the handoff.
+   Then propose one commit named after the step ID — git writes stay behind the Ask-first gate
+   in `AGENTS.md`.
 4. When every step is ticked and its criteria hold, set the plan status to `Done` and point the
    user at `/sdd-compile`.
 
@@ -166,7 +193,8 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
   the riskiest one, and say plainly that reading these steps now is cheaper than reading the diff
   later — a wrong step costs hundreds of lines, a wrong line costs one. Ask which steps look
   wrong before anything is implemented. Every other artifact here has a named reader; this one
-  is the most expensive to get wrong.
+  is the most expensive to get wrong. Once approved, propose one commit of the plan (Ask-first
+  gate), then the pair moves to `active/` before implementation (`/sdd-lifecycle` performs it).
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

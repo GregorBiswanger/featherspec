@@ -88,9 +88,10 @@ flowchart LR
   S["💬 /sdd-specify<br/>interview → spec"] --> K["🔍 /sdd-clarify<br/>adversarial pass"]
   K --> P["🗺️ /sdd-plan<br/>spec → baby steps"]
   P --> R["👀 you read the plan<br/>cheapest review there is"]
-  R --> I["⚙️ implement<br/>step by step"]
+  R --> A["📂 /sdd-lifecycle<br/>backlog → active"]
+  A --> I["⚙️ implement<br/>step by step"]
   I --> C["✅ /sdd-compile<br/>verdict + evidence"]
-  C --> L["📦 /sdd-lifecycle<br/>spec → done/"]
+  C --> L["📦 /sdd-lifecycle<br/>active → done"]
   L -.->|next iteration| S
 ```
 
@@ -162,9 +163,9 @@ reason: always-true, event, state, unwanted behaviour, optional feature.
 ```
 
 This reads your finished spec **as a stranger** — no conversation history, no benefit of the
-doubt — and returns four lists: contradictions, terms you used in two senses, criteria nothing
-can decide, and failure modes you never named. It does not fix them. It ends with one question:
-the thing whose being wrong would cost the most.
+doubt — and returns five lists: contradictions, terms you used in two senses, criteria nothing
+can decide, implementation details posing as intent, and failure modes you never named. It does
+not fix them. It ends with one question: the thing whose being wrong would cost the most.
 
 Thirty seconds of reading here is the cheapest ambiguity you will ever remove. Left alone, every
 one of those gaps gets silently resolved by the planner's best guess and hardened into numbered
@@ -192,7 +193,9 @@ and on the **order** — that step three really does depend on step two, that no
 is missing, that the risky part comes first. A wrong step produces hundreds of wrong lines; a
 wrong line produces one. Two hundred lines of plan beats two thousand lines of diff.
 
-Say which steps look wrong before anything is implemented.
+Say which steps look wrong before anything is implemented. Once you approve,
+`/sdd-lifecycle` moves the pair into `.specs/active/` — implementation happens there, not in
+the backlog.
 
 ### ⑥ Implement, step by step
 
@@ -213,9 +216,10 @@ from your memory.
 /sdd-compile
 ```
 
-You get a readiness brief that opens with a verdict — `READY`, `NOT READY`, or `NOT READY —
-unverified` — followed by every acceptance criterion marked satisfied or pending *with
-evidence*, the open plan steps, whether the docs are in sync, and the next three actions.
+You get a readiness brief that opens with a verdict — `READY` (with declared manual checks
+counted), `NOT READY`, or `NOT READY — unverified` — followed by every acceptance criterion
+marked satisfied or pending *with evidence*, the open plan steps, whether the docs are in
+sync, and the next three actions.
 
 Evidence means a test name and its output, or a command and its output. Not a step number, and
 not a sentence describing the code. If the suite did not run, the verdict is `unverified` no
@@ -245,7 +249,7 @@ runs faster because the context is already written down.
 | `/sdd-overview` | Where am I? Workflow map, current spec status, command list |
 | `/sdd-setup` | One-time wizard: doc language, Memory Bank, first architecture snapshot |
 | `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec |
-| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, missing failure modes |
+| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → a persisted plan of baby steps, with research and traceability |
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
 | `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` |
@@ -265,7 +269,7 @@ CLAUDE.md              one line: @AGENTS.md
 .claude/commands/      the nine workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
-.github/prompts/       one-line loaders so Copilot reaches the same bodies
+.github/prompts/       thin loaders so Copilot reaches the same bodies
 .github/agents/        the Copilot persona — a pointer at AGENTS.md, nothing more
 .vscode/settings.json  tells Copilot where to find .claude/rules and .github/prompts
 
@@ -275,7 +279,7 @@ docs/history/          how FeatherSpec itself was built — delete it in your pr
 ```
 
 Everything mutable lives in `AGENTS.md` and the two data folders. Workflow bodies exist exactly
-once, under `.claude/commands/`; `.github/prompts/` holds one-line pointers to them.
+once, under `.claude/commands/`; `.github/prompts/` holds thin pointers to them.
 
 There is one deliberate exception, and it is labelled everywhere it occurs: a path-scoped rule
 only loads once a matching file has been **read**, so a brand-new spec or plan would be written
@@ -295,7 +299,8 @@ Where a copy exists, it names `AGENTS.md` as the winner.
   request; a command is only ever run when *you* type it. Nine workflows sitting in every
   system prompt is a cost with no upside here.
 - **Only the entry point differs.** `.claude/commands/<name>.md` holds the body;
-  `.github/prompts/<name>.prompt.md` is a one-line pointer to it. One file to edit, two tools
+  `.github/prompts/<name>.prompt.md` is a thin pointer to it (its frontmatter mirrors the
+  body's — declared in `AGENTS.md`, which wins on divergence). One body to edit, two tools
   served.
 
 The [full interop matrix](https://github.com/GregorBiswanger/featherspec/wiki/Interop-Matrix)

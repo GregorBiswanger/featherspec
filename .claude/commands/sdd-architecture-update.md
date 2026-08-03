@@ -5,7 +5,7 @@ disable-model-invocation: true
 ---
 
 <!-- Single source for the /sdd-architecture-update workflow. Claude Code runs this file directly;
-     GitHub Copilot reaches it through the one-line loader in
+     GitHub Copilot reaches it through the thin loader in
      .github/prompts/sdd-architecture-update.prompt.md. Deliberately no shell injection and no
      argument-variable substitution: Copilot supports neither. -->
 
@@ -15,8 +15,9 @@ The user may name a focus area (module, folder, or concern) after the command; i
 
 ## Gather context first
 
-Inspect the actual repository directory tree (top two levels are enough) and read the current
-`architecture:` snapshot from `AGENTS.md`.
+Read the current `architecture:` snapshot from `AGENTS.md`. Inspect the tree's top two levels
+for new structures, and verify every path the snapshot names (entrypoints, modules, shared) at
+whatever depth it sits — boundary changes hide below level two.
 
 ## Goal
 
@@ -44,6 +45,10 @@ Only after confirmation:
   `# last reconciled:` comment inside that block to today's date — a snapshot with no date
   cannot be told apart from one that was never checked.
 - Update `.memory-bank/systemPatterns.md` (patterns/decisions).
-- Update `.memory-bank/activeContext.md` (recent changes + next steps; keep to 1–2 pages).
+- Update `.memory-bank/techContext.md` when stack, build or test facts changed.
+- Update `.memory-bank/activeContext.md` (recent changes + next steps; size limit from
+  `AGENTS.md`).
+- Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if over, propose an
+  eviction per its order.
 
 Everything must remain **DocLanguage-aware**.
