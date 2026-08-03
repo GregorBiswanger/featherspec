@@ -1,13 +1,13 @@
 ---
-name: sdd-specify
 description: Adaptive product-owner interview that turns an idea into a lean, testable spec.
 argument-hint: "[idea or title] [area/module]"
 disable-model-invocation: true
 ---
 
-<!-- Shared skill for Claude Code and GitHub Copilot. Deliberately no shell injection
-     and no argument-variable substitution: Copilot supports neither, and this one file
-     is read by both tools. -->
+<!-- Single source for the /sdd-specify workflow. Claude Code runs this file directly;
+     GitHub Copilot reaches it through the one-line loader in
+     .github/prompts/sdd-specify.prompt.md. Deliberately no shell injection and no
+     argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-specify — Specification Wizard
 

@@ -1,13 +1,13 @@
 ---
-name: sdd-lifecycle
 description: Manage spec status and move specs between backlog/active/done.
 argument-hint: "[spec path] [newStatus: Draft|In Progress|Implemented|Deprecated]"
 disable-model-invocation: true
 ---
 
-<!-- Shared skill for Claude Code and GitHub Copilot. Deliberately no shell injection
-     and no argument-variable substitution: Copilot supports neither, and this one file
-     is read by both tools. -->
+<!-- Single source for the /sdd-lifecycle workflow. Claude Code runs this file directly;
+     GitHub Copilot reaches it through the one-line loader in
+     .github/prompts/sdd-lifecycle.prompt.md. Deliberately no shell injection and no
+     argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-lifecycle — Manage Spec Status and Folders
 
@@ -22,7 +22,7 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
 
 ## Rules
 
-> These restate the *Spec lifecycle* policy from `AGENTS.md` on purpose: this skill is the one
+> These restate the *Spec & plan lifecycle* policy from `AGENTS.md` on purpose: this command is the one
 > that performs the moves and deletions, so the safety rules must be in front of the model at
 > the moment it acts. `AGENTS.md` stays authoritative — if the two ever diverge, follow it and
 > fix this list.
@@ -36,14 +36,22 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   file to the destination **and delete the original**.
 - **Duplicate check:** before moving, scan all three folders for files with the same name.
   If found, delete copies in less-advanced folders (done > active > backlog), then move.
+- **Plans travel with their spec:** if `NNNN-slug.plan.md` exists next to `NNNN-slug.md`, move
+  and de-duplicate both together — a plan must never end up in a different folder than its
+  spec. A spec has its own status vocabulary (`Draft | In Progress | Implemented | Deprecated`);
+  the plan has its own (`Not started | In Progress | Blocked | Done`). Do not overwrite one with
+  the other.
+- **Before `done/`:** check the plan too — every step ticked, the traceability table filled with
+  real code paths. If steps are still open, say so and let the user decide before moving.
 
 ## Default behavior
 
-1. **Inspect** the referenced spec(s): title, summary, acceptance criteria, current status.
+1. **Inspect** the referenced spec(s): title, summary, acceptance criteria, current status, and
+   the state of the accompanying plan if there is one.
 2. **Propose** a lifecycle update (draft → `backlog/`; in progress → `active/`; completed →
    `done/` with status `Implemented`).
-3. **Act**: edit the `**Status:**` line, move the file to the target folder, and delete the
-   original from the source folder.
+3. **Act**: edit the `**Status:**` line, move the file — together with its `.plan.md` sibling —
+   to the target folder, and delete the originals from the source folder.
 4. **Sync docs**: update the relevant `.memory-bank/*` files. **Always** update
    `.memory-bank/activeContext.md` when a spec becomes active or is completed — set
    `## Active Spec` (or clear it when moving to `done/`), update `Current phase`, and refresh

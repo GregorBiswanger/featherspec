@@ -1,13 +1,13 @@
 ---
-name: sdd-architecture-update
 description: Detect architecture drift and sync the snapshot + Memory Bank (with confirmation).
 argument-hint: "[focus: module|folder|area] (optional)"
 disable-model-invocation: true
 ---
 
-<!-- Shared skill for Claude Code and GitHub Copilot. Deliberately no shell injection
-     and no argument-variable substitution: Copilot supports neither, and this one file
-     is read by both tools. -->
+<!-- Single source for the /sdd-architecture-update workflow. Claude Code runs this file directly;
+     GitHub Copilot reaches it through the one-line loader in
+     .github/prompts/sdd-architecture-update.prompt.md. Deliberately no shell injection and no
+     argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-architecture-update — Architecture Reconciliation
 

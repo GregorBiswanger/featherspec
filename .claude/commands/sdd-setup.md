@@ -1,13 +1,13 @@
 ---
-name: sdd-setup
 description: Onboarding wizard — set DocLanguage, seed the Memory Bank, capture the first architecture snapshot.
 argument-hint: "[docLanguage] [projectName] [stack] — or just answer the wizard"
 disable-model-invocation: true
 ---
 
-<!-- Shared skill for Claude Code and GitHub Copilot. Deliberately no shell injection
-     and no argument-variable substitution: Copilot supports neither, and this one file
-     is read by both tools. -->
+<!-- Single source for the /sdd-setup workflow. Claude Code runs this file directly;
+     GitHub Copilot reaches it through the one-line loader in
+     .github/prompts/sdd-setup.prompt.md. Deliberately no shell injection and no
+     argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-setup — SDD Setup Wizard
 
@@ -49,7 +49,7 @@ commands guide exactly this workflow.
 
 - `/sdd-setup`: one-time onboarding — sets `DocLanguage`, prepares the Memory Bank and spec folders, initializes the first architecture snapshot.
 - `/sdd-specify`: adaptive product-owner interview that turns a feature/idea into a lean, testable spec under `.specs/`.
-- `/sdd-plan`: produce a step-by-step implementation plan for an existing spec.
+- `/sdd-plan`: write the plan file for an existing spec — researched baby steps, resumable state, traceability to code.
 - `/sdd-architecture-update`: reconcile the architecture snapshot with the real repo after structural change (with confirmation).
 - `/sdd-lifecycle`: maintain spec status and move specs between `backlog/`, `active/`, `done/`.
 - `/sdd-style-update`: capture or refine coding-style preferences in `AGENTS.md`.

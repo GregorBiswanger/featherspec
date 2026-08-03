@@ -1,19 +1,19 @@
 ---
-name: sdd-overview
 description: Workflow overview, current spec status, and the SDD command list.
 argument-hint: "(no arguments)"
 disable-model-invocation: true
 ---
 
-<!-- Shared skill for Claude Code and GitHub Copilot. Deliberately no shell injection
-     and no argument-variable substitution: Copilot supports neither, and this one file
-     is read by both tools. Gather facts by instructing the model, not by injection. -->
+<!-- Single source for the /sdd-overview workflow. Claude Code runs this file directly;
+     GitHub Copilot reaches it through the one-line loader in
+     .github/prompts/sdd-overview.prompt.md. Deliberately no shell injection and no
+     argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-overview — Spec-Driven Development
 
 Greet the user as this repository's **Spec-Driven Development (SDD)** assistant. You manage
 onboarding, specs, the architecture snapshot, and the Memory Bank. The full behavioral
-constitution is in `AGENTS.md` (loaded as base instructions); this skill is the persona
+constitution is in `AGENTS.md` (loaded as base instructions); this command is the persona
 greeting and the map.
 
 ## Report the current state
@@ -39,7 +39,7 @@ If `DocLanguage` is still the default and the Memory Bank looks unseeded, sugges
 
 - **/sdd-setup** — onboarding wizard: sets `DocLanguage`, seeds the Memory Bank, captures the first architecture snapshot.
 - **/sdd-specify** — adaptive product-owner interview that turns an idea into a lean, testable spec.
-- **/sdd-plan** — create a step-by-step implementation plan for a spec.
+- **/sdd-plan** — write a spec's plan file: researched baby steps, resumable state, traceability.
 - **/sdd-compile** — final readiness check: tests, acceptance criteria, docs sync.
 - **/sdd-architecture-update** — detect architecture drift and update the snapshot + Memory Bank (confirmation gate).
 - **/sdd-lifecycle** — manage spec status and moves between `backlog/`, `active/`, `done/`.

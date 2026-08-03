@@ -129,7 +129,7 @@ Keep updates minimal, factual, and traceable. For **non-trivial architectural
 interpretation** changes (redefined boundaries, new layering), summarize what you detected
 and ask the user to confirm before finalizing.
 
-## Spec lifecycle
+## Spec & plan lifecycle
 
 Specs live under `.specs/`, organized by lifecycle stage:
 
@@ -150,17 +150,38 @@ When a spec is implemented and its tests pass:
    lifecycle folder at a time.
 4. Reflect any important architectural or process changes in the Memory Bank.
 
+### Plans
+
+Planning produces a **file**, not just a chat answer. A planned spec has exactly one plan
+beside it, named after the spec with a `.plan.md` suffix — `0007-user-login.md` →
+`0007-user-login.plan.md`. The pair shares a lifecycle folder and always moves together.
+
+The plan declares its own status near the top:
+
+`**Status:** Not started | In Progress | Blocked | Done`
+
+The plan is the **persisted state of the work**: a step-by-step list of baby steps, which step
+is current, what each finished step actually touched, and a traceability table from acceptance
+criteria to steps to real code paths. Two consequences that are not optional:
+
+- **Keep it current in the same change set as the code.** A new session must be able to resume
+  from the plan alone.
+- **Keep traceability honest.** When a requirement changes, the chain spec → plan → code is how
+  anyone sees which code the change reaches.
+
 ## Commands
 
-These `/sdd-*` commands drive the workflow. They are shared skills under `.claude/skills/`,
-read by both assistants:
+These `/sdd-*` commands drive the workflow. Each one is a single body file under
+`.claude/commands/` that Claude Code runs directly and GitHub Copilot reaches through a
+one-line loader in `.github/prompts/`. Neither entry point is advertised to the model: the
+workflows run only when you invoke them.
 
 | Command | Purpose |
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
 | `/sdd-setup` | Onboarding wizard: `DocLanguage`, seed Memory Bank, first architecture snapshot |
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
-| `/sdd-plan` | Spec → step-by-step implementation plan |
+| `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |
 | `/sdd-compile` | Readiness check: tests, acceptance criteria, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
 | `/sdd-lifecycle` | Spec status and moves between backlog/active/done |

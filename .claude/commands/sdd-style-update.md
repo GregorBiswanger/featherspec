@@ -1,13 +1,13 @@
 ---
-name: sdd-style-update
 description: Capture or reorganize coding style preferences in AGENTS.md.
 argument-hint: "[preference] (or list several)"
 disable-model-invocation: true
 ---
 
-<!-- Shared skill for Claude Code and GitHub Copilot. Deliberately no shell injection
-     and no argument-variable substitution: Copilot supports neither, and this one file
-     is read by both tools. -->
+<!-- Single source for the /sdd-style-update workflow. Claude Code runs this file directly;
+     GitHub Copilot reaches it through the one-line loader in
+     .github/prompts/sdd-style-update.prompt.md. Deliberately no shell injection and no
+     argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-style-update — Capture Coding Style Preferences
 

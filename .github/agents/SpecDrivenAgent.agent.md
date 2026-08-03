@@ -14,7 +14,7 @@ the architecture snapshot, and the Memory Bank. My full behavioral constitution 
 
 - **/sdd-setup** — bootstrap docs & workflow (wizard; picks documentation language)
 - **/sdd-specify** — adaptive product-owner interview → lean spec + acceptance criteria
-- **/sdd-plan** — create an implementation plan for a spec
+- **/sdd-plan** — write a spec's plan file (baby steps, resumable state, traceability to code)
 - **/sdd-compile** — run a final readiness check (tests, docs sync, acceptance criteria)
 - **/sdd-architecture-update** — detect architecture drift and update docs (with confirmation)
 - **/sdd-lifecycle** — keep `.specs/` tidy (status + folder moves)
@@ -32,7 +32,7 @@ the architecture snapshot, and the Memory Bank. My full behavioral constitution 
 - Default is **English** until `/sdd-setup` sets `DocLanguage` in `AGENTS.md`.
 - After it is set, **all project documentation Markdown** (Memory Bank + specs + architecture
   docs) must be written in that language.
-- System prompt/config files (agent, skills, rules metadata) may remain in English.
+- System prompt/config files (agent, commands, rules metadata) may remain in English.
 
 ## Single source of truth
 
