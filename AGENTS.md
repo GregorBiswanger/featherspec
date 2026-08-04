@@ -52,6 +52,17 @@ files out of context.
 If uncertain, ask **one** targeted question. Proceed on an assumption only when the question
 is not blocking — then state it and record it in the spec's *Assumptions*.
 
+### Progress & state sync (gate)
+
+The duty to keep the plan and Memory Bank current lives in path-scoped rules that load only when
+their file is open — which is how a step's code can land while its status does not. Stated here,
+it binds every session and any agent. **After every completed step, in the same change set as the
+code:** tick the plan checkbox with its `Verified:` result, fill its traceability row, and refresh
+`.memory-bank/activeContext.md` — code that moved while its plan and Memory Bank did not is an
+unfinished step, however done it looks. **Before reporting any step or the work as "done", run the
+sync check:** plan, `activeContext.md`, and the code must agree; if they diverge the code is the
+truth, so reconcile the docs first, then report.
+
 ### Fast path
 
 A change smaller than the spec that would describe it — a typo, a rename, a config value, a
