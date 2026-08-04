@@ -206,9 +206,11 @@ Implement T-001.
 The agent does one focused change, runs its `Verify:` line, and writes the result into the
 step's `Verified:` field — the command it ran and what came back — before it ticks the box.
 No recorded run, no tick: that one rule is what keeps a plan from becoming a list of good
-intentions. It records which files it touched in the same change set as the code. Repeat until
-the steps are done. Close a session mid-way and the next one resumes from the plan file, not
-from your memory.
+intentions. It records which files it touched in the same change set as the code, and refreshes
+`.memory-bank/activeContext.md` in that same change set, so the dashboard never lags the work.
+Before anything is called *done*, it reconciles plan, Memory Bank, and code — a step whose
+status did not move is not finished, whatever the code looks like. Repeat until the steps are
+done. Close a session mid-way and the next one resumes from the plan file, not from your memory.
 
 ### ⑦ Check it against your own criteria
 
