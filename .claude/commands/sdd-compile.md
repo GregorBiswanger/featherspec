@@ -66,8 +66,9 @@ stays `pending`.
 - **Do / Don't** — including the *Style & Output Preferences* from `AGENTS.md`.
 - **Docs sync** — compare `activeContext.md`'s `Last updated` line against the newest commit in
   the git log above. Check the `architecture:` snapshot and `systemPatterns.md` against
-  structural or decision changes in the diff (writes go through the confirmation gate in
-  `AGENTS.md`), and that `techContext.md`'s test command matches the one that actually ran.
+  structural or decision changes in the diff (a stale snapshot means the unprompted
+  `/sdd-architecture-update` run required by `AGENTS.md` was missed), and that
+  `techContext.md`'s test command matches the one that actually ran.
   If the code moved and a doc did not, name what is missing. When the diff or the spec changed
   who the users are or what success means, check `.memory-bank/projectbrief.md` still says the
   same — mission drift hides there because no compiler complains. Is `activeContext.md` within

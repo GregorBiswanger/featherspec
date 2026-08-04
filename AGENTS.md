@@ -75,10 +75,12 @@ The ceremony is the method's servant, not its point.
 
 ### Rule: Preference capture (high priority)
 
-When the user states any coding style or output preference, or asks for code to be rewritten
-differently ("more idiomatic", "without LINQ"): acknowledge briefly, **immediately** record it
+When the user, in any language, states a coding style or output preference, asks for a
+rewrite ("more idiomatic", "without LINQ"), or asks to remember a lasting do or don't
+("no comments from now on", "remember this"): acknowledge briefly, **immediately** record it
 as a bullet below — replacing any bullet it contradicts, and saying so — and follow it
-strictly from then on. This section is never finished.
+strictly from then on. Bullets here load in every session; that is what makes them binding.
+This section is never finished.
 
 ### Current preferences
 
@@ -87,16 +89,16 @@ strictly from then on. This section is never finished.
 
 ## Architecture & Design Snapshot (MUST SYNC)
 
-Keep this snapshot current. `/sdd-architecture-update` reconciles it with the real tree.
+Agents orient by this snapshot — find modules and entrypoints here instead of scanning the
+tree — so it is only useful while it is true.
 
-### Rule: Best-effort automatic drift detection
+### Rule: Run the architecture update unprompted
 
-At the start of tasks that add, move or delete **source** modules, entrypoints or top-level
-folders — not specs, plans or Memory Bank files — run a quick drift check:
-
-- Compare the current workspace structure to this snapshot and the Memory Bank.
-- Report what drifted and propose the update. Write it only after the user confirms; that
-  confirmation is what `/sdd-architecture-update` performs.
+When a change adds, moves or deletes **source** modules, entrypoints or top-level folders —
+not specs, plans or Memory Bank files — or the workspace no longer matches this snapshot:
+run the `/sdd-architecture-update` workflow yourself, in the same change set, exactly as if
+the user had typed it (its body lives in `.claude/commands/sdd-architecture-update.md`).
+Typing it manually is the fallback for when this automatic run visibly did not happen.
 
 ```yaml
 # last reconciled: never
@@ -135,13 +137,11 @@ changed entrypoints · build/deploy pipeline changes · boundaries redrawn betwe
 layers · new architectural decisions or constraints · new user-stated style guidelines
 (→ *Style & Output Preferences*).
 
-**Sync targets:** the `architecture:` snapshot — proposed, then written after the user
-confirms; the drift rule above owns that gate and there is exactly one · `systemPatterns.md`
+**Sync targets:** the `architecture:` snapshot — via `/sdd-architecture-update`, run
+unprompted per its rule above; its confirmation gate is the only one · `systemPatterns.md`
 for patterns and decisions · `techContext.md` for stack, build, run and test changes ·
 `activeContext.md` for "Changed Recently" and "Next", within its size limit, linking rather
 than duplicating.
-
-Keep updates minimal, factual, and traceable.
 
 ## Spec & plan lifecycle
 
@@ -206,4 +206,4 @@ list — commands render it from here.
 Flow — the only source of the recommended order; commands render it from here:
 `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → human reads the plan → `/sdd-lifecycle`
 (backlog → active) → implement → `/sdd-compile` → `/sdd-lifecycle` (active → done).
-`/sdd-architecture-update` whenever structure drifts.
+`/sdd-architecture-update` runs unprompted whenever structure drifts; type it only as fallback.
