@@ -65,6 +65,24 @@ Ask exactly: **"In which language should the project documentation Markdown file
 - Then write all project docs (Memory Bank + specs) in that language, rewriting the default
   English templates if needed.
 
+## Step 1 (MUST follow Step 0): Project mode
+
+Run `git ls-files` and count source files outside this template's own folders
+(`.claude/`, `.github/`, `.specs/`, `.memory-bank/`, `.vscode/`). Guess the mode —
+substantial source files plus a snapshot still at `TBD` or `# last reconciled: never`
+suggests existing software — state your guess, then ask exactly:
+**"Is this a new project, or existing software we are adopting?"**
+
+- **New project** → continue with this wizard unchanged.
+- **Existing software** → ask what is needed right now: documentation language and
+  Memory Bank seeding only, or a deep architecture scan that builds the fingerprint
+  from the code. If the scan is chosen: first collect wizard steps 1, 2 and 7 (only
+  the human knows mission, audience and taste), then run the `/sdd-architecture-scan`
+  workflow yourself, exactly as if the user had typed it (its body lives in
+  `.claude/commands/sdd-architecture-scan.md`). Skip wizard steps 3–6 — the scan
+  answers them from the code and writes `techContext.md` and `systemPatterns.md`
+  itself. Afterwards finish only actions B (projectbrief + activeContext), D and E.
+
 ## Read the repo before asking
 
 Manifests and lock files (stack, package manager) · the tree's top two levels (entrypoints,

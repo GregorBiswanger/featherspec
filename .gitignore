@@ -2,3 +2,9 @@
 .claude/settings.local.json
 CLAUDE.local.md
 .github/copilot/settings.local.json
+
+# Volatile deep-scan working state — deleting it loses nothing curated
+.sdd-scan/
+
+# Local validation notes for developing this template — never shipped
+validation/
