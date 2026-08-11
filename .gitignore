@@ -5,6 +5,3 @@ CLAUDE.local.md
 
 # Volatile deep-scan working state — deleting it loses nothing curated
 .sdd-scan/
-
-# Local validation notes for developing this template — never shipped
-validation/
