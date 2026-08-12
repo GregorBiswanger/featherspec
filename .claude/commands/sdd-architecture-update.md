@@ -65,6 +65,8 @@ Only after confirmation:
 
 Treat the scan's distilled findings as the observed state; include its coverage figures and
 navigation self-test score in the delta report; on confirmation also set `last deep scan` in
-the snapshot comment. The gate above stays the snapshot's only write gate.
+the snapshot comment. The gate above stays the snapshot's only write gate. If the findings
+arrive without a recorded self-test score, do not open the gate — send the scan back to run
+its self-test first: an unverified fingerprint is not observed state.
 
 Everything must remain **DocLanguage-aware**.

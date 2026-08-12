@@ -28,7 +28,7 @@ wins.
 
 ```yaml
 DocLanguage: English # default; /sdd-setup may change this. Governs the user's project docs
-                     # (Memory Bank, specs, README); the template's own wiring stays English.
+                     # (Memory Bank, specs, README) and all workflow dialogue; wiring stays English.
 ```
 
 ## Non-negotiables

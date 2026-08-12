@@ -64,6 +64,8 @@ Ask exactly: **"In which language should the project documentation Markdown file
 - After a language is chosen, set `DocLanguage` in `AGENTS.md` (the **only** place it lives).
 - Then write all project docs (Memory Bank + specs) in that language, rewriting the default
   English templates if needed.
+- From here on, conduct the entire dialogue — every question, confirmation and summary —
+  in `DocLanguage`. Only this template's own files stay English.
 
 ## Step 1 (MUST follow Step 0): Project mode
 
@@ -76,7 +78,8 @@ suggests existing software — state your guess, then ask exactly:
 - **New project** → continue with this wizard unchanged.
 - **Existing software** → ask what is needed right now: documentation language and
   Memory Bank seeding only, or a deep architecture scan that builds the fingerprint
-  from the code. If the scan is chosen: first collect wizard steps 1, 2 and 7 (only
+  from the code (token-intensive — the scan states its value, cost and levers before it
+  starts). If the scan is chosen: first collect wizard steps 1, 2 and 7 (only
   the human knows mission, audience and taste), then run the `/sdd-architecture-scan`
   workflow yourself, exactly as if the user had typed it (its body lives in
   `.claude/commands/sdd-architecture-scan.md`). Skip wizard steps 3–6 — the scan
@@ -92,6 +95,9 @@ for what you can read: pre-fill steps 3, 5 and 6 below from what you found and p
 for correction in one turn. On a re-run, merge with what exists — never reset a curated file.
 
 ## Wizard steps (ask only what the repo did not answer)
+
+Every question carries one short clause of why it is asked (what it seeds) — plain
+language, no lecture.
 
 1. **Project name & one-liner**
 2. **Primary users / target audience**
