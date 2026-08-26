@@ -28,6 +28,9 @@ GitHub Copilot, because both tools execute the **same files**.
 
 ## Start in two minutes
 
+*(These three steps are the greenfield path — adopting an existing repository? Jump to
+[Already have a codebase?](#already-have-a-codebase).)*
+
 ### 1 · Get the template
 
 Click **[Use this template](https://github.com/GregorBiswanger/featherspec/generate)** on GitHub — or clone it:
@@ -83,12 +86,29 @@ That is the entire installation. Nothing to build, nothing to run.
 
 ## Already have a codebase?
 
-FeatherSpec is not greenfield-only. Run `/sdd-setup` and answer **existing software** — the
-wizard offers a deep architecture scan that reads your code (recursively, with isolated scout
-agents), lets you confirm the module boundaries it found, and distills a lean fingerprint into
-the `architecture:` snapshot. It is resumable at any point, re-runnable whenever the snapshot
-feels stale (`/sdd-architecture-scan`, optionally with a focus path), and it cleans up after
-itself.
+FeatherSpec adopts existing software as a first-class path — from a single service up to
+large enterprise repositories: the scan's worklist gate is the cost dial (deep-scan the
+core, defer the periphery, rescan later with a focus path).
+
+**Step 0 — get the files into your repository.** An existing project does not start from
+"Use this template"; copy the template's files in instead. Fetch the template next to your
+project:
+
+```bash
+npx degit GregorBiswanger/featherspec featherspec-tmp
+```
+
+Then copy into your repo: `AGENTS.md`, `CLAUDE.md`, `.claude/`, `.github/prompts/`,
+`.github/agents/`, `.specs/`, `.memory-bank/` — plus `.vscode/settings.json` and the
+template's `.gitignore` entries (merge both if you already have your own). Nothing else:
+no build, no dependencies.
+
+**Then run `/sdd-setup` and answer *existing software*** — the wizard offers a deep
+architecture scan that reads your code (recursively, with isolated scout agents), lets you
+confirm the module boundaries it found, and distills a lean fingerprint into the
+`architecture:` snapshot. It is resumable at any point, re-runnable whenever the snapshot
+feels stale (`/sdd-architecture-scan`, optionally with a focus path), and it cleans up
+after itself.
 
 The payoff: agents jump straight to the right files instead of exploring — with verified
 conventions and traps as grounds for better technical decisions — and the documentation can
