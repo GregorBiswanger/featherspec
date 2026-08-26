@@ -53,6 +53,10 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   re-verify, then proceed.
 - **Deprecated:** the spec stays in `done/` and links its successor spec (or
   `successor: none — behaviour removed`); its plan keeps its status plus an abandonment note.
+- **Reactivating an `Implemented` spec** whose behaviour is changing: pair moves back to
+  `active/`, spec and plan both `In Progress`; `/sdd-plan` Mode C extends the plan from its
+  impact report. A new slice of work gets a successor spec instead — when unsure which case
+  it is, ask. `Deprecated` stays reserved for behaviour a successor replaces or removes.
 - **Abandoning a spec that was never implemented:** delete it only on the user's instruction
   and note it in `activeContext.md` — no `Deprecated`, no move to `done/`.
 - **`Baseline` specs** (existing behaviour, brownfield) live in `done/` without a plan and are
@@ -69,7 +73,7 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    the state of the accompanying plan if there is one.
 2. **Propose** a lifecycle update (draft → `backlog/`; in progress → `active/`; completed →
    `done/` with status `Implemented`; invalidated → `Deprecated`, stays in `done/` with a
-   successor link).
+   successor link; changing again → reactivation back to `active/`).
 3. **Act**: edit the `**Status:**` line, move the file — together with its `.plan.md` sibling —
    to the target folder, and delete the originals from the source folder.
 4. **Sync docs**: update the relevant `.memory-bank/*` files. **Always** update

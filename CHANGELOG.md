@@ -11,6 +11,25 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.3.0] - 2026-08-27
+
+### Added
+
+- `/sdd-plan` opens with a software-architect persona and, where the tool supports
+  subagents, delegates each research lookup to an isolated agent — only distilled,
+  source-backed findings enter the planning context.
+- Plans name their **quality gates**: the Approach block lists the test/build/lint commands
+  from `techContext.md`, step Verify lines draw on them, and the final step runs them all.
+- Bidirectional spec ↔ plan linkage: specs carry a `**Plan:**` line under their status,
+  maintained by `/sdd-plan`; plans already linked their spec.
+- `/sdd-lifecycle` gains the reactivation move: an `Implemented` spec whose behaviour
+  changes moves back to `active/` after `/sdd-plan` Mode C's impact report.
+
+### Changed
+
+- The plan's Approach block records chosen technologies with a one-line rationale each;
+  long-lived decisions go dated to `systemPatterns.md`.
+
 ## [1.2.0] - 2026-08-26
 
 ### Added
@@ -152,6 +171,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.3.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/GregorBiswanger/featherspec/compare/v0.4.0...v1.0.0
