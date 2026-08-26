@@ -3,5 +3,5 @@
   "chat.useClaudeMdFile": false,
   "chat.instructionsFilesLocations": { ".claude/rules": true },
   "chat.promptFilesLocations": { ".github/prompts": true },
-  "chat.agentFilesLocations": { ".github/agents": true, ".claude/agents": true }
+  "chat.agentFilesLocations": { ".github/agents": true, ".claude/agents": false }
 }

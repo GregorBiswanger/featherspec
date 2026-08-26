@@ -23,6 +23,7 @@ Inspect the workspace and report, in `DocLanguage`:
 - The `DocLanguage` value from `AGENTS.md`.
 - Which specs sit in `.specs/backlog/`, `.specs/active/`, and `.specs/done/` (list the files;
   say "(none)" for an empty folder).
+- If the snapshot comment names a `last deep scan` date: report it plus the count of `unmapped:` entries.
 - Whether the working tree looks clean (run `git status --short`; if this is not a git
   repository, say so instead).
 

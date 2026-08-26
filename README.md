@@ -21,7 +21,7 @@ criteria, then into a **plan** of baby steps — and only then writes code. Spec
 and progress all live on disk as Markdown in your repository, so the next session, the next
 teammate, and the next tool pick up exactly where you left off.
 
-Nine `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
+Ten `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
 GitHub Copilot, because both tools execute the **same files**.
 
 ---
@@ -78,6 +78,18 @@ questions about the project. It seeds the Memory Bank and captures a first archi
 snapshot.
 
 That is the entire installation. Nothing to build, nothing to run.
+
+---
+
+## Already have a codebase?
+
+FeatherSpec is not greenfield-only. Run `/sdd-setup` and answer **existing software** — the
+wizard offers a deep architecture scan that reads your code (recursively, with isolated scout
+agents), lets you confirm the module boundaries it found, and distills a lean fingerprint into
+the `architecture:` snapshot. It is resumable at any point, re-runnable whenever the snapshot
+feels stale (`/sdd-architecture-scan`, optionally with a focus path), and it cleans up after
+itself. The full walkthrough lives in the wiki:
+[Adopting an Existing Codebase](https://github.com/GregorBiswanger/featherspec/wiki/Adopting-an-Existing-Codebase).
 
 ---
 
@@ -244,7 +256,7 @@ runs faster because the context is already written down.
 
 ---
 
-## The nine commands
+## The ten commands
 
 | Command | What it does |
 | --- | --- |
@@ -256,6 +268,7 @@ runs faster because the context is already written down.
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
 | `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` |
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
+| `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
 
 New to it? Just run `/sdd-overview`.
@@ -268,16 +281,19 @@ New to it? Just run `/sdd-overview`.
 AGENTS.md              the constitution — rules, doc language, architecture snapshot
 CLAUDE.md              one line: @AGENTS.md
 
-.claude/commands/      the nine workflow bodies (Claude runs them directly)
+.claude/commands/      the ten workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
-.github/agents/        the Copilot persona — a pointer at AGENTS.md, nothing more
+.github/agents/        the Copilot persona, plus the scan's scout agent in VS Code dialect
 .vscode/settings.json  tells Copilot where to find .claude/rules and .github/prompts
 
 .specs/                backlog/ · active/ · done/   — specs + their plan files (ships empty)
 .memory-bank/          projectbrief · systemPatterns · techContext · activeContext
 ```
+
+A deep scan may add one more: `.architecture/` — optional curated per-module maps, created
+only when the snapshot's line cap would otherwise evict navigation detail.
 
 Everything mutable lives in `AGENTS.md` and the two data folders. Workflow bodies exist exactly
 once, under `.claude/commands/`; `.github/prompts/` holds thin pointers to them.
@@ -297,7 +313,7 @@ Where a copy exists, it names `AGENTS.md` as the winner.
   it is *not* a default Copilot location, so keep that file if you move these folders into
   another project. FeatherSpec leans on the overlap instead of maintaining two copies.
 - **Workflows are commands, not skills.** A skill advertises itself to the model on every
-  request; a command is only ever run when *you* type it. Nine workflows sitting in every
+  request; a command is only ever run when *you* type it. Ten workflows sitting in every
   system prompt is a cost with no upside here.
 - **Only the entry point differs.** `.claude/commands/<name>.md` holds the body;
   `.github/prompts/<name>.prompt.md` is a thin pointer to it (its frontmatter mirrors the
