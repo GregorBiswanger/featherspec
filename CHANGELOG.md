@@ -11,6 +11,20 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.4.0] - 2026-08-27
+
+### Added
+
+- `/sdd-clean`: context cleanup for FeatherSpec's persistent markdown — analyzes every
+  managed file against its declared purpose, detects verbosity, duplicates, stale and
+  code-rediscoverable content, previews a cleanup plan behind one gate, compacts
+  semantically (decisions, constraints and conventions are always preserved), and reports
+  estimated tokens before → after. Snapshot drift hands over to
+  `/sdd-architecture-update`'s gate; specs and plans get report-only findings. Re-running
+  is safe: already-optimized files are left untouched.
+- `/sdd-architecture-update` recommends `/sdd-clean` when the Memory Bank has visibly
+  outgrown its purpose — cleanup itself never runs as a side effect.
+
 ## [1.3.0] - 2026-08-27
 
 ### Added
@@ -171,6 +185,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.4.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.0.0...v1.1.0
