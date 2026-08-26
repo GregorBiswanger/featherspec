@@ -35,7 +35,7 @@ steps to real code.
 ## Mode A — plan from scratch
 
 1. **Read** the spec, `AGENTS.md` (constraints, `architecture:` snapshot, style preferences),
-   and `.memory-bank/techContext.md` plus `systemPatterns.md` — noting the quality gates
+   and `.memory-bank/techContext.md` plus `.memory-bank/systemPatterns.md` — noting the quality gates
    `techContext.md` records (test, build, lint commands). A missing gate is a
    `techContext.md` finding to report, never something to invent.
 2. **Survey the code** the spec touches — entrypoints, the modules named in the snapshot, the
