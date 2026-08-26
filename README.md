@@ -119,6 +119,25 @@ The full walkthrough lives in the wiki:
 
 ---
 
+## Already running FeatherSpec? Updates are built in
+
+Since v1.2.0 the template is versioned ([tags & releases](https://github.com/GregorBiswanger/featherspec/releases)),
+and projects created from it update safely — however customized. Projects adopted **before**
+v1.2.0 just copy two files from the current template into their repo:
+
+- `.claude/commands/sdd-featherspec-update.md`
+- `.github/prompts/sdd-featherspec-update.prompt.md` *(skip if you removed the Copilot half;
+  restart VS Code afterwards if you kept it)*
+
+Then run `/sdd-featherspec-update`. It detects your version (even unstamped and heavily
+customized projects), fetches the latest release, previews every change before writing, and
+migrates **around** your customizations instead of over them: your specs, Memory Bank and
+edits are provably untouched, conflicts are asked — never decided — and a backup branch
+guards the whole run. `/sdd-featherspec-update check` alone answers "which version am I on?".
+Details: [Updating & Versioning](https://github.com/GregorBiswanger/featherspec/wiki/Updating-and-Versioning).
+
+---
+
 ## The loop
 
 ```mermaid
