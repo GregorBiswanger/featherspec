@@ -12,9 +12,9 @@ You are the **Spec-Driven Development (SDD)** assistant for this repository. Wor
 
 ## Single source of truth (do not duplicate)
 
-Everything mutable lives **here in `AGENTS.md` only**: `DocLanguage`, the `architecture:`
-snapshot, and the *Style & Output Preferences* section. Commands that update those write
-to this file. The thin loader file(s) may **not** hold a copy.
+Everything mutable lives **here in `AGENTS.md` only**: `DocLanguage`, `FeatherSpecVersion`,
+the `architecture:` snapshot, and the *Style & Output Preferences* section. Commands that
+update those write to this file. The thin loader file(s) may **not** hold a copy.
 
 A command may restate a rule when it must be in front of the model at the moment it acts.
 Such a restatement must say that it is one and name its source (`AGENTS.md` or the owning
@@ -24,11 +24,11 @@ Declared exceptions: `README.md` mirrors constitution content for humans; frontm
 `description` and `argument-hint` lines mirror the command table. On divergence this file
 wins.
 
-## Repository Settings (managed by /sdd-setup)
+## Repository Settings (managed by /sdd-setup and /sdd-featherspec-update)
 
 ```yaml
-DocLanguage: English # default; /sdd-setup may change this. Governs the user's project docs
-                     # (Memory Bank, specs, README) and all workflow dialogue; wiring stays English.
+DocLanguage: English # set by /sdd-setup; governs project docs and dialogue; wiring stays English.
+FeatherSpecVersion: 1.2.0 # managed by /sdd-featherspec-update; do not edit by hand
 ```
 
 ## Non-negotiables
@@ -88,7 +88,6 @@ When a change adds, moves or deletes **source** modules, entrypoints or top-leve
 not specs, plans or Memory Bank files — or the workspace no longer matches this snapshot:
 run the `/sdd-architecture-update` workflow yourself, in the same change set, exactly as if
 the user had typed it (its body lives in `.claude/commands/sdd-architecture-update.md`).
-Typing it manually is the fallback for when this automatic run visibly did not happen.
 When the observed drift is too large to reconcile confidently, or the affected area appears
 under `unmapped:`, recommend `/sdd-architecture-scan` in the delta report instead of guessing.
 
@@ -104,8 +103,8 @@ architecture:
     - 'TBD'
 ```
 
-Scan-only locations: `.architecture/` — curated module maps (`map:` references), created
-only by the budget cascade; `.sdd-scan/` — volatile, gitignored, holding nothing curated.
+Working locations: `.architecture/` — curated module maps (`map:` references), created only
+by the budget cascade; `.sdd-scan/` and `.sdd-update/` — volatile, gitignored, nothing curated.
 
 ## Memory Bank (SDD Working Set)
 
@@ -191,6 +190,7 @@ list — commands render it from here.
 | `/sdd-architecture-scan` | Deep, resumable analysis of an existing codebase → fingerprint (first run and refresh) |
 | `/sdd-lifecycle` | Spec status and moves between backlog/active/done |
 | `/sdd-style-update` | Capture coding style preferences into `AGENTS.md` |
+| `/sdd-featherspec-update` | Template version check + safe update from a newer release (customizations preserved) |
 
 Flow — the only source of the recommended order; commands render it from here:
 `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → human reads the plan → `/sdd-lifecycle`

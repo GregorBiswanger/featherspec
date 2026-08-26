@@ -5,3 +5,6 @@ CLAUDE.local.md
 
 # Volatile deep-scan working state — deleting it loses nothing curated
 .sdd-scan/
+
+# Volatile template-update working state — deleting it loses nothing curated
+.sdd-update/

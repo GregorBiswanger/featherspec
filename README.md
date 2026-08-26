@@ -21,7 +21,7 @@ criteria, then into a **plan** of baby steps — and only then writes code. Spec
 and progress all live on disk as Markdown in your repository, so the next session, the next
 teammate, and the next tool pick up exactly where you left off.
 
-Ten `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
+Eleven `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
 GitHub Copilot, because both tools execute the **same files**.
 
 ---
@@ -282,7 +282,7 @@ runs faster because the context is already written down.
 
 ---
 
-## The ten commands
+## The eleven commands
 
 | Command | What it does |
 | --- | --- |
@@ -296,6 +296,7 @@ runs faster because the context is already written down.
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
 | `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
+| `/sdd-featherspec-update` | Check your template version and update safely — customizations preserved |
 
 New to it? Just run `/sdd-overview`.
 
@@ -304,10 +305,11 @@ New to it? Just run `/sdd-overview`.
 ## What ends up in your repo
 
 ```text
-AGENTS.md              the constitution — rules, doc language, architecture snapshot
+AGENTS.md              the constitution — rules, doc language, template version, architecture snapshot
 CLAUDE.md              one line: @AGENTS.md
+CHANGELOG.md           the template's release history (snapshot at adoption)
 
-.claude/commands/      the ten workflow bodies (Claude runs them directly)
+.claude/commands/      the eleven workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
@@ -359,6 +361,7 @@ Everything beyond this page lives in the **[Wiki](https://github.com/GregorBiswa
 | --- | --- |
 | [Getting Started](https://github.com/GregorBiswanger/featherspec/wiki/Getting-Started) | Setup for both tools, verifying what actually loaded |
 | [Commands](https://github.com/GregorBiswanger/featherspec/wiki/Commands) | Every `/sdd-*` command in detail |
+| [Updating & Versioning](https://github.com/GregorBiswanger/featherspec/wiki/Updating-and-Versioning) | Check your version, update safely, what never gets touched |
 | [Specify Method](https://github.com/GregorBiswanger/featherspec/wiki/Specify-Method) | The interview model behind `/sdd-specify` — origin and deliberate deviations |
 | [Specs & Plans](https://github.com/GregorBiswanger/featherspec/wiki/Specs-and-Plans) | Document structure, lifecycle, traceability |
 | [Memory Bank](https://github.com/GregorBiswanger/featherspec/wiki/Memory-Bank) | The four files and what belongs in each |
