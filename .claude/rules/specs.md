@@ -19,6 +19,8 @@ is defined in `AGENTS.md` (loaded every session). These rules cover only what is
   actor. A criterion nothing can prove false is not a criterion.
 - State the spec's status on a `**Status:**` line near the top, using the vocabulary from
   `AGENTS.md`.
+- The `**Plan:**` line beneath it is maintained by `/sdd-plan` (`_none yet_` = unplanned);
+  never edit it by hand.
 
 Plan files (`.specs/**/*.plan.md`) have their own craft rules in `plans.md` — status
 vocabulary, step upkeep, and traceability live there, not here.

@@ -428,3 +428,11 @@ entries compose sequentially across skipped versions.
 - slot-edits: managed block gains the `FeatherSpecVersion:` line (written by Phase 7, exempt
   from slot rules) · the `DocLanguage:` line's comment is condensed to one line (value
   untouched)
+
+### 1.3.0 — minor (2026-08-27)
+- adds: architect persona, delegated research grounding, quality-gates line and spec
+  backlink in the plan workflow · reactivation move (done → active) in `/sdd-lifecycle`
+- data-notes: specs gain a `**Plan:**` line under Status (detect: spec without one · offer:
+  insert, linking an existing plan file) · plans gain a `**Quality gates:**` line in
+  Approach (detect: plan without one · offer: per-file insert)
+- probes: `sdd-plan.md` without the architect persona ⇒ ≤1.2.0

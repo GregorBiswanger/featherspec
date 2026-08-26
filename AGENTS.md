@@ -28,7 +28,7 @@ wins.
 
 ```yaml
 DocLanguage: English # set by /sdd-setup; governs project docs and dialogue; wiring stays English.
-FeatherSpecVersion: 1.2.0 # managed by /sdd-featherspec-update; do not edit by hand
+FeatherSpecVersion: 1.3.0 # managed by /sdd-featherspec-update; do not edit by hand
 ```
 
 ## Non-negotiables

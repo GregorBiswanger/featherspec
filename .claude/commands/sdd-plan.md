@@ -11,6 +11,11 @@ disable-model-invocation: true
 
 # /sdd-plan — Implementation Plan
 
+You are an experienced software architect and tech lead: you turn one reviewed spec into the
+smallest sequence of verifiable steps a developer or an AI coding agent can execute — grounded
+in the repository as it is, the recorded stack, and current, source-backed facts. You decide
+the how; the spec owns the what.
+
 The user may name a spec or plan path after the command. If none is given — or the named path
 does not exist — list what sits under `.specs/` and ask which one to work on.
 
@@ -30,7 +35,9 @@ steps to real code.
 ## Mode A — plan from scratch
 
 1. **Read** the spec, `AGENTS.md` (constraints, `architecture:` snapshot, style preferences),
-   and `.memory-bank/techContext.md` plus `systemPatterns.md`.
+   and `.memory-bank/techContext.md` plus `systemPatterns.md` — noting the quality gates
+   `techContext.md` records (test, build, lint commands). A missing gate is a
+   `techContext.md` finding to report, never something to invent.
 2. **Survey the code** the spec touches — entrypoints, the modules named in the snapshot, the
    existing test setup and its commands. Plan against the repo as it is, not as it should be.
    If your tool supports subagents, delegate broad exploration and keep only the distilled
@@ -51,7 +58,9 @@ steps to real code.
    resolves a spec *Open point* is recorded in the spec (revise mode) before the plan is
    finalized — a plan must not silently outrun its spec.
 5. **Decompose into baby steps** (see below).
-6. **Write the plan file**, then hand it over for review and stop (see *Always* below).
+6. **Write the plan file**, set the spec's `**Plan:**` line to link it — inserting the line
+   under `**Status:**` when an older spec lacks it, in the same change set — then hand it
+   over for review and stop (see *Always* below).
 
 ## Research (do it, do not skip it)
 
@@ -61,6 +70,9 @@ behaviour · a protocol, standard or regulation · a pattern where your knowledg
 Web lookups are network access — the Ask-first gate in `AGENTS.md` applies: name the lookups
 and get one yes for the whole research batch.
 
+- If your tool supports subagents, delegate each lookup to an isolated agent and take back
+  only the distilled finding plus its source — raw pages crowd out planning judgement.
+  Without subagents, do the lookups inline; the recording duty below binds either way.
 - Check the version actually used in the repo (lock file, manifest) before trusting a doc page.
 - Prefer official documentation, release notes, and the project's own repository.
 - Record every source under `## Research`: title, link, one line on what it settled, and the
@@ -83,8 +95,13 @@ can be finished and checked on its own:
 - **Recorded**: the step's `Verified:` field stays empty until the `Verify:` line was actually
   run. A tick without a recorded result is a claim, not a verification.
 - **Red first**: when a step adds a test for a criterion, record its failing run in `Verified:`
-  before the implementation lands. A test that was never red decides nothing.
+  before the implementation lands. A test that was never red decides nothing. This binds new
+  behaviour only — a criterion preserving existing behaviour is decided by its existing test
+  staying green.
 - **Ordered so the repo keeps working** after every step; risky or blocking parts come first.
+- **Gated at the end**: the final step runs every quality gate the plan's `Quality gates:`
+  line names — a plan that ends without the full gate run is unfinished. Its `Covers:` line
+  names every criterion the gates re-prove.
 - **Tied to the spec**: each step names the acceptance criteria it serves, every criterion is
   covered by at least one step, and pure scaffolding steps say so explicitly.
 
@@ -111,8 +128,13 @@ this ever diverges, follow them and fix this file:
 
 ## Approach
 
-Two or three sentences: the strategy, why the steps are ordered this way, and which
-`.memory-bank/*` files the implementation will touch.
+Two or three sentences: the strategy, the chosen technologies or patterns with a one-line
+why each (long-lived decisions go dated to `systemPatterns.md` — link, don't duplicate),
+why the steps are ordered this way, and which `.memory-bank/*` files the implementation
+will touch.
+
+**Quality gates:** <the commands from `techContext.md` that Verify lines draw on; the
+final step runs them all>
 
 ## Research
 
@@ -174,6 +196,10 @@ Two or three sentences: the strategy, why the steps are ordered this way, and wh
    user at `/sdd-compile`.
 
 ## Mode C — the spec changed
+
+A pair sitting in `done/` means an `Implemented` spec is changing: report the impact first
+(steps 1–3), then propose the reactivation move — pair back to `active/`, spec and plan
+`In Progress` — via `/sdd-lifecycle`; a new slice of work gets a successor spec instead.
 
 1. Compare spec and plan: which acceptance criteria are new, changed, or gone?
 2. Read the traceability table **in reverse** — for every touched criterion, list the steps and
