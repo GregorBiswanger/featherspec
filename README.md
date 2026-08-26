@@ -21,7 +21,7 @@ criteria, then into a **plan** of baby steps — and only then writes code. Spec
 and progress all live on disk as Markdown in your repository, so the next session, the next
 teammate, and the next tool pick up exactly where you left off.
 
-Nine `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
+Ten `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
 GitHub Copilot, because both tools execute the **same files**.
 
 ---
@@ -256,7 +256,7 @@ runs faster because the context is already written down.
 
 ---
 
-## The nine commands
+## The ten commands
 
 | Command | What it does |
 | --- | --- |
@@ -281,7 +281,7 @@ New to it? Just run `/sdd-overview`.
 AGENTS.md              the constitution — rules, doc language, architecture snapshot
 CLAUDE.md              one line: @AGENTS.md
 
-.claude/commands/      the nine workflow bodies (Claude runs them directly)
+.claude/commands/      the ten workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
@@ -313,7 +313,7 @@ Where a copy exists, it names `AGENTS.md` as the winner.
   it is *not* a default Copilot location, so keep that file if you move these folders into
   another project. FeatherSpec leans on the overlap instead of maintaining two copies.
 - **Workflows are commands, not skills.** A skill advertises itself to the model on every
-  request; a command is only ever run when *you* type it. Nine workflows sitting in every
+  request; a command is only ever run when *you* type it. Ten workflows sitting in every
   system prompt is a cost with no upside here.
 - **Only the entry point differs.** `.claude/commands/<name>.md` holds the body;
   `.github/prompts/<name>.prompt.md` is a thin pointer to it (its frontmatter mirrors the

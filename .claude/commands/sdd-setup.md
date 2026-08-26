@@ -72,14 +72,20 @@ Ask exactly: **"In which language should the project documentation Markdown file
 Run `git ls-files` and count source files outside this template's own folders
 (`.claude/`, `.github/`, `.specs/`, `.memory-bank/`, `.vscode/`). Guess the mode —
 substantial source files plus a snapshot still at `TBD` or `# last reconciled: never`
-suggests existing software — state your guess, then ask exactly:
+suggests existing software — state your guess, then ask exactly this question,
+rendered in `DocLanguage`:
 **"Is this a new project, or existing software we are adopting?"**
 
 - **New project** → continue with this wizard unchanged.
-- **Existing software** → ask what is needed right now: documentation language and
-  Memory Bank seeding only, or a deep architecture scan that builds the fingerprint
-  from the code (token-intensive — the scan states its value, cost and levers before it
-  starts). If the scan is chosen: first collect wizard steps 1, 2 and 7 (only
+- **Existing software** → present the choice as a short plain-language briefing in
+  `DocLanguage` (~5 lines), and **recommend the deep architecture scan**: it builds
+  the architecture fingerprint from the code, and with it agents jump straight to the
+  right files instead of searching — cheaper and faster in every later session, higher
+  quality, fewer wrong assumptions, and technical planning starts from a shared map.
+  Say honestly that the scan reads code and, depending on project size, takes time and
+  noticeable tokens. Name the alternatives: describe the architecture yourself, or
+  seed only the Memory Bank now and scan later. If the scan is chosen: first collect
+  wizard steps 1, 2 and 7 (only
   the human knows mission, audience and taste), then run the `/sdd-architecture-scan`
   workflow yourself, exactly as if the user had typed it (its body lives in
   `.claude/commands/sdd-architecture-scan.md`). Skip wizard steps 3–6 — the scan

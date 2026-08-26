@@ -24,7 +24,11 @@ of why, never a lecture.
 
 - No `.sdd-scan/_worklist.md` → run **Phase A**, then stop at the worklist gate.
 - Worklist exists with pending units → run **Phase B** on pending units only.
-- All units done, or the user says "distill what we have" → run **Phase C**.
+- All units done but the update merge not yet confirmed → run **Phase C**. The user
+  saying "distill what we have" also runs **Phase C** — a full re-distillation from
+  the reports, even after a confirmed merge; refreshing dates or markers alone is
+  not a distillation. Otherwise, after a confirmed merge, a re-invocation has
+  nothing left but the cleanup question.
 
 ## On a fresh start — say what this buys and costs (once, in `DocLanguage`)
 
@@ -65,6 +69,7 @@ interpretation. Then
 propose analysis units (modules, bounded contexts, projects) with priorities as
 `.sdd-scan/_worklist.md`: a table with columns #, Unit, Path, Parent, Depth, Priority,
 Tier (deep | standard | shallow), Status (pending | split | done | synthesized), Report.
+Inventory and worklist are written in `DocLanguage`, like every scan artifact.
 Propose `deep` when churn is high **or** centrality is high (many incoming references) —
 a low-churn shared kernel or contracts folder is a root, not periphery. Propose shared
 or contract-like locations (shared kernels, contract folders, cross-service event
@@ -86,9 +91,10 @@ weakly coupled subgraph, not one per folder.
 Open the gate in plain words: one line on what this list is (the scan's work plan —
 which parts of the code get how much attention), one line on why the user decides
 (boundaries and depth are judgment calls, and deeper costs more). Then present the
-proposed units, priorities and tiers, state the cost of the cut explicitly ("N units
-≈ N/3 scout rounds at the default cap"), and offer the plain default ("answer OK to
-accept the proposal"). Say what you guessed, ask what to merge, split, defer or
+proposed units, priorities and tiers, state the cost of the cut explicitly and in plain outcome terms ("N areas ≈
+N/3 analysis rounds — more depth means more time and tokens"; if you use the word
+scout, introduce it in one clause: an isolated reading agent covering one area), and
+offer the plain default ("answer OK to accept the proposal"). Say what you guessed, ask what to merge, split, defer or
 re-tier, apply the answer, mark the worklist confirmed. Never proceed on an
 unconfirmed worklist.
 
@@ -183,11 +189,18 @@ The snapshot obeys the same curation bar: every `entrypoints:`/`modules:` line c
 its path plus a one-clause purpose or trap — never a bare path. A snapshot that a
 directory listing could have produced is not a fingerprint.
 
-**Budget cascade:** target the `architecture:` snapshot alone. Measure against the
-cap in `.claude/rules/constitution.md`. Only when eviction would hit navigation
-facts, move per-module detail to `.architecture/<unit>.md` (≤ 40 lines each — this
-restates `.claude/rules/architecture-map.md`, which is authoritative) and keep in the
-snapshot one line and a `map:` reference per module, plus `coverage:` — counting
+**Maps and the snapshot budget — deterministic, no judgment calls:** every **deep**
+unit gets a curated map `.architecture/<unit>.md` (≤ 40 lines each — this restates
+`.claude/rules/architecture-map.md`, which is authoritative) holding its inside view:
+internal path patterns, the registration file, the task playbook. Deep tier means the
+map exists — there is no "it fits in the snapshot" exception. A standard unit gets a
+map only when its snapshot line cannot answer "where exactly inside"; shallow units
+never do. The snapshot keeps exactly **one YAML list item per module and per
+entrypoint** — path, one purpose clause, and a `map:` reference where a map exists;
+never concatenate several entries into one line to save lines — the cap in
+`.claude/rules/constitution.md` is managed by this cascade, not by line-packing. A
+fingerprint whose deep units are only navigable at project granularity is not
+finished. Keep `coverage:` — counting
 shallow-tier units separately, e.g. "9/14 mapped (2 shallow)" — and an `unmapped:`
 list instructing agents to explore carefully there and propose a worklist entry.
 Shallow-tier units carry the matching instruction: their facts are head-derived —
@@ -201,7 +214,11 @@ and the surface-cue probe's outcome are recorded for the delta report. A distill
 result that cannot answer navigation questions is not ready to become the snapshot.
 
 Compose ten navigation questions ("Where do you add/change X?") across the mapped
-**deep and standard** units — shallow units are excluded from the score. Answer each
+**deep and standard** units — shallow units are excluded from the score. At least
+half of the questions must target locations **inside** units — a file or a subfolder
+pattern ("where do I add a new integration event", "which file registers a
+handler") — because a question answerable by naming a project proves nothing about
+navigation depth. Answer each
 in writing using **only** your distilled result — no file access — then verify each
 against the repository and score. Fix the fingerprint for every miss you can, and
 carry the final score into the delta report.
@@ -220,4 +237,5 @@ if the user had typed it (its body lives in
 `.claude/commands/sdd-architecture-update.md`), with your distilled findings as the
 observed state; its confirmation gate remains the snapshot's only write gate. After a
 confirmed merge, set `last deep scan` in the snapshot comment via that same update,
-then ask once: "Delete the raw analysis in `.sdd-scan/`? (recommended)".
+then ask once, rendered in `DocLanguage`: "Delete the raw analysis in `.sdd-scan/`?
+(recommended)".

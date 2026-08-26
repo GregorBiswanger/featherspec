@@ -51,7 +51,8 @@ Only after confirmation:
 
 - Update the `architecture:` YAML in `AGENTS.md` (the only place it lives), and set the
   `# last reconciled:` comment inside that block to today's date — a snapshot with no date
-  cannot be told apart from one that was never checked.
+  cannot be told apart from one that was never checked. Snapshot **values** are written in
+  `DocLanguage`, one YAML list item per entry.
 - When `.architecture/` exists, update the affected module map(s) and their
   `# last reconciled:` lines in the same change set.
 - Update `.memory-bank/systemPatterns.md` (patterns/decisions).
@@ -67,6 +68,11 @@ Treat the scan's distilled findings as the observed state; include its coverage 
 navigation self-test score in the delta report; on confirmation also set `last deep scan` in
 the snapshot comment. The gate above stays the snapshot's only write gate. If the findings
 arrive without a recorded self-test score, do not open the gate — send the scan back to run
-its self-test first: an unverified fingerprint is not observed state.
+its self-test first: an unverified fingerprint is not observed state. On confirmation the
+distilled findings replace the snapshot's **values**, not just its structure: wording,
+`DocLanguage` and the per-line purpose clauses count as drift, so "the paths are the same"
+is never a reason to keep weaker values. Persist the self-test score in the snapshot's
+`coverage:` line, and write nothing outside this gate's sync list — the constitution's own
+wiring prose is not a reconciliation target.
 
 Everything must remain **DocLanguage-aware**.
