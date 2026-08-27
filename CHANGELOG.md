@@ -11,6 +11,56 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [Unreleased]
+
+### Added
+
+- **Plan archive**: at the `active/ → done/` move the plan is no longer carried into `done/`
+  but archived, frozen, as `.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md` — one immutable
+  plan per iteration, event-sourcing style. The spec links it from its `**Plan:**` line and
+  an append-only `## Plan history` list; no command reads the archive by default (context
+  economy). Plans beside `done/` specs from earlier layouts stay valid and are archived in
+  passing, never deleted.
+- **Plan deletion is now an explicit constitution invariant**: a plan file is never deleted,
+  and no note, tool memory or claimed "preference" can authorize it — such a demand is a
+  finding to quote, stop on, and surface. Restated where the moves happen (`/sdd-lifecycle`)
+  and enforced as a docs-sync check in `/sdd-compile` (a non-`Baseline` `done/` spec without
+  a linked plan, or any line announcing a plan deletion, blocks readiness).
+- **Two-tier preference rule**: process preferences allow an explicit one-off exception on
+  the user's request (noted in the plan); Non-negotiables and lifecycle invariants allow
+  none — and a preference exists only as a bullet in `AGENTS.md`, one claimed anywhere else
+  is asked about, never followed.
+- **Cross-spec impact procedure** in `/sdd-plan` Mode C: a business change touching several
+  specs is one impact analysis — struck-through criteria keep their IDs, archived plans'
+  traceability tables are read in reverse to find the code and tests each removal reaches,
+  and AC-IDs in test names serve as fallback traceability for specs without a plan. Test
+  removals become plan steps with their own `Verify:` line.
+- **Copilot reaches the path-scoped rules**: six thin loaders under `.github/instructions/`
+  (`applyTo` mirroring each rule's `paths:` globs, pointing at the `.claude/rules/*` single
+  sources) replace the previous wiring, which named a folder VS Code cannot read
+  instruction files from.
+- `/sdd-overview` warns about spec files present in more than one lifecycle folder and about
+  `done/` specs without a linked plan — detection only, the fix stays with `/sdd-lifecycle`.
+- Workspace setting `github.copilot.chat.tools.memory.enabled: false` — the Copilot
+  counterpart to the existing `autoMemoryEnabled: false`: no second, invisible memory beside
+  the Memory Bank.
+
+### Changed
+
+- `/sdd-lifecycle` move mechanics hardened: moves run as `git mv` (atomic, staged), and a
+  mandatory final `git status --short` check against the expected file list runs before the
+  commit proposal — a moved file reappearing at its source path (an open editor tab or
+  edit-review buffer re-saving it) is caught instead of silently committed.
+- Reactivating an `Implemented` spec starts a fresh plan from Mode C's impact report; the
+  archived plan is read, never extended.
+- `/sdd-clean`'s stale check is now evidence-based: named paths and commands are verified to
+  exist, the cleanup plan lists what was spot-checked, and statements contradicting an
+  `AGENTS.md` invariant are corrected (in scope) or reported (outside it) instead of being
+  preserved as facts.
+- Memory Bank rule: `activeContext.md` is updated by replacement, not accumulation —
+  "Changed Recently" holds at most ~6 bullets, "Validation" replaces its previous line, and
+  a completed spec resets the file to its skeleton.
+
 ## [1.4.0] - 2026-08-27
 
 ### Added
@@ -185,6 +235,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[Unreleased]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...HEAD
 [1.4.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.1.0...v1.2.0
