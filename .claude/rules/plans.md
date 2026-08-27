@@ -11,7 +11,9 @@ cover only what is specific to **working inside a plan file**:
 
 - Write in the language specified by `DocLanguage` in `AGENTS.md`.
 - Steps stay baby steps: one concern, finishable in one sitting, with a `Verify:` line that is
-  a command whose output decides it. A step you cannot verify on its own is a step to split.
+  a command whose output decides it. A step you cannot verify on its own is a step to split;
+  as a rule of thumb a step covers one or two acceptance criteria — more than three is a
+  split candidate.
   Where no machine check exists, `Verify:` reads `manual: <what a person looks at>` plus the
   reason no command can settle it.
 - **Tick the checkbox only after `Verified:` is filled with a real result** — date, the command

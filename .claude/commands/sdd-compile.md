@@ -33,6 +33,24 @@ that produced a gap is the worst placed to find it. If delegation is impossible,
 line at the top of the brief and re-run every check yourself, trusting no note from your own
 session.
 
+## Expected state and verdict rubric
+
+This check normally runs **before** the `done/` move: the state it certifies is the spec
+`In Progress` in `active/` with its plan `Done` beside it. That state is correct, never a
+finding — and the `done/` move is never a readiness fix: the move *follows* `READY`
+(`/sdd-lifecycle` demands this brief first), so naming it under next steps as a way to
+become ready is circular. A spec already in `done/` makes this a post-hoc audit — say so
+and read the plan from the archive.
+
+Verdict blockers are exactly four: a criterion without evidence · a failing or unrun gate ·
+a hole in the plan or its traceability · a working document that contradicts the code or a
+constitution invariant (a non-`Baseline` `done/` spec without a plan link, a line
+announcing a plan deletion). Nothing else blocks. Historical process deviations (a red run in the wrong style, a rule
+captured mid-work), wording drift in Memory Bank prose, and pending user acceptance are
+findings, never verdict material — user acceptance is what a `READY` verdict *enables*,
+not its precondition. A re-run on an unchanged repository returns the same verdict with the
+same blockers; new nitpicks on unchanged state are drift, not diligence.
+
 ## What counts as evidence
 
 Evidence is a **test name plus its pass/fail output** or a **command plus its output**.
@@ -48,7 +66,9 @@ stays `pending`.
   `READY` requires: every criterion `satisfied` (plan-declared, recorded `manual:` checks
   count, and set the `(manual items: n)` form) · every criterion has a test or declared
   `manual:` cell in the traceability table · no finished step with an empty `Verified:` ·
-  docs sync clean. Anything else is `NOT READY` — name the blocking items directly after it.
+  no docs-sync blocker (rubric class four — every other docs-sync result is a finding
+  listed after the verdict). Anything else is `NOT READY` — name the blocking items
+  directly after it.
   It is `NOT READY — unverified` whenever the test suite did not run, whatever the criteria
   say. Exception: a repo that declares no test command anywhere, with every criterion
   plan-declared `manual:`, can reach `READY (manual items: n)` — name that absence in the
@@ -72,15 +92,21 @@ stays `pending`.
   the git log above. Check the `architecture:` snapshot and `systemPatterns.md` against
   structural or decision changes in the diff (a stale snapshot means the unprompted
   `/sdd-architecture-update` run required by `AGENTS.md` was missed), and that
-  `techContext.md`'s test command matches the one that actually ran.
+  `techContext.md`'s *Quality gates* commands match those the plan names and that actually
+  ran.
   If the code moved and a doc did not, name what is missing. When the diff or the spec changed
   who the users are or what success means, check `.memory-bank/projectbrief.md` still says the
   same — mission drift hides there because no compiler complains. Is `activeContext.md` within
   its size limit from `AGENTS.md`? Do the spec and plan statuses match what you just read?
   A `done/` spec whose `**Plan:**` line names no plan (beside it or archived) and that is not
-  `Baseline` is a docs-sync finding. So is any line — in a plan handoff, the Memory Bank, or
-  a brief — that announces or reports deleting a plan file: plans are never deleted
-  (`AGENTS.md`); quote the line as a violation, never adopt it into this brief.
+  `Baseline` is a docs-sync **blocker** (rubric class four). So is any line — in a plan
+  handoff, the Memory Bank, or a brief — that announces or reports deleting a plan file:
+  plans are never deleted (`AGENTS.md`); quote the line, never adopt it into this brief.
+  Also scan `.specs/` for stray copies — a spec in more than one lifecycle folder, a
+  `.plan.md` in `backlog/` or `active/` without its same-name spec beside it, or a plan
+  whose stem already has a dated twin in `plan-archive/`: an editor "save all" after a
+  lifecycle move recreates moved files at their old path. Stray copies are findings for
+  `/sdd-lifecycle` to resolve, not verdict material.
 - **Next 3 steps** — concrete and actionable.
 
 Write the brief in `DocLanguage`.

@@ -212,7 +212,9 @@ Restated here because path-scoped rules load when a matching file is **read**, a
 spec has not been read yet. `AGENTS.md` and `.claude/rules/specs.md` stay authoritative — if
 this ever diverges, follow them and fix this list:
 
-- Write the spec in `DocLanguage`.
+- Write the spec in `DocLanguage` — **every section, including the acceptance criteria and
+  their Given/When/Then examples**. English criteria in a German-language project are a
+  defect, not a style choice; before handing over, re-check the whole file's language.
 - Put `**Status:** Draft` directly under the H1, and `**Plan:** _none yet_` beneath it —
   that line is maintained by `/sdd-plan` and `/sdd-lifecycle`, never by hand.
 - Keep acceptance criteria explicit and **testable**.

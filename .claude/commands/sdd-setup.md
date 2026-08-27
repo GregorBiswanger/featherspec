@@ -1,5 +1,5 @@
 ---
-description: Onboarding wizard — set DocLanguage, seed the Memory Bank, capture the first architecture snapshot.
+description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gates, TDD cadence).
 argument-hint: "[docLanguage] [projectName] [stack] — or just answer the wizard"
 disable-model-invocation: true
 ---
@@ -85,12 +85,13 @@ rendered in `DocLanguage`:
   Say honestly that the scan reads code and, depending on project size, takes time and
   noticeable tokens. Name the alternatives: describe the architecture yourself, or
   seed only the Memory Bank now and scan later. If the scan is chosen: first collect
-  wizard steps 1, 2 and 7 (only
-  the human knows mission, audience and taste), then run the `/sdd-architecture-scan`
-  workflow yourself, exactly as if the user had typed it (its body lives in
-  `.claude/commands/sdd-architecture-scan.md`). Skip wizard steps 3–6 — the scan
-  answers them from the code and writes `techContext.md` and `systemPatterns.md`
-  itself. Afterwards finish only actions B (projectbrief + activeContext), D and E.
+  wizard steps 1, 2, 7 and 8 (only the human knows mission, audience, working mode and
+  taste), then run the `/sdd-architecture-scan` workflow yourself, exactly as if the user
+  had typed it (its body lives in `.claude/commands/sdd-architecture-scan.md`). Skip wizard
+  steps 3–5 — the scan answers them from the code and writes `techContext.md` and
+  `systemPatterns.md` itself; step 6 shrinks to one confirmation question over the gates
+  the scan found. Afterwards finish only actions B (projectbrief + activeContext, plus the
+  *Quality gates* section in `techContext.md` from the step-6 confirmation), D, E and F.
 
 ## Read the repo before asking
 
@@ -111,8 +112,21 @@ language, no lecture.
 4. **Architecture style** (modular monolith / microservices / layered / hexagonal / other) —
    this one needs interpretation, so ask even when you have a guess, and say what you guessed
 5. **Repo entrypoints** (apps, services, CLIs, APIs) — pre-fill from the tree
-6. **Quality gates** (tests, lint/format, CI) — pre-fill from CI config and test scripts
-7. **Coding preferences** (comments, naming, patterns to avoid)
+6. **Definition of Green** (the post-implementation quality gate) — pre-fill a proposal from
+   the stack and CI config, then have the user confirm or correct it. Propose the command
+   sequence that must pass with **zero warnings and zero errors** after every completed
+   implementation step, as exact commands with flags, not tool names — e.g. JS/TS:
+   `npx eslint .` → `npx tsc --noEmit` → `npm test`; .NET:
+   `dotnet format --verify-no-changes` → `dotnet build -warnaserror` → `dotnet test`;
+   Python: `ruff check` → `mypy` → `pytest`. Name the loop plainly: on any warning or
+   error, fix the code and re-run the gate until it is clean.
+7. **Working mode (TDD cadence)** — which cadence binds implementation steps? One short
+   plain-language line per option: **(a) strict slice gate** — one test per slice, red first
+   via a `Not implemented` stub at the new boundary, stop for the user's go before making it
+   green (recommend for teams reviewing every step); **(b) red-first** without per-slice
+   stops; **(c) tests alongside implementation**. In every mode, a new test that is green
+   immediately because existing code already covers it is fine.
+8. **Coding preferences** (comments, naming, patterns to avoid)
 
 ## Actions you must perform
 
@@ -124,7 +138,9 @@ After collecting answers:
 **B) Initialize documentation** in `DocLanguage`:
 
 - Update `.memory-bank/projectbrief.md` with mission + primary users + success criteria.
-- Update `.memory-bank/techContext.md` with stack + build/run/test.
+- Update `.memory-bank/techContext.md` with stack + build/run/test, plus a *Quality gates*
+  section listing the confirmed Definition-of-Green commands in order — `/sdd-plan` reads
+  them from here, and `/sdd-compile` re-runs them via the plan's *Quality gates* line.
 - Create `.memory-bank/activeContext.md` only if missing or still placeholder (`TBD`) —
   otherwise leave it, it may hold live session state. **Read `.claude/rules/memory-bank.md`
   first** and follow its *Structure* section exactly — that section is the only definition of
@@ -137,14 +153,26 @@ After collecting answers:
 - Populate the `architecture:` snapshot in `AGENTS.md` from the folder/project layout.
 - If assumptions are required, write them down and ask the user to confirm (one question).
 
-**D) Style preference capture:**
+**D) Style & working preference capture:**
 
-- Seed *Style & Output Preferences* in `AGENTS.md` with what the user stated.
+- Seed *Style & Output Preferences* in `AGENTS.md` with what the user stated — in English
+  (`AGENTS.md` is wiring), one bullet per preference. Two bullets come from the wizard:
+  **Quality gate (code)** — run the Definition-of-Green commands from `techContext.md` after
+  every completed implementation step and loop until zero warnings and errors, **scoped
+  explicitly: it binds implementation steps only, never specify/clarify/plan work or
+  doc-only edits** — and **TDD** with the cadence chosen in step 7.
 
 **E) Budget check:**
 
-- Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if over, propose an
-  eviction per its order before finishing.
+- Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if clearly over,
+  beyond its tolerance clause, propose one eviction per its order before finishing.
+
+**F) Baseline commit (Ask-first):**
+
+- If the repository has no commit yet, propose one now (e.g. `chore: adopt FeatherSpec and
+  seed project docs`). A first commit anchors plan baselines, scope checks and safe
+  lifecycle moves (`git mv`); without it every later safety net runs blind. The git write
+  stays behind the Ask-first gate in `AGENTS.md`.
 
 ## Output
 

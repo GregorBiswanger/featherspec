@@ -14,7 +14,9 @@ paths:
   (3) examples, once one remains. Never evict a rule to a loader file: that is the drift this
   design exists to prevent. And never evict a sentence that states a gate, an ask-first
   boundary or a non-negotiable — a gate that exists only sometimes is not a gate. If nothing is left to evict, the constitution has outgrown its job
-  and the surplus belongs in a path-scoped rule under `.claude/rules/`.
+  and the surplus belongs in a path-scoped rule under `.claude/rules/`. The cap triggers
+  **one** eviction proposal, not a recurring negotiation: a line or two over it after a
+  legitimate gate or preference addition is acceptable until the next natural edit.
 - `DocLanguage`, the `architecture:` snapshot, and *Style & Output Preferences* live **only**
   here. Never copy them into `CLAUDE.md` or any other loader.
 - Maintain *Style & Output Preferences* as a living record.

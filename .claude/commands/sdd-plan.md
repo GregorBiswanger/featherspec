@@ -101,9 +101,12 @@ can be finished and checked on its own:
 - **Ordered so the repo keeps working** after every step; risky or blocking parts come first.
 - **Gated at the end**: the final step runs every quality gate the plan's `Quality gates:`
   line names — a plan that ends without the full gate run is unfinished. Its `Covers:` line
-  names every criterion the gates re-prove.
+  names every criterion the gates re-prove. Where an `AGENTS.md` quality-gate preference
+  already runs the full sequence per step, the final step is the recorded proof of the last
+  clean run.
 - **Tied to the spec**: each step names the acceptance criteria it serves, every criterion is
-  covered by at least one step, and pure scaffolding steps say so explicitly.
+  covered by at least one step, and pure scaffolding steps say so explicitly. Rule of thumb:
+  a step covers one or two criteria — one covering more than three is a split candidate.
 
 If the step list runs long, the spec was probably two specs. Say so before writing the file.
 
@@ -243,8 +246,10 @@ A business change that touches many specs is one impact analysis, not many blind
   later — a wrong step costs hundreds of lines, a wrong line costs one. Ask which steps look
   wrong before anything is implemented. Every other artifact here has a named reader; this one
   is the most expensive to get wrong. Once approved, propose one commit of the plan (Ask-first
-  gate); in Mode A the pair then moves to `active/` before implementation (`/sdd-lifecycle`
-  performs it), in Mode C the spec is already there and work continues from the fresh plan.
+  gate) — then stop again. **Approval of the plan approves the document, never the start of
+  work**: implementation begins only on the user's explicit start signal — e.g.
+  "start T-001", given after the `/sdd-lifecycle` move — and "the plan looks good" is not
+  that signal. In Mode C the same explicit go applies.
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

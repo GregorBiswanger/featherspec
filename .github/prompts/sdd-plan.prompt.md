@@ -1,6 +1,6 @@
 ---
 name: sdd-plan
-description: Turn a spec into a persisted baby-step plan file with research and traceability.
+description: Turn a spec into a persisted baby-step plan file — research, resume, impact analysis.
 argument-hint: "[path to spec or plan]"
 ---
 

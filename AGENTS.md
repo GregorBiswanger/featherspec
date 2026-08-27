@@ -181,7 +181,7 @@ list — commands render it from here.
 | Command | Purpose |
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
-| `/sdd-setup` | Onboarding wizard: `DocLanguage`, seed Memory Bank, first architecture snapshot |
+| `/sdd-setup` | Onboarding wizard: `DocLanguage`, Memory Bank, architecture snapshot, working agreements (quality gates, TDD cadence) |
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |

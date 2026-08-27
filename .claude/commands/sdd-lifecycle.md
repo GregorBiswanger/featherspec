@@ -53,8 +53,8 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   same procedure, never delete it.
 - **Before `done/`:** check the plan too — every step ticked **and its `Verified:` field
   filled**, the traceability table filled with real code paths and a test per criterion. Ask
-  for the evidence: a `/sdd-compile` brief whose verdict is `READY`, or the `Verified:` lines
-  themselves. Ticked boxes with no recorded run are not evidence — name the criteria that lack
+  for the evidence: a `/sdd-compile` brief whose verdict is `READY` (the
+  `READY (manual items: n)` form counts), or the `Verified:` lines themselves. Ticked boxes with no recorded run are not evidence — name the criteria that lack
   it and stop. If steps are still open, say so and let the user decide before moving.
   Scan every step's `Notes:` for deviations: one that changed behaviour must be reconciled
   into the spec (updated, or recorded there as accepted) before the move. That reconciliation
@@ -90,12 +90,15 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    successor link; changing again → reactivation back to `active/`).
 3. **Act**: edit the `**Status:**` line, then move with `git mv` — one command per file, so
    the move is staged atomically and a late re-save of an open editor buffer shows up as a
-   new untracked file. Not a git repository? Write each file at its destination, delete the
-   original, and say so. Per move:
+   new untracked file. Not a git repository — or the files untracked because no commit
+   exists yet? Write each file at its destination, delete the original, say so, and propose
+   the missing baseline commit: without one, plan baselines, scope checks and this command's
+   own final check all run blind. Per move:
    - **Between `backlog/` and `active/`:** spec and `.plan.md` sibling move together.
    - **Into `done/`:** first the plan's last permitted edit — set its `**Status:**` to
-     `Done` and close its stale handoff lines — then `git mv` the spec to `done/` and the
-     plan to `.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md` (today's date; create the
+     `Done`, close its stale handoff lines, and point its `**Spec:**` line at
+     `../done/NNNN-slug.md`, the spec's home after this move — then `git mv` the spec to
+     `done/` and the plan to `.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md` (today's date; create the
      folder if missing). The plan is frozen from then on. An existing file at that archive
      name is frozen too — never overwrite it; suffix the new name
      (`NNNN-slug.YYYY-MM-DD-2.plan.md`) or ask. Then link from the spec: set `**Plan:**` to
@@ -104,22 +107,28 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
      if missing): `- YYYY-MM-DD — [<archive name>](../plan-archive/<archive name>) — <one-line outcome>`.
    - **Out of `done/` back to `active/` (reactivation):** the spec moves alone; its archived
      plan stays put and frozen, and `**Plan:**` keeps naming the newest archive entry until
-     `/sdd-plan` Mode C writes the fresh plan beside the spec.
+     `/sdd-plan` Mode C writes the fresh plan beside the spec. The archived plan's
+     `../done/` backlink dangles until the spec returns to `done/` — expected; never edit
+     the frozen plan for it.
 4. **Sync docs**: update the relevant `.memory-bank/*` files. **Always** update
    `.memory-bank/activeContext.md` when a spec becomes active or is completed — on the
    `done/` move, reset it per the update-by-replacement rule in
    `.claude/rules/memory-bank.md` (authoritative): skeleton, one completion line linking
    spec and archived plan, fresh `## Next`. On other moves set `## Active Spec`, update
    `Current phase`, refresh `## Next`, and keep within the size limit from `AGENTS.md`.
-5. **Final check, then commit**: run `git status --short` and compare against the expected
-   list — backlog ↔ active: two renames plus the status edit; into `done/`: the spec rename,
-   the plan rename into `plan-archive/`, and the spec and plan edits; reactivation: the spec
+5. **Final check, then commit** — the very last action of this run, after every edit and
+   save: list the source folder(s) on the file system and verify the moved files are gone.
+   Where a HEAD exists, `git status --short` must additionally match the expected list —
+   backlog ↔ active: two renames plus the status edit; into `done/`: the spec rename, the
+   plan rename into `plan-archive/`, and the spec and plan edits; reactivation: the spec
    rename plus its status edit — each case plus the Memory Bank files this run touched.
-   Anything else — especially a moved file reappearing at its source path — is a finding:
-   stop and show it. A file reappears when an open editor tab or a pending edit-review
-   buffer saves it again after the move; ask the user to close or accept those, then re-run
-   the check. Only when the status matches, propose one commit covering move + sync
-   (Ask-first gate).
+   Anything else — especially a moved file back at its source path — is a finding: stop and
+   show it. If any file is edited after this check, run the check again. Then warn the user
+   in the hand-off, every time: a still-open editor tab or a pending edit-review buffer of a
+   moved file recreates it at the old path on the next "save all" — close or accept those
+   now, and run `/sdd-overview` once afterwards; its duplicate warning is the re-check this
+   command cannot perform after it ends. Only when the check passes, propose one commit
+   covering move + sync (Ask-first gate).
 
 ## Do / Don't
 

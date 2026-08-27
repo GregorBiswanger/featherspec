@@ -44,13 +44,17 @@ docs fixes that are safe to overwrite.
 - Workspace setting `github.copilot.chat.tools.memory.enabled: false` — the Copilot
   counterpart to the existing `autoMemoryEnabled: false`: no second, invisible memory beside
   the Memory Bank.
+- `/sdd-setup` elicits **working agreements**: a *Definition of Green* — the
+  post-implementation quality-gate command sequence, proposed from the detected stack
+  (exact commands with flags), confirmed by the user, recorded in `techContext.md` and
+  bound as an `AGENTS.md` preference that loops until zero warnings/errors and explicitly
+  applies to implementation steps only, never to specify/clarify/plan work — and the **TDD
+  cadence** (strict slice gate · red-first · tests alongside), chosen by the user instead
+  of assumed. The wizard also proposes the **baseline commit** when the repository has
+  none: without a HEAD, plan baselines, scope checks and safe `git mv` moves all run blind.
 
 ### Changed
 
-- `/sdd-lifecycle` move mechanics hardened: moves run as `git mv` (atomic, staged), and a
-  mandatory final `git status --short` check against the expected file list runs before the
-  commit proposal — a moved file reappearing at its source path (an open editor tab or
-  edit-review buffer re-saving it) is caught instead of silently committed.
 - Reactivating an `Implemented` spec starts a fresh plan from Mode C's impact report; the
   archived plan is read, never extended.
 - `/sdd-clean`'s stale check is now evidence-based: named paths and commands are verified to
@@ -59,7 +63,29 @@ docs fixes that are safe to overwrite.
   preserved as facts.
 - Memory Bank rule: `activeContext.md` is updated by replacement, not accumulation —
   "Changed Recently" holds at most ~6 bullets, "Validation" replaces its previous line, and
-  a completed spec resets the file to its skeleton.
+  a completed spec resets the file to its skeleton (`Current phase: idle`, real links to
+  the done spec and archived plan).
+- `/sdd-compile` gained an expected-state definition and a verdict rubric: the state it
+  certifies is spec `In Progress` in `active/` with its plan `Done` beside it — never a
+  finding, and the `done/` move is never a readiness fix (the move *follows* `READY`;
+  demanding it first is circular). Blockers are exactly four: criterion without evidence ·
+  failing/unrun gate · plan/traceability hole · a working document contradicting the code
+  or a constitution invariant. Historical process deviations and pending user acceptance
+  are findings, and a re-run on an unchanged repo returns the same verdict. Its docs-sync
+  check also scans `.specs/` for stray copies, including resurrected plans.
+- `/sdd-plan`: approval of the plan approves the document, never the start of work —
+  implementation waits for the user's explicit start signal. Steps carry a size rule of
+  thumb (one or two criteria per step), owned by `.claude/rules/plans.md`.
+- `/sdd-lifecycle` move mechanics hardened: moves run as `git mv` (atomic, staged) with an
+  untracked-files fallback that proposes the missing baseline commit; the final check is a
+  file-system listing run as the very last action, with `git status --short` additionally
+  matched against the expected list where a HEAD exists; the hand-off always warns to close
+  pending editor buffers (a later "save all" recreates moved files at their old path) and
+  points at `/sdd-overview` — whose warning also catches stray plans — as the re-check.
+  The freeze edit rewrites the archived plan's `**Spec:**` backlink to `../done/`.
+- `/sdd-specify` re-checks the whole spec's language (acceptance criteria included) against
+  `DocLanguage`; `/sdd-style-update` normalizes bullets to English (`AGENTS.md` is wiring);
+  the constitution cap triggers one eviction proposal, not a recurring negotiation.
 
 ## [1.4.0] - 2026-08-27
 
