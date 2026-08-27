@@ -28,7 +28,7 @@ wins.
 
 ```yaml
 DocLanguage: English # set by /sdd-setup; governs project docs and dialogue; wiring stays English.
-FeatherSpecVersion: 1.3.0 # managed by /sdd-featherspec-update; do not edit by hand
+FeatherSpecVersion: 1.4.0 # managed by /sdd-featherspec-update; do not edit by hand
 ```
 
 ## Non-negotiables
@@ -79,8 +79,6 @@ load in every session; that is what makes them binding. This section is never fi
 - **Formatting**: Follow the project's formatter / linter configuration when present.
 
 ## Architecture & Design Snapshot (MUST SYNC)
-
-Agents orient by this snapshot — find modules and entrypoints here instead of scanning the tree.
 
 ### Rule: Run the architecture update unprompted
 
@@ -191,6 +189,7 @@ list — commands render it from here.
 | `/sdd-lifecycle` | Spec status and moves between backlog/active/done |
 | `/sdd-style-update` | Capture coding style preferences into `AGENTS.md` |
 | `/sdd-featherspec-update` | Template version check + safe update from a newer release (customizations preserved) |
+| `/sdd-clean` | Context cleanup: dedupe and compact the persistent markdown safely, with a token report |
 
 Flow — the only source of the recommended order; commands render it from here:
 `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → human reads the plan → `/sdd-lifecycle`

@@ -61,6 +61,8 @@ Only after confirmation:
   `AGENTS.md`).
 - Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if over, propose an
   eviction per its order.
+- When the Memory Bank files have visibly outgrown their purpose during this sync, recommend
+  `/sdd-clean` in the delta report — never clean up here as a side effect.
 
 ## When invoked from /sdd-architecture-scan
 

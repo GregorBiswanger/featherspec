@@ -436,3 +436,8 @@ entries compose sequentially across skipped versions.
   insert, linking an existing plan file) · plans gain a `**Quality gates:**` line in
   Approach (detect: plan without one · offer: per-file insert)
 - probes: `sdd-plan.md` without the architect persona ⇒ ≤1.2.0
+
+### 1.4.0 — minor (2026-08-27)
+- adds: `/sdd-clean` (body + loader) — context cleanup for the persistent markdown with a
+  token report · `/sdd-architecture-update` may recommend it on visible Memory Bank growth
+- probes: `sdd-clean.md` absent ⇒ ≤1.3.0

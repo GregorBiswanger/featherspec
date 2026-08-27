@@ -21,7 +21,7 @@ criteria, then into a **plan** of baby steps — and only then writes code. Spec
 and progress all live on disk as Markdown in your repository, so the next session, the next
 teammate, and the next tool pick up exactly where you left off.
 
-Eleven `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
+Twelve `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
 GitHub Copilot, because both tools execute the **same files**.
 
 ---
@@ -301,7 +301,7 @@ runs faster because the context is already written down.
 
 ---
 
-## The eleven commands
+## The twelve commands
 
 | Command | What it does |
 | --- | --- |
@@ -316,6 +316,7 @@ runs faster because the context is already written down.
 | `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
 | `/sdd-featherspec-update` | Check your template version and update safely — customizations preserved |
+| `/sdd-clean` | Keep the persistent context lean: dedupe, drop stale content, compact — with a token report |
 
 New to it? Just run `/sdd-overview`.
 
@@ -328,7 +329,7 @@ AGENTS.md              the constitution — rules, doc language, template versio
 CLAUDE.md              one line: @AGENTS.md
 CHANGELOG.md           the template's release history (snapshot at adoption)
 
-.claude/commands/      the eleven workflow bodies (Claude runs them directly)
+.claude/commands/      the twelve workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
