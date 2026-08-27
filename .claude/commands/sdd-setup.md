@@ -55,8 +55,9 @@ Keep the orientation short, then continue the wizard with Step 1.
   bundled into **one** "here is what I derived — correct anything" confirmation; only the
   genuinely open steps are asked, one per message — never a wall of eight questions.
 - Name the source of every pre-fill — "from `package.json`", "template default in
-  `AGENTS.md`" — never vague claims like "from your notes": template defaults are not the
-  user's notes, and unnamed sources confuse.
+  `AGENTS.md`", "from my saved user memory (which you asked me to keep earlier)" — never
+  vague claims like "from your notes" or "your saved preferences": template defaults are
+  not the user's notes, and an unnamed source in a fresh project reads as spooky, not smart.
 
 ## Step 0 (MUST be the first question)
 
