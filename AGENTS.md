@@ -162,7 +162,8 @@ spec with a `.plan.md` suffix — `0007-user-login.md` → `0007-user-login.plan
 shares a lifecycle folder and moves together — except into `done/`: there the plan is
 archived, frozen, under `.specs/plan-archive/`, dated and linked from the spec's `**Plan:**`
 line and `## Plan history` (procedure in `/sdd-lifecycle`). One plan per iteration —
-reactivation starts a fresh plan; archived plans are read, never edited.
+reactivation starts a fresh plan; archived plans are read, never edited (the closing edit
+made while archiving completes the freeze).
 
 The plan declares its own status near the top:
 `**Status:** Not started | In Progress | Blocked | Done`
@@ -181,7 +182,7 @@ list — commands render it from here.
 | Command | Purpose |
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
-| `/sdd-setup` | Onboarding wizard: `DocLanguage`, Memory Bank, architecture snapshot, working agreements (quality gates, TDD cadence) |
+| `/sdd-setup` | Onboarding wizard: `DocLanguage`, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode) |
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |

@@ -49,8 +49,9 @@ docs fixes that are safe to overwrite.
   (exact commands with flags), confirmed by the user, recorded in `techContext.md` and
   bound as an `AGENTS.md` preference that loops until zero warnings/errors and explicitly
   applies to implementation steps only, never to specify/clarify/plan work — and the **TDD
-  cadence** (strict slice gate · red-first · tests alongside), chosen by the user instead
-  of assumed. The wizard also proposes the **baseline commit** when the repository has
+  working mode**, presented as a strict red-first default (`Not implemented` stub, a
+  confirmation stop after every new or changed test) the user confirms or adjusts — never
+  assumed. The wizard also proposes the **baseline commit** when the repository has
   none: without a HEAD, plan baselines, scope checks and safe `git mv` moves all run blind.
 
 ### Changed
@@ -86,6 +87,21 @@ docs fixes that are safe to overwrite.
 - `/sdd-specify` re-checks the whole spec's language (acceptance criteria included) against
   `DocLanguage`; `/sdd-style-update` normalizes bullets to English (`AGENTS.md` is wiring);
   the constitution cap triggers one eviction proposal, not a recurring negotiation.
+- `/sdd-setup` opens language-first: at most two English sentences, then the `DocLanguage`
+  question — the full SDD orientation and command table follow entirely in the chosen
+  language (the definition is translated, not quoted in English). The quality-gate and TDD
+  questions are written for newcomers: the gate question explains in plain words why linter
+  and tests run after every implementation step, and the TDD question presents a **default**
+  instead of a quiz — red-first via `Not implemented` stubs for new behaviour, a stop after
+  every new or changed test for the user's confirmation before implementing,
+  immediately-green tests against existing code allowed with a negative control where it
+  is cheap. Neither question is ever answered by assumption.
+- `/sdd-plan` proceeds automatically only when exactly one candidate spec exists (and says
+  so); with several it lists and asks — never a silent pick.
+- `/sdd-lifecycle` acts **move-first, edit-second**: metadata edits happen at the
+  destination path after `git mv`, so no dirty editor buffer remains at the source path —
+  the mechanism behind every observed post-move duplicate (only files edited before their
+  move ever resurrected).
 
 ## [1.4.0] - 2026-08-27
 

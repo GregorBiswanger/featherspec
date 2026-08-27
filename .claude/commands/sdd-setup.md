@@ -1,5 +1,5 @@
 ---
-description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gates, TDD cadence).
+description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode).
 argument-hint: "[docLanguage] [projectName] [stack] — or just answer the wizard"
 disable-model-invocation: true
 ---
@@ -16,45 +16,35 @@ are missing, ask for them in the wizard below.
 
 You are running an onboarding wizard for this repository.
 
-## Spec-Driven Development (SDD) — orientation for the model
+## Session opening — language first, then orientation
 
-On the first invocation, start with a short introduction to Spec-Driven Development and the
-available `/sdd-*` commands. Then immediately ask **Step 0** (the language question).
+Open with at most two short **English** sentences — a greeting and that setup starts with
+one question — then immediately ask **Step 0** (the language question). Everything before
+the language is chosen stays English and minimal: no SDD explanation, no command table yet.
+A mixed-language opening is exactly what this ordering prevents. On a re-run — `AGENTS.md`
+already holds a `DocLanguage`, or it arrived as an argument — open in that language,
+confirm it in one line instead of re-asking Step 0, and compress the orientation to one
+sentence: a re-run tunes, it does not re-onboard.
 
-Use this definition verbatim (unchanged, in English), optionally with a brief surrounding
-explanation:
+**After** `DocLanguage` is set, give the whole orientation in `DocLanguage`:
 
-**Spec-Driven Development (SDD)** is an AI-assisted development approach where a **clear,
-structured, versioned specification** is the **primary artifact**. Implementation, tests
-(and often documentation) are **derived from the spec** and then **continuously validated
-against it** in an iterative loop (**generate → verify/validate → refine**).
+- Explain Spec-Driven Development in 3–5 plain sentences, rendering this definition
+  faithfully in `DocLanguage` (translate it — do not quote English into a non-English
+  session): *Spec-Driven Development (SDD) is an AI-assisted development approach where a
+  clear, structured, versioned specification is the primary artifact. Implementation and
+  tests are derived from the spec and continuously validated against it (generate →
+  verify → refine). Because agents generate code anchored to an explicit spec — and their
+  output can be checked, corrected and regenerated against it — SDD yields higher-quality,
+  more maintainable code than unstructured "vibe" prompting. The spec survives the
+  implementation and stays the reference point for change.*
+- State this repo's operating protocol as `AGENTS.md` defines it at the top — the
+  three-step form is load-bearing, so render the three steps in `DocLanguage` without
+  adding or merging steps.
+- Show the `/sdd-*` commands from the **Commands** table in `AGENTS.md` — all of them, in
+  `DocLanguage`. That table is the single machine-facing roster; keep no second copy here.
+  Name the usual order in one line, rendered from the Flow line under *Commands*.
 
-For quality with coding assistants: because assistants/agents generate code **anchored to
-an explicit spec**—and outputs can be **checked, corrected, and regenerated** based on that
-spec—SDD helps **ensure higher-quality, more maintainable code** than unstructured prompt-
-or "vibe"-driven coding.
-
-Key principles:
-
-- **Spec-first:** define _what_ to build (behavior, acceptance criteria, constraints) before writing code.
-- **Structured specification:** structured enough for consistent tool/agent execution.
-- **Living spec:** the spec evolves with the system and remains the reference point for change.
-- **Spec-anchored:** the spec survives implementation and is maintained alongside the code it
-  produced, so a change to a requirement can be traced to the code and tests it reaches. The
-  spec steers the code; it does not replace it, and nothing here regenerates code from a spec.
-
-Explain in 2–4 English sentences that specs are the primary reference point and that the
-`/sdd-*` commands guide the workflow. State this repo's operating protocol exactly as
-`AGENTS.md` defines it at the top — three steps, never paraphrased into your own words.
-
-## Overview: when to use which command
-
-Show the `/sdd-*` commands from the **Commands** table in `AGENTS.md` — all of them, in
-`DocLanguage`. That table is the single machine-facing roster; keep no second copy here, or the
-one command a new user never hears about will be the one you forgot to list.
-
-Name the usual order in one line, rendered from the Flow line under *Commands* in `AGENTS.md`.
-Keep this overview short, then transition into the onboarding dialog, starting with Step 0.
+Keep the orientation short, then continue the wizard with Step 1.
 
 ## Step 0 (MUST be the first question)
 
@@ -112,21 +102,28 @@ language, no lecture.
 4. **Architecture style** (modular monolith / microservices / layered / hexagonal / other) —
    this one needs interpretation, so ask even when you have a guess, and say what you guessed
 5. **Repo entrypoints** (apps, services, CLIs, APIs) — pre-fill from the tree
-6. **Definition of Green** (the post-implementation quality gate) — pre-fill a proposal from
-   the stack and CI config, then have the user confirm or correct it. Propose the command
-   sequence that must pass with **zero warnings and zero errors** after every completed
-   implementation step, as exact commands with flags, not tool names — e.g. JS/TS:
-   `npx eslint .` → `npx tsc --noEmit` → `npm test`; .NET:
-   `dotnet format --verify-no-changes` → `dotnet build -warnaserror` → `dotnet test`;
-   Python: `ruff check` → `mypy` → `pytest`. Name the loop plainly: on any warning or
-   error, fix the code and re-run the gate until it is clean.
-7. **Working mode (TDD cadence)** — which cadence binds implementation steps? One short
-   plain-language line per option: **(a) strict slice gate** — one test per slice, red first
-   via a `Not implemented` stub at the new boundary, stop for the user's go before making it
-   green (recommend for teams reviewing every step); **(b) red-first** without per-slice
-   stops; **(c) tests alongside implementation**. In every mode, a new test that is green
-   immediately because existing code already covers it is fine.
+6. **Quality gate** — written for someone who has never heard the term. Explain first, in
+   one or two plain sentences, what it is for: to keep AI-implemented code trustworthy, the
+   matching linter and the unit tests run after every completed implementation step, and
+   the code is fixed until both come back with zero warnings and zero errors. Then propose
+   the concrete commands from the detected stack and ask whether that is what should run —
+   exact commands with flags, e.g. JS/TS: `npx eslint .` → `npx tsc --noEmit` → `npm test`;
+   .NET: `dotnet format --verify-no-changes` → `dotnet build -warnaserror` → `dotnet test`;
+   Python: `ruff check` → `mypy` → `pytest`. Jargon ("Definition of Green") may be named as
+   the term of art, never used as the question.
+7. **TDD working mode** — explain in plain language (many users have never worked
+   test-first), present the **default**, and ask only whether it fits or should differ —
+   never a multiple-choice quiz. The default: *for new behaviour the test comes first and
+   fails through a `Not implemented` stub, so it fails for the right reason; after writing
+   or changing a test, stop and ask the user whether the test and its expectations are
+   right; only after that go, implement until green. A new test that is green immediately
+   because existing code already covers it is fine — where it is cheap, add a negative
+   control case proving the test can fail. Never implement past a just-written test
+   without the user's confirmation.* The user changes it by simply saying so.
 8. **Coding preferences** (comments, naming, patterns to avoid)
+
+Steps 6 and 7 are never answered by assumption: if the user skips them, ask each again,
+individually, before writing anything.
 
 ## Actions you must perform
 
@@ -160,7 +157,10 @@ After collecting answers:
   **Quality gate (code)** — run the Definition-of-Green commands from `techContext.md` after
   every completed implementation step and loop until zero warnings and errors, **scoped
   explicitly: it binds implementation steps only, never specify/clarify/plan work or
-  doc-only edits** — and **TDD** with the cadence chosen in step 7.
+  doc-only edits** — and **TDD** with the working mode confirmed in step 7 (default:
+  red-first via `Not implemented` stubs for new behaviour; stop after every new or changed
+  test for the user's confirmation before implementing; immediately-green tests against
+  existing code allowed, with a negative control where it is cheap).
 
 **E) Budget check:**
 

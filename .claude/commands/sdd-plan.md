@@ -17,7 +17,9 @@ in the repository as it is, the recorded stack, and current, source-backed facts
 the how; the spec owns the what.
 
 The user may name a spec or plan path after the command. If none is given — or the named path
-does not exist — list what sits under `.specs/` and ask which one to work on.
+does not exist — look at `.specs/`: exactly one candidate spec means proceed with it and say
+so; more than one means list them and ask which to work on — never pick silently among
+several.
 
 Planning produces a **file**. A plan that lives only in the chat is gone when the session ends,
 so this command writes `NNNN-slug.plan.md` next to its spec and keeps it as the persisted state of
