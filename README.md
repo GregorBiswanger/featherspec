@@ -77,8 +77,10 @@ same behaviour.
 
 It asks which language your documentation should be written in (answer `English`, `Deutsch`,
 `Français`, … — everything the workflow writes from then on follows it), then a handful of
-questions about the project. It seeds the Memory Bank and captures a first architecture
-snapshot.
+questions about the project. It seeds the Memory Bank, captures a first architecture
+snapshot, and agrees the working rules with you: the quality gate that runs after every
+implementation step until it is clean, and the TDD working mode — proposed in plain
+language, confirmed by you, never assumed.
 
 That is the entire installation. Nothing to build, nothing to run.
 
@@ -99,9 +101,9 @@ npx degit GregorBiswanger/featherspec featherspec-tmp
 ```
 
 Then copy into your repo: `AGENTS.md`, `CLAUDE.md`, `.claude/`, `.github/prompts/`,
-`.github/agents/`, `.specs/`, `.memory-bank/` — plus `.vscode/settings.json` and the
-template's `.gitignore` entries (merge both if you already have your own). Nothing else:
-no build, no dependencies.
+`.github/instructions/`, `.github/agents/`, `.specs/`, `.memory-bank/` — plus
+`.vscode/settings.json` and the template's `.gitignore` entries (merge both if you already
+have your own). Nothing else: no build, no dependencies.
 
 **Then run `/sdd-setup` and answer *existing software*** — the wizard offers a deep
 architecture scan that reads your code (recursively, with isolated scout agents), lets you
@@ -220,9 +222,9 @@ reason: always-true, event, state, unwanted behaviour, optional feature.
 ```
 
 This reads your finished spec **as a stranger** — no conversation history, no benefit of the
-doubt — and returns five lists: contradictions, terms you used in two senses, criteria nothing
-can decide, implementation details posing as intent, and failure modes you never named. It does
-not fix them. It ends with one question: the thing whose being wrong would cost the most.
+doubt — and returns six lists: contradictions, terms you used in two senses, criteria nothing
+can decide, implementation details posing as intent, failure modes you never named, and
+assumptions posing as decisions. It does not fix them. It ends with one question: the thing whose being wrong would cost the most.
 
 Thirty seconds of reading here is the cheapest ambiguity you will ever remove. Left alone, every
 one of those gaps gets silently resolved by the planner's best guess and hardened into numbered
@@ -250,9 +252,10 @@ and on the **order** — that step three really does depend on step two, that no
 is missing, that the risky part comes first. A wrong step produces hundreds of wrong lines; a
 wrong line produces one. Two hundred lines of plan beats two thousand lines of diff.
 
-Say which steps look wrong before anything is implemented. Once you approve,
-`/sdd-lifecycle` moves the pair into `.specs/active/` — implementation happens there, not in
-the backlog.
+Say which steps look wrong before anything is implemented. Approving the plan approves the
+document, not the start of work — implementation begins on your explicit go ("Implement
+T-001"), and that go also moves the pair into `.specs/active/`: implementation happens
+there, not in the backlog.
 
 ### ⑥ Implement, step by step
 
@@ -260,8 +263,10 @@ the backlog.
 Implement T-001.
 ```
 
-The agent does one focused change, runs its `Verify:` line, and writes the result into the
-step's `Verified:` field — the command it ran and what came back — before it ticks the box.
+With the default TDD working mode, a new behaviour starts as a test you get to see fail —
+and the agent stops after writing it, waiting for your go before any implementation.
+The agent then does one focused change, runs its `Verify:` line, and writes the result into
+the step's `Verified:` field — the command it ran and what came back — before it ticks the box.
 No recorded run, no tick: that one rule is what keeps a plan from becoming a list of good
 intentions. It records which files it touched in the same change set as the code, and refreshes
 `.memory-bank/activeContext.md` in that same change set, so the dashboard never lags the work.
@@ -295,9 +300,13 @@ spec. That is the next iteration.
 /sdd-lifecycle
 ```
 
-Spec and plan move together into `.specs/done/`, statuses are updated, and the Memory Bank is
-refreshed. The spec stays as a living document — the starting point for iteration two, which
-runs faster because the context is already written down.
+Spec and plan part ways here, deliberately. The spec moves into `.specs/done/` and stays a
+living document — the starting point for iteration two, which runs faster because the
+context is already written down. The plan is frozen into `.specs/plan-archive/` under a
+dated name, linked from the spec's `**Plan:**` line and its `## Plan history`: one immutable
+plan per iteration, never deleted — so a later change can trace exactly what each iteration
+built, down to the tests to retire when a requirement goes away. The agent verifies the
+moved files really left their old folder before proposing the commit.
 
 ---
 
@@ -306,12 +315,12 @@ runs faster because the context is already written down.
 | Command | What it does |
 | --- | --- |
 | `/sdd-overview` | Where am I? Workflow map, current spec status, command list |
-| `/sdd-setup` | One-time wizard: doc language, Memory Bank, first architecture snapshot |
+| `/sdd-setup` | One-time wizard: doc language, Memory Bank, architecture snapshot, working agreements |
 | `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → a persisted plan of baby steps, with research and traceability |
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
-| `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` |
+| `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` — archiving the plan at completion |
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
 | `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
@@ -333,10 +342,11 @@ CHANGELOG.md           the template's release history (snapshot at adoption)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
+.github/instructions/  thin loaders so Copilot gets the path-scoped rules too
 .github/agents/        the Copilot persona, plus the scan's scout agent in VS Code dialect
-.vscode/settings.json  tells Copilot where to find .claude/rules and .github/prompts
+.vscode/settings.json  Copilot wiring: instructions/prompts locations, local memory tool off
 
-.specs/                backlog/ · active/ · done/   — specs + their plan files (ships empty)
+.specs/                backlog/ · active/ · done/ · plan-archive/ — specs, plans, frozen plan history (ships empty)
 .memory-bank/          projectbrief · systemPatterns · techContext · activeContext
 ```
 
@@ -357,9 +367,10 @@ Where a copy exists, it names `AGENTS.md` as the winner.
 ## Why one template for two tools
 
 - **VS Code Copilot reads most of Claude Code's configuration.** `AGENTS.md` natively, via
-  `chat.useAgentsMdFile`; `.claude/rules/` once the shipped `.vscode/settings.json` enables it —
-  it is *not* a default Copilot location, so keep that file if you move these folders into
-  another project. FeatherSpec leans on the overlap instead of maintaining two copies.
+  `chat.useAgentsMdFile`; the path-scoped rules through six thin loaders in
+  `.github/instructions/`, whose `applyTo` globs mirror each rule's `paths:` — the rule text
+  itself stays single-source under `.claude/rules/`. FeatherSpec leans on the overlap
+  instead of maintaining two copies.
 - **Workflows are commands, not skills.** A skill advertises itself to the model on every
   request; a command is only ever run when *you* type it. Ten workflows sitting in every
   system prompt is a cost with no upside here.

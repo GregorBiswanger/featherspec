@@ -40,8 +40,7 @@ git write (commit, branch, reset, push) · running a command that reaches the ne
 **Never** — request or include secrets (`.env`, keys, tokens) in chat or code; keep sensitive
 files out of context.
 
-If uncertain, ask **one** targeted question. Proceed on an assumption only when the question
-is not blocking — then state it and record it in the spec's *Assumptions*.
+If uncertain, ask **one** targeted question; a non-blocking assumption is stated and recorded in the spec's *Assumptions*.
 
 ### Progress & state sync (gate)
 
@@ -56,9 +55,8 @@ truth, so reconcile the docs first, then report.
 ### Fast path
 
 A change smaller than the spec that would describe it (a typo, a config value) is made
-directly, with no spec and no plan. Say that you are taking the fast path. A fast-path fix
-with regression risk requires a test in the same change set — no test, no fast path — and a
-note in `.memory-bank/activeContext.md`.
+directly, with no spec and no plan — say so. A fast-path fix with regression risk requires a
+test in the same change set — no test, no fast path — and a note in `.memory-bank/activeContext.md`.
 
 ## Style & Output Preferences (MUST MAINTAIN)
 
@@ -174,10 +172,9 @@ it current in the same change set as the code — a new session must resume from
 
 ## Commands
 
-Each `/sdd-*` command is a single body file under `.claude/commands/`; Claude Code runs it
-directly, GitHub Copilot reaches it through a thin loader in `.github/prompts/`. Neither
-entry point is advertised to the model. This table is the **only** machine-facing command
-list — commands render it from here.
+Each `/sdd-*` command is one body file under `.claude/commands/` — Claude Code runs it
+directly, GitHub Copilot via a thin loader in `.github/prompts/`; neither is advertised to the
+model. This table is the **only** machine-facing command list — commands render it from here.
 
 | Command | Purpose |
 | --- | --- |
