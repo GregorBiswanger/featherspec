@@ -70,8 +70,8 @@ Run the version check above to get `V_base` (stamped or estimated-unstamped). Re
 inventories once Base is fetched (until then, provisionally): *dual* · *Claude-only*
 (Copilot half absent) · *Copilot-only* (Claude half absent) · *Copilot-ejected* (bodies
 merged into `.prompt.md` files → **advisory mode**, see below). Halves, for every scope
-decision: the Claude half is `.claude/`; the Copilot half is `.github/` (prompts, agents,
-`copilot-instructions.md`) plus `.vscode/settings.json`. A half is absent only when Base
+decision: the Claude half is `.claude/`; the Copilot half is `.github/` (prompts,
+instructions, agents, `copilot-instructions.md`) plus `.vscode/settings.json`. A half is absent only when Base
 ships files for it and the project has none of them; a half hidden by `.gitignore` or
 `files.exclude` is present, not deleted. Then check the working tree
 (`git status --porcelain`): dirty → ask the user to commit or stash first. Ignore
@@ -324,7 +324,9 @@ vacuous match: loader ↔ body links per command · the frontmatter triangle, fo
 template-known commands only — every present body has a description, its loader (in shapes
 that have loaders) names and links it, the constitution table carries its row; wording may
 differ, existence and linkage may not; user-owned commands are advisory lines, never a
-miss · scout twin bodies byte-identical · `.vscode`
+miss · instructions loader ↔ rule link per `.claude/rules` file, each loader's `applyTo`
+equal to its rule's `paths:` globs (in shapes that have the Copilot
+half) · scout twin bodies byte-identical · `.vscode`
 location keys · `.gitignore` template lines (including `.sdd-update/`) · the `@AGENTS.md`
 line where the shape has `CLAUDE.md` · the three byte-slots (managed-settings values,
 preference bullets, `architecture:` block) byte-equal to Phase 2 **except** bytes changed by
@@ -350,7 +352,7 @@ rollback, and **do not write the stamp**.
    edits — an FYI, not an action), per-conflict resolutions, `review/` leftovers, data
    migrations applied/skipped, pinned files with pending template changes, the restore
    command, pinned-model recheck, **"VS Code needs a full restart to discover new prompt
-   files (Claude Code does not)"**, and "run `/sdd-overview` to verify."
+   and instructions files (Claude Code does not)"**, and "run `/sdd-overview` to verify."
 
 Re-running after success is free: stamp == target lands everything in cases 1/3 — zero
 writes, and Phase 6 doubles as a health check.

@@ -1,7 +1,8 @@
 {
   "chat.useAgentsMdFile": true,
   "chat.useClaudeMdFile": false,
-  "chat.instructionsFilesLocations": { ".claude/rules": true },
+  "chat.instructionsFilesLocations": { ".github/instructions": true, ".claude/rules": false },
   "chat.promptFilesLocations": { ".github/prompts": true },
-  "chat.agentFilesLocations": { ".github/agents": true, ".claude/agents": false }
+  "chat.agentFilesLocations": { ".github/agents": true, ".claude/agents": false },
+  "github.copilot.chat.tools.memory.enabled": false
 }
