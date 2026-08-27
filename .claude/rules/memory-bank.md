@@ -46,6 +46,16 @@ Three metadata lines first — `Last updated: <date>`, `Current branch: <branch>
 - **Next** — numbered, concrete, immediately actionable steps.
 - **Validation** — current test/check status: done, pending, known issues.
 
+### Update by replacement, not accumulation
+
+- **Changed Recently** holds at most ~6 bullets: a new entry evicts the oldest. Slice-level
+  detail lives in the plan; this file links, it does not chronicle.
+- **Validation** states the current result and replaces the previous line — never a series
+  of dated near-duplicates.
+- When a spec reaches `done/`, reset the file to its skeleton: no active spec, one
+  completion line linking the spec and its archived plan, a fresh **Next**. History lives in
+  git and the archived plan, not here.
+
 ### When to update
 
 1. At the end of each relevant coding session.
@@ -74,4 +84,6 @@ Move the following to the correct file instead of adding it to `activeContext.md
 | Stale todos | delete them, or move the live ones to the plan's `Notes:` |
 
 **Do not duplicate. Link and summarize.** Never route content into a file this template does
-not declare: the Memory Bank is these four files, and a spec's only companion is its `.plan.md`.
+not declare: the Memory Bank is these four files, and a spec's only companion beside it is
+its `.plan.md` — completed iterations live frozen in `.specs/plan-archive/` (lifecycle facts
+per `AGENTS.md`, which stays authoritative).

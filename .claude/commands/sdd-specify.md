@@ -214,7 +214,7 @@ this ever diverges, follow them and fix this list:
 
 - Write the spec in `DocLanguage`.
 - Put `**Status:** Draft` directly under the H1, and `**Plan:** _none yet_` beneath it —
-  that line is maintained by `/sdd-plan`, never by hand.
+  that line is maintained by `/sdd-plan` and `/sdd-lifecycle`, never by hand.
 - Keep acceptance criteria explicit and **testable**.
 
 Then create the file (do not just print it): `.specs/backlog/NNNN-slug.md` — a new spec always

@@ -37,6 +37,10 @@ cover only what is specific to **working inside a plan file**:
 - Research entries keep their link and retrieval date, so a later session can tell fresh
   findings from stale ones.
 - It stays a working document, not a diary: current state and the decisions that still matter.
+- An archived plan (`.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md`) is **frozen**: never
+  edit, extend, renumber or delete it. What a later iteration learns belongs in that
+  iteration's own plan; the spec's `## Plan history` line carries the pointer. Deleting a
+  plan file is never sanctioned — `AGENTS.md` owns that invariant.
 
 > Note: path-scoped rules load when a matching file is **read**. When `/sdd-plan` creates a
 > brand-new plan, this rule is not loaded yet — which is why that command restates the

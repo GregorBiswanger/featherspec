@@ -1,5 +1,5 @@
 ---
-description: Turn a spec into a persisted baby-step plan file with research and traceability.
+description: Turn a spec into a persisted baby-step plan file — research, resume, impact analysis.
 argument-hint: "[path to spec or plan]"
 disable-model-invocation: true
 ---
@@ -28,9 +28,9 @@ steps to real code.
 
 | Situation | Mode |
 | --- | --- |
-| The spec has no plan file yet | **A — plan from scratch** |
-| A plan exists and work is unfinished | **B — resume** |
-| A plan exists but the spec changed | **C — re-plan the delta** |
+| The spec's `**Plan:**` line says `_none yet_` (no plan anywhere) | **A — plan from scratch** |
+| A plan sits beside the spec and work is unfinished | **B — resume** |
+| The spec changed after its plan (beside it, or archived in `.specs/plan-archive/`) | **C — re-plan the delta** |
 
 ## Mode A — plan from scratch
 
@@ -197,19 +197,42 @@ final step runs them all>
 
 ## Mode C — the spec changed
 
-A pair sitting in `done/` means an `Implemented` spec is changing: report the impact first
-(steps 1–3), then propose the reactivation move — pair back to `active/`, spec and plan
-`In Progress` — via `/sdd-lifecycle`; a new slice of work gets a successor spec instead.
+A changed spec whose plan is archived (or still beside it in `done/`, from a pre-1.5 layout)
+means an `Implemented` spec is changing: report the impact first (steps 1–3), then propose
+the reactivation move — spec back to `active/`, `In Progress` — via `/sdd-lifecycle`; a new
+slice of work gets a successor spec instead.
 
-1. Compare spec and plan: which acceptance criteria are new, changed, or gone?
-2. Read the traceability table **in reverse** — for every touched criterion, list the steps and
-   the code paths already built from it. That list *is* the impact: the code a change to this
-   requirement reaches.
-3. Report the impact before editing anything: criterion → steps → files, plus what becomes
-   obsolete.
-4. Then extend the plan: append new steps, **never renumber** existing IDs (they are references),
-   strike obsolete steps with a one-line reason instead of deleting them, and set the plan status
-   back to `In Progress`.
+1. Follow the spec's `**Plan:**` line or `## Plan history` to its most recent plan (usually
+   in `.specs/plan-archive/`) and read only what the impact needs: which acceptance criteria
+   are new, changed, or gone?
+2. Read that plan's traceability table **in reverse** — for every touched criterion, list the
+   steps and the code paths already built from it. That list *is* the impact: the code a
+   change to this requirement reaches. For a criterion that is gone, list its deciding tests
+   too — left in place, they keep proving behaviour nobody wants anymore.
+3. Report the impact before editing anything: criterion → steps → files → tests, plus what
+   becomes obsolete.
+4. Then — only after the reactivation move ran and the spec sits in `active/` — write a
+   **fresh plan** beside it (structure above, same `NNNN-slug.plan.md` name); a new plan is
+   never written beside a `done/` spec. Its Research section links the archived predecessor,
+   its steps carry the removals and adaptations from the impact report, and the spec's
+   `**Plan:**` line points at it again. The archived plan stays frozen — read it, never
+   extend or renumber it. Only a still-active plan (work in flight, never archived) is
+   extended in place instead: append steps, **never renumber** existing IDs, strike obsolete
+   steps with a one-line reason.
+
+### Impact across several specs
+
+A business change that touches many specs is one impact analysis, not many blind edits:
+
+1. Name every affected spec first — search the criteria, then have the user confirm the list.
+2. Revise the specs (`/sdd-specify` revise mode): changed criteria change in place; a
+   criterion that no longer applies is struck through with date and reason — IDs are never
+   deleted or reused, steps and tests still reference them.
+3. For each spec, run steps 1–4 above against its latest plan. No plan anywhere? The AC-IDs
+   in test names are the fallback traceability: search the test code for each struck
+   criterion's ID to find the tests to remove or retarget.
+4. Every removal becomes a plan step with its own `Verify:` line — deleting a test is a
+   behaviour change and earns the same evidence discipline as adding one.
 
 ## Always
 
@@ -220,7 +243,8 @@ A pair sitting in `done/` means an `Implemented` spec is changing: report the im
   later — a wrong step costs hundreds of lines, a wrong line costs one. Ask which steps look
   wrong before anything is implemented. Every other artifact here has a named reader; this one
   is the most expensive to get wrong. Once approved, propose one commit of the plan (Ask-first
-  gate), then the pair moves to `active/` before implementation (`/sdd-lifecycle` performs it).
+  gate); in Mode A the pair then moves to `active/` before implementation (`/sdd-lifecycle`
+  performs it), in Mode C the spec is already there and work continues from the fresh plan.
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

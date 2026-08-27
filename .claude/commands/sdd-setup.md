@@ -119,7 +119,7 @@ language, no lecture.
 After collecting answers:
 
 **A) Ensure folders** (already present in this template; create only if missing):
-`.memory-bank/`, `.specs/backlog/`, `.specs/active/`, `.specs/done/`.
+`.memory-bank/`, `.specs/backlog/`, `.specs/active/`, `.specs/done/`, `.specs/plan-archive/`.
 
 **B) Initialize documentation** in `DocLanguage`:
 

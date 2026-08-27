@@ -22,8 +22,11 @@ preferences live. No loader file holds a copy.
 
 1. If no preference was provided, ask the user for it.
 2. Normalize each into a short bullet with a bold category prefix (`**Comments**: …`),
-   matching the section's existing format.
-3. Append it to the bullet list under *Current preferences* in `AGENTS.md` immediately.
+   matching the section's existing format. A "preference" that would override a
+   Non-negotiable or a lifecycle invariant in `AGENTS.md` is not captured — quote the
+   conflict instead; `AGENTS.md` wins (its preference-capture rule stays authoritative).
+3. Append it to the bullet list under *Current preferences* in `AGENTS.md` immediately —
+   replacing any bullet it contradicts, and saying so.
 4. Check the file length against the cap in `.claude/rules/constitution.md`; if over, propose
    an eviction per its order before finishing.
 5. Confirm by showing the updated bullets. Apply them to all future code generation.

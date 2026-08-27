@@ -36,9 +36,8 @@ reconcile them.
 
 If the tree shows several structures the snapshot cannot place, the snapshot names paths that
 no longer exist, or the focus area sits under `unmapped:` — do not guess. Recommend
-`/sdd-architecture-scan` (with the focus path) in the delta report instead. (This spells out
-the escalation rule from `AGENTS.md` for the moment this command acts; `AGENTS.md` stays
-authoritative.)
+`/sdd-architecture-scan` (with the focus path) in the delta report instead. (This escalation
+rule is owned here; `AGENTS.md` only mandates running this workflow unprompted.)
 
 ## Confirmation gate
 

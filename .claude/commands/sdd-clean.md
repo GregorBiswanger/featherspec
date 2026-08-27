@@ -42,8 +42,11 @@ for maps) and ask, in this order:
 2. **Duplicate?** A fact stated in several files keeps exactly one canonical home; the
    others link or drop it.
 3. **Stale?** Spot-check claims against the repository — named paths, technologies,
-   assumptions. Stale content is updated or removed; git history is the archive, the live
-   file represents the current useful state.
+   assumptions. A named file, script or command target must exist: verify each with a cheap
+   check (path exists, script is in the manifest) and carry the checked items into the
+   Phase-2 plan — "nothing to verify" is itself a claim and needs that list to back it.
+   Stale content is updated or removed; git history is the archive, the live file
+   represents the current useful state.
 4. **Rediscoverable?** Inventories an agent can derive from the code in seconds (file
    lists, obvious signatures) go. Intent, boundaries, constraints, conventions and traps
    stay — the Memory Bank holds knowledge, not a second copy of the repository.
@@ -54,6 +57,10 @@ for maps) and ask, in this order:
    it only narrates the past.
 7. **Over budget?** `activeContext.md` against its size limit in `AGENTS.md`; maps against
    their 40 lines. Over budget triggers the checks above — never blind truncation.
+8. **Against the constitution?** A statement that contradicts an `AGENTS.md` invariant — a
+   plan file described as deleted, a "preference" that is not a bullet in `AGENTS.md` — is a
+   finding, never a fact to preserve: inside this command's write scope, correct the text to
+   plain facts stripped of the invalid justification; outside it, report it with the quote.
 
 Estimate context cost as tokens ≈ bytes ÷ 4 and say it is an estimate — one command for the
 whole scope (e.g. `git ls-files '.memory-bank/*.md' '.architecture/*.md' | xargs wc -c`),
@@ -74,6 +81,7 @@ Files analyzed: 7 · already concise: 4
 ~ compact: activeContext.md (finished episodes) · techContext.md (verbose prose)
 ! duplicate: "modular monolith" in systemPatterns.md + techContext.md → canonical: systemPatterns.md
 ? verify: techContext.md names Redis — not found in the repository
+Spot-checked: npm test (manifest ✓) · src/auth/login.ts (exists ✓) · dist/server.js (missing → stale)
 Report-only: 0007-user-login.plan.md handoff looks finished (its own command edits it)
 Estimated: 5,900 → ~3,800 tokens (−36 %) · preserved: decisions, constraints, conventions
 Apply? (yes / details <file> / abort)
