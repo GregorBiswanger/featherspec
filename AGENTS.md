@@ -198,4 +198,5 @@ Flow — the only source of the recommended order; commands render it from here:
 `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → human reads the plan → `/sdd-lifecycle`
 (backlog → active) → implement → `/sdd-compile` → `/sdd-lifecycle` (active → done).
 `/sdd-architecture-update` runs unprompted whenever structure drifts; type it only as fallback.
+The backlog → active move also rides on an explicit start signal (see `/sdd-plan`).
 Brownfield: run `/sdd-architecture-scan` before the first spec.

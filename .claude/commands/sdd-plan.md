@@ -66,11 +66,18 @@ steps to real code.
 
 ## Research (do it, do not skip it)
 
-Plan against current facts, not recollection. Use your web search or fetch capability whenever
-the spec involves a library, framework or API you cannot verify from the repo · version-specific
-behaviour · a protocol, standard or regulation · a pattern where your knowledge may be stale.
-Web lookups are network access — the Ask-first gate in `AGENTS.md` applies: name the lookups
-and get one yes for the whole research batch.
+Plan against current facts, not recollection — you are a language model, not a knowledge
+base: names, versions, defaults and idioms drift after training. When a web search or fetch
+tool is available, **using it is the preferred path** for every fact you would otherwise
+assert from memory: a library, framework or API you cannot verify from the repo ·
+version-specific behaviour · a protocol, standard or regulation · a naming or architecture
+convention under debate · any pattern where your knowledge may be stale. Never quietly
+downgrade such a fact to an assumption just to skip the lookup. Web lookups are network
+access — the Ask-first gate in `AGENTS.md` applies: name the lookups and get one yes for
+the whole research batch. Only when no web tool exists at all, mark the affected steps as
+assumptions **and** hand the user ready-made search queries ("googling these for me raises
+the plan's quality: …") so the knowledge can still be pulled in. The same applies when the
+user declines the research batch: say so plainly and never present a guess as fact.
 
 - If your tool supports subagents, delegate each lookup to an isolated agent and take back
   only the distilled finding plus its source — raw pages crowd out planning judgement.
@@ -79,8 +86,6 @@ and get one yes for the whole research batch.
 - Prefer official documentation, release notes, and the project's own repository.
 - Record every source under `## Research`: title, link, one line on what it settled, and the
   date you retrieved it. No link, no claim.
-- If no web access is available, say so plainly and mark the affected steps as assumptions
-  rather than presenting a guess as fact.
 
 ## Baby steps
 
@@ -188,7 +193,9 @@ final step runs them all>
 1. Read the plan first, then the spec. `Current step` and `Session handoff` say where the work
    stands — verify that against `git status --short` and the actual code before trusting it.
    If the pair still sits in `backlog/` or the spec still says `Draft` while work is starting,
-   propose the move to `active/` + `In Progress` first — `/sdd-lifecycle` performs it.
+   propose the move to `active/` + `In Progress` first — or, when the user has already given
+   the explicit start signal, perform it per *Always* below; `/sdd-lifecycle`'s procedure
+   governs either way.
 2. Report in three lines: what is done, what is next, what blocks it. If
    `activeContext.md`'s `Last updated` is older than the newest commit, say so — the
    dashboard is stale.
@@ -249,9 +256,13 @@ A business change that touches many specs is one impact analysis, not many blind
   wrong before anything is implemented. Every other artifact here has a named reader; this one
   is the most expensive to get wrong. Once approved, propose one commit of the plan (Ask-first
   gate) — then stop again. **Approval of the plan approves the document, never the start of
-  work**: implementation begins only on the user's explicit start signal — e.g.
-  "start T-001", given after the `/sdd-lifecycle` move — and "the plan looks good" is not
-  that signal. In Mode C the same explicit go applies.
+  work**: implementation begins only on the user's explicit start signal — "start T-001",
+  "implement" — and "the plan looks good" is not that signal. The start signal also covers
+  a still-pending backlog → active move: perform it as part of starting, following
+  `/sdd-lifecycle`'s procedure exactly as if the user had typed it (its body lives in
+  `.claude/commands/sdd-lifecycle.md`), with the start signal counting as the yes to its
+  move proposal — only the commit stays behind the Ask-first gate — and say so. In Mode C
+  the same explicit go applies.
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

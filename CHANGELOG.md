@@ -102,6 +102,19 @@ docs fixes that are safe to overwrite.
   destination path after `git mv`, so no dirty editor buffer remains at the source path —
   the mechanism behind every observed post-move duplicate (only files edited before their
   move ever resurrected).
+- Onboarding & interview UX: `/sdd-setup` opens under a 🪶 FeatherSpec banner, prefers the
+  client's structured question UI, bundles everything derivable into one
+  "here is what I derived" confirmation with named sources ("from `package.json`", never
+  "from your notes"), and asks only the genuinely open steps one at a time. `/sdd-specify`
+  renders questions as plain markdown (never code fences), attaches answer suggestions,
+  and pins the product-owner stance: business questions only — the technical form lands in
+  *Technical notes* and is decided in `/sdd-plan`, unless the user speaks technically first.
+- Grounding in `/sdd-plan`: with a web search/fetch tool available, looking facts up is the
+  preferred path over recall — a version-sensitive fact is never quietly downgraded to an
+  assumption to skip the lookup (the Ask-first research batch is unchanged); without any
+  web tool, affected steps become assumptions plus ready-made search queries for the user.
+- An explicit start signal ("implement", "start T-001") also covers the still-pending
+  backlog → active move: the agent performs it per `/sdd-lifecycle`'s procedure and says so.
 
 ## [1.4.0] - 2026-08-27
 

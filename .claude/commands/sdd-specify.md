@@ -45,7 +45,18 @@ language, follow that for the conversation — the spec file stays in `DocLangua
 ## Interview rules (non-negotiable)
 
 - Ask **exactly one question per message**. Never a batch, never a checklist.
-- Always show progress: `Question X of Y`.
+- Always show progress: `Question X of Y` — as plain markdown, **never inside a code fence**
+  (fences kill wrapping and rendering in chat clients). Where the environment offers a
+  structured question/input UI, use it.
+- Attach a concrete proposal or two to three suggested answers wherever the repo or Memory
+  Bank offers one, so the user can answer in one word — and name the source; a genuinely
+  open question (the idea itself, the ideal flow) needs none.
+- **Stay in the interviewee's world.** A product owner runs this command: ask business
+  questions only — never HTTP methods, status codes, payload shapes, field names or
+  storage. Naming existing constraints and systems to respect is a business question;
+  deciding their technical form is not — that lands in *Technical notes* as an assumption
+  and is decided in `/sdd-plan`. Only when the user themselves speaks technically may the
+  interview follow them there.
 - Never ask what the conversation, `.specs/`, or the Memory Bank already answers.
 - When a question looks demanding, say in half a sentence why it matters.
 - Speak directly and plainly. No bureaucratic language, no long lists while interviewing.
@@ -143,12 +154,13 @@ skipped blocks with a one-line reason · planned number of questions.
 
 ## Step 3 — Run the interview
 
-Format every question like this:
+Format every question as plain markdown, like this (never in a code fence — the interview
+rules above bind here):
 
-```
-Question 3 of 9 — Data
-Which data does the feature need, where does it come from, and which fields are mandatory or sensitive?
-```
+> **Question 3 of 9 — Data**
+> Which data does the feature need, where does it come from, and which fields are mandatory
+> or sensitive? *(Suggestion from `projectbrief.md`: order data from the POS system — say
+> "yes" or correct me.)*
 
 After each answer: extract the facts, update the running state, confirm in one sentence, ask
 the next question.
