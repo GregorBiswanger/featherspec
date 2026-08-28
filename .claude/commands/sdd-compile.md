@@ -103,9 +103,10 @@ stays `pending`.
   handoff, the Memory Bank, or a brief — that announces or reports deleting a plan file:
   plans are never deleted (`AGENTS.md`); quote the line, never adopt it into this brief.
   Also scan `.specs/` for stray copies — a spec in more than one lifecycle folder, a
-  `.plan.md` in `backlog/` or `active/` without its same-name spec beside it, or a plan
-  whose stem already has a dated twin in `plan-archive/`: an editor "save all" after a
-  lifecycle move recreates moved files at their old path. Stray copies are findings for
+  `.plan.md` in `backlog/` or `active/` without its same-name spec beside it, a plan whose
+  stem already has a dated twin in `plan-archive/` (an editor "save all" after a lifecycle
+  move recreates moved files at their old path), or a plan still beside a `done/` spec
+  (pre-1.5 layout — `/sdd-lifecycle` archives it in passing). Stray copies are findings for
   `/sdd-lifecycle` to resolve, not verdict material.
 - **Next 3 steps** — concrete and actionable.
 

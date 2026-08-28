@@ -25,9 +25,10 @@ Inspect the workspace and report, in `DocLanguage`:
   say "(none)" for an empty folder). While listing, flag as a warning: a file name that
   appears in more than one lifecycle folder; a `.plan.md` in `backlog/` or `active/` with no
   same-name spec beside it, or whose stem already has a dated twin in `.specs/plan-archive/`
-  (a moved file resurrected by a later editor save); and a `done/` spec that is not
-  `Baseline` whose `**Plan:**` line names no plan (beside it or in `.specs/plan-archive/`).
-  Detection only — the fix belongs to `/sdd-lifecycle`.
+  (a moved file resurrected by a later editor save); a `done/` spec with a same-name
+  `.plan.md` still beside it (pre-1.5 layout — `/sdd-lifecycle` archives it in passing);
+  and a `done/` spec that is not `Baseline` whose `**Plan:**` line names no plan (beside it
+  or in `.specs/plan-archive/`). Detection only — the fix belongs to `/sdd-lifecycle`.
 - If the snapshot comment names a `last deep scan` date: report it plus the count of `unmapped:` entries.
 - Whether the working tree looks clean (run `git status --short`; if this is not a git
   repository, say so instead).

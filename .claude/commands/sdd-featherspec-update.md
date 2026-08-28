@@ -206,8 +206,10 @@ do not classify with a broken hasher.
 lines only, and a Target-only never-write file (e.g. `CHANGELOG.md` when the base predates
 it) is *reported as available* under `.sdd-update/target/`, never added. The only exceptions
 are the two carve-outs below (`.specs/` template surface, `.memory-bank/` seeds still
-byte-equal to Base); Phase 6's re-hash proof covers the never-write set minus files updated
-through those carve-outs.
+byte-equal to Base) and files a ledger data-note migration later changes or moves on the
+user's individual yes (recorded in the worklist); Phase 6's re-hash proof covers the
+never-write set minus files updated through those carve-outs — confirmed migrations are
+proven against their note instead.
 
 Now classify every remaining path (B/T/P are canonical hashes; the **shape scope filters
 every case**, adds included — a path under an absent half is skipped and listed as "skipped
@@ -333,14 +335,19 @@ preference bullets, `architecture:` block) byte-equal to Phase 2 **except** byte
 individually-confirmed slot-edits recorded in the worklist · every unknown-name table row
 still present · every silently-applied file canonical-hash-equal to the fetched Target ·
 the **never-write set re-hashes equal to Phase 2** — the machine-checkable proof that no
-project knowledge was lost · no unlisted leftovers in `review/` · every worklist row
+project knowledge was lost — **except** files an individually-confirmed data migration
+changed or moved (recorded in the worklist): those are proven against the migration's note
+instead — the moved file present at its new path, links written as the note
+prescribes · no unlisted leftovers in `review/` · every worklist row
 terminal. The constitution's ~200-line target is a *report line*, never a gate — user length
 must not block an update. Any real miss → fail loudly, keep the state files, offer the
 rollback, and **do not write the stamp**.
 
 ## Phase 7 — Finalize
 
-1. Write `FeatherSpecVersion: <target>` into the constitution's managed block — **last**.
+1. Write `FeatherSpecVersion: <target>` into the constitution's managed block — **last** —
+   and update the constitution's worklist row to the stamped state, so a resume between
+   stamp and commit does not re-open the file.
 2. The one sanctioned user-state write, per the constitution's own sync gate: append a
    "Changed Recently" line to `.memory-bank/activeContext.md` (skip if an entry for this
    target already exists) and a `techContext.md` line when the stack facts changed.
@@ -352,7 +359,9 @@ rollback, and **do not write the stamp**.
    edits — an FYI, not an action), per-conflict resolutions, `review/` leftovers, data
    migrations applied/skipped, pinned files with pending template changes, the restore
    command, pinned-model recheck, **"VS Code needs a full restart to discover new prompt
-   and instructions files (Claude Code does not)"**, and "run `/sdd-overview` to verify."
+   and instructions files (Claude Code does not)"**, a note that git's LF/CRLF conversion
+   warnings on autocrlf checkouts are cosmetic (canonical hashing already neutralizes line
+   endings), and "run `/sdd-overview` to verify."
 
 Re-running after success is free: stamp == target lands everything in cases 1/3 — zero
 writes, and Phase 6 doubles as a health check.
@@ -451,7 +460,9 @@ entries compose sequentially across skipped versions.
   TDD working mode, baseline-commit proposal) · duplicate/stray-plan warnings in
   `/sdd-overview` and `/sdd-compile`
 - key-migrations: `.vscode/settings.json` `chat.instructionsFilesLocations` — set
-  `.claude/rules` to `false`, add `.github/instructions: true` · new key
+  `.claude/rules` to `false`, add `.github/instructions: true` (declining while the six
+  instructions loaders land makes Copilot load every rule twice — the offer must say so;
+  a recorded decline is a Phase 6 report line, never a miss) · new key
   `github.copilot.chat.tools.memory.enabled: false`
 - semantic-flips: the `done/` move archives the plan as
   `.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md` instead of carrying it into `done/`
