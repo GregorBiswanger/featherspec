@@ -11,7 +11,7 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
-## [Unreleased]
+## [1.5.0] - 2026-08-28
 
 ### Added
 
@@ -290,7 +290,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
-[Unreleased]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...HEAD
+[1.5.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.1.0...v1.2.0

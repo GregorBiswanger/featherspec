@@ -443,3 +443,24 @@ entries compose sequentially across skipped versions.
 - adds: `/sdd-clean` (body + loader) — context cleanup for the persistent markdown with a
   token report · `/sdd-architecture-update` may recommend it on visible Memory Bank growth
 - probes: `sdd-clean.md` absent ⇒ ≤1.3.0
+
+### 1.5.0 — minor (2026-08-28)
+- adds: `.specs/plan-archive/` (folder + `.gitkeep`) — frozen, dated plans of completed
+  iterations · six `.github/instructions/*.instructions.md` thin loaders (`applyTo` mirrors
+  each rule's `paths:` globs) · working agreements in `/sdd-setup` (Definition of Green,
+  TDD working mode, baseline-commit proposal) · duplicate/stray-plan warnings in
+  `/sdd-overview` and `/sdd-compile`
+- key-migrations: `.vscode/settings.json` `chat.instructionsFilesLocations` — set
+  `.claude/rules` to `false`, add `.github/instructions: true` · new key
+  `github.copilot.chat.tools.memory.enabled: false`
+- semantic-flips: the `done/` move archives the plan as
+  `.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md` instead of carrying it into `done/`
+  (the spec links it via `**Plan:**` and `## Plan history`) · a plan file is never
+  deleted — now an explicit constitution invariant · lifecycle moves run move-first,
+  edit-second with a file-system final check · `/sdd-compile` certifies the pre-done state
+  (spec `In Progress` + plan `Done`) under a four-class blocker rubric
+- data-notes: a plan beside a `done/` spec is pre-1.5 layout (detect: `done/NNNN-slug.md`
+  with sibling `NNNN-slug.plan.md` · offer: archive it under a dated name and link
+  `**Plan:**` plus `## Plan history`)
+- probes: `.github/instructions/` present ⇒ ≥1.5.0 · `sdd-clean.md` present without
+  `.specs/plan-archive/` ⇒ 1.4.0
