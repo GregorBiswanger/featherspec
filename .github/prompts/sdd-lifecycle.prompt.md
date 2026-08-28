@@ -1,6 +1,6 @@
 ---
 name: sdd-lifecycle
-description: Manage spec status and move specs between backlog/active/done.
+description: Spec status, moves between backlog/active/done, plan archiving at completion.
 argument-hint: "[spec path] [newStatus — vocabulary in AGENTS.md]"
 ---
 

@@ -1,5 +1,5 @@
 ---
-description: Turn a spec into a persisted baby-step plan file with research and traceability.
+description: Turn a spec into a persisted baby-step plan file — research, resume, impact analysis.
 argument-hint: "[path to spec or plan]"
 disable-model-invocation: true
 ---
@@ -17,7 +17,9 @@ in the repository as it is, the recorded stack, and current, source-backed facts
 the how; the spec owns the what.
 
 The user may name a spec or plan path after the command. If none is given — or the named path
-does not exist — list what sits under `.specs/` and ask which one to work on.
+does not exist — look at `.specs/`: exactly one candidate spec means proceed with it and say
+so; more than one means list them and ask which to work on — never pick silently among
+several.
 
 Planning produces a **file**. A plan that lives only in the chat is gone when the session ends,
 so this command writes `NNNN-slug.plan.md` next to its spec and keeps it as the persisted state of
@@ -28,9 +30,9 @@ steps to real code.
 
 | Situation | Mode |
 | --- | --- |
-| The spec has no plan file yet | **A — plan from scratch** |
-| A plan exists and work is unfinished | **B — resume** |
-| A plan exists but the spec changed | **C — re-plan the delta** |
+| The spec's `**Plan:**` line says `_none yet_` (no plan anywhere) | **A — plan from scratch** |
+| A plan sits beside the spec and work is unfinished | **B — resume** |
+| The spec changed after its plan (beside it, or archived in `.specs/plan-archive/`) | **C — re-plan the delta** |
 
 ## Mode A — plan from scratch
 
@@ -64,11 +66,18 @@ steps to real code.
 
 ## Research (do it, do not skip it)
 
-Plan against current facts, not recollection. Use your web search or fetch capability whenever
-the spec involves a library, framework or API you cannot verify from the repo · version-specific
-behaviour · a protocol, standard or regulation · a pattern where your knowledge may be stale.
-Web lookups are network access — the Ask-first gate in `AGENTS.md` applies: name the lookups
-and get one yes for the whole research batch.
+Plan against current facts, not recollection — you are a language model, not a knowledge
+base: names, versions, defaults and idioms drift after training. When a web search or fetch
+tool is available, **using it is the preferred path** for every fact you would otherwise
+assert from memory: a library, framework or API you cannot verify from the repo ·
+version-specific behaviour · a protocol, standard or regulation · a naming or architecture
+convention under debate · any pattern where your knowledge may be stale. Never quietly
+downgrade such a fact to an assumption just to skip the lookup. Web lookups are network
+access — the Ask-first gate in `AGENTS.md` applies: name the lookups and get one yes for
+the whole research batch. Only when no web tool exists at all, mark the affected steps as
+assumptions **and** hand the user ready-made search queries ("googling these for me raises
+the plan's quality: …") so the knowledge can still be pulled in. The same applies when the
+user declines the research batch: say so plainly and never present a guess as fact.
 
 - If your tool supports subagents, delegate each lookup to an isolated agent and take back
   only the distilled finding plus its source — raw pages crowd out planning judgement.
@@ -77,8 +86,6 @@ and get one yes for the whole research batch.
 - Prefer official documentation, release notes, and the project's own repository.
 - Record every source under `## Research`: title, link, one line on what it settled, and the
   date you retrieved it. No link, no claim.
-- If no web access is available, say so plainly and mark the affected steps as assumptions
-  rather than presenting a guess as fact.
 
 ## Baby steps
 
@@ -101,9 +108,12 @@ can be finished and checked on its own:
 - **Ordered so the repo keeps working** after every step; risky or blocking parts come first.
 - **Gated at the end**: the final step runs every quality gate the plan's `Quality gates:`
   line names — a plan that ends without the full gate run is unfinished. Its `Covers:` line
-  names every criterion the gates re-prove.
+  names every criterion the gates re-prove. Where an `AGENTS.md` quality-gate preference
+  already runs the full sequence per step, the final step is the recorded proof of the last
+  clean run.
 - **Tied to the spec**: each step names the acceptance criteria it serves, every criterion is
-  covered by at least one step, and pure scaffolding steps say so explicitly.
+  covered by at least one step, and pure scaffolding steps say so explicitly. Rule of thumb:
+  a step covers one or two criteria — one covering more than three is a split candidate.
 
 If the step list runs long, the spec was probably two specs. Say so before writing the file.
 
@@ -183,7 +193,9 @@ final step runs them all>
 1. Read the plan first, then the spec. `Current step` and `Session handoff` say where the work
    stands — verify that against `git status --short` and the actual code before trusting it.
    If the pair still sits in `backlog/` or the spec still says `Draft` while work is starting,
-   propose the move to `active/` + `In Progress` first — `/sdd-lifecycle` performs it.
+   propose the move to `active/` + `In Progress` first — or, when the user has already given
+   the explicit start signal, perform it per *Always* below; `/sdd-lifecycle`'s procedure
+   governs either way.
 2. Report in three lines: what is done, what is next, what blocks it. If
    `activeContext.md`'s `Last updated` is older than the newest commit, say so — the
    dashboard is stale.
@@ -197,19 +209,42 @@ final step runs them all>
 
 ## Mode C — the spec changed
 
-A pair sitting in `done/` means an `Implemented` spec is changing: report the impact first
-(steps 1–3), then propose the reactivation move — pair back to `active/`, spec and plan
-`In Progress` — via `/sdd-lifecycle`; a new slice of work gets a successor spec instead.
+A changed spec whose plan is archived (or still beside it in `done/`, from a pre-1.5 layout)
+means an `Implemented` spec is changing: report the impact first (steps 1–3), then propose
+the reactivation move — spec back to `active/`, `In Progress` — via `/sdd-lifecycle`; a new
+slice of work gets a successor spec instead.
 
-1. Compare spec and plan: which acceptance criteria are new, changed, or gone?
-2. Read the traceability table **in reverse** — for every touched criterion, list the steps and
-   the code paths already built from it. That list *is* the impact: the code a change to this
-   requirement reaches.
-3. Report the impact before editing anything: criterion → steps → files, plus what becomes
-   obsolete.
-4. Then extend the plan: append new steps, **never renumber** existing IDs (they are references),
-   strike obsolete steps with a one-line reason instead of deleting them, and set the plan status
-   back to `In Progress`.
+1. Follow the spec's `**Plan:**` line or `## Plan history` to its most recent plan (usually
+   in `.specs/plan-archive/`) and read only what the impact needs: which acceptance criteria
+   are new, changed, or gone?
+2. Read that plan's traceability table **in reverse** — for every touched criterion, list the
+   steps and the code paths already built from it. That list *is* the impact: the code a
+   change to this requirement reaches. For a criterion that is gone, list its deciding tests
+   too — left in place, they keep proving behaviour nobody wants anymore.
+3. Report the impact before editing anything: criterion → steps → files → tests, plus what
+   becomes obsolete.
+4. Then — only after the reactivation move ran and the spec sits in `active/` — write a
+   **fresh plan** beside it (structure above, same `NNNN-slug.plan.md` name); a new plan is
+   never written beside a `done/` spec. Its Research section links the archived predecessor,
+   its steps carry the removals and adaptations from the impact report, and the spec's
+   `**Plan:**` line points at it again. The archived plan stays frozen — read it, never
+   extend or renumber it. Only a still-active plan (work in flight, never archived) is
+   extended in place instead: append steps, **never renumber** existing IDs, strike obsolete
+   steps with a one-line reason.
+
+### Impact across several specs
+
+A business change that touches many specs is one impact analysis, not many blind edits:
+
+1. Name every affected spec first — search the criteria, then have the user confirm the list.
+2. Revise the specs (`/sdd-specify` revise mode): changed criteria change in place; a
+   criterion that no longer applies is struck through with date and reason — IDs are never
+   deleted or reused, steps and tests still reference them.
+3. For each spec, run steps 1–4 above against its latest plan. No plan anywhere? The AC-IDs
+   in test names are the fallback traceability: search the test code for each struck
+   criterion's ID to find the tests to remove or retarget.
+4. Every removal becomes a plan step with its own `Verify:` line — deleting a test is a
+   behaviour change and earns the same evidence discipline as adding one.
 
 ## Always
 
@@ -220,7 +255,14 @@ A pair sitting in `done/` means an `Implemented` spec is changing: report the im
   later — a wrong step costs hundreds of lines, a wrong line costs one. Ask which steps look
   wrong before anything is implemented. Every other artifact here has a named reader; this one
   is the most expensive to get wrong. Once approved, propose one commit of the plan (Ask-first
-  gate), then the pair moves to `active/` before implementation (`/sdd-lifecycle` performs it).
+  gate) — then stop again. **Approval of the plan approves the document, never the start of
+  work**: implementation begins only on the user's explicit start signal — "start T-001",
+  "implement" — and "the plan looks good" is not that signal. The start signal also covers
+  a still-pending backlog → active move: perform it as part of starting, following
+  `/sdd-lifecycle`'s procedure exactly as if the user had typed it (its body lives in
+  `.claude/commands/sdd-lifecycle.md`), with the start signal counting as the yes to its
+  move proposal — only the commit stays behind the Ask-first gate — and say so. In Mode C
+  the same explicit go applies.
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

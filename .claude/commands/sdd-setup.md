@@ -1,5 +1,5 @@
 ---
-description: Onboarding wizard — set DocLanguage, seed the Memory Bank, capture the first architecture snapshot.
+description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode).
 argument-hint: "[docLanguage] [projectName] [stack] — or just answer the wizard"
 disable-model-invocation: true
 ---
@@ -16,45 +16,48 @@ are missing, ask for them in the wizard below.
 
 You are running an onboarding wizard for this repository.
 
-## Spec-Driven Development (SDD) — orientation for the model
+## Session opening — language first, then orientation
 
-On the first invocation, start with a short introduction to Spec-Driven Development and the
-available `/sdd-*` commands. Then immediately ask **Step 0** (the language question).
+Open under a `🪶 **FeatherSpec**` banner with at most two short **English** sentences — a
+warm one-line welcome to the template and that setup starts with one question — then
+immediately ask **Step 0** (the language question). Everything before the language is
+chosen stays English and minimal: no SDD explanation, no command table yet.
+A mixed-language opening is exactly what this ordering prevents. On a re-run — `AGENTS.md`
+already holds a `DocLanguage`, or it arrived as an argument — open in that language,
+confirm it in one line instead of re-asking Step 0, and compress the orientation to one
+sentence: a re-run tunes, it does not re-onboard.
 
-Use this definition verbatim (unchanged, in English), optionally with a brief surrounding
-explanation:
+**After** `DocLanguage` is set, give the whole orientation in `DocLanguage`:
 
-**Spec-Driven Development (SDD)** is an AI-assisted development approach where a **clear,
-structured, versioned specification** is the **primary artifact**. Implementation, tests
-(and often documentation) are **derived from the spec** and then **continuously validated
-against it** in an iterative loop (**generate → verify/validate → refine**).
+- Explain Spec-Driven Development in 3–5 plain sentences, rendering this definition
+  faithfully in `DocLanguage` (translate it — do not quote English into a non-English
+  session): *Spec-Driven Development (SDD) is an AI-assisted development approach where a
+  clear, structured, versioned specification is the primary artifact. Implementation and
+  tests are derived from the spec and continuously validated against it (generate →
+  verify → refine). Because agents generate code anchored to an explicit spec — and their
+  output can be checked, corrected and regenerated against it — SDD yields higher-quality,
+  more maintainable code than unstructured "vibe" prompting. The spec survives the
+  implementation and stays the reference point for change.*
+- State this repo's operating protocol as `AGENTS.md` defines it at the top — the
+  three-step form is load-bearing, so render the three steps in `DocLanguage` without
+  adding or merging steps.
+- Show the `/sdd-*` commands from the **Commands** table in `AGENTS.md` — all of them, in
+  `DocLanguage`. That table is the single machine-facing roster; keep no second copy here.
+  Name the usual order in one line, rendered from the Flow line under *Commands*.
 
-For quality with coding assistants: because assistants/agents generate code **anchored to
-an explicit spec**—and outputs can be **checked, corrected, and regenerated** based on that
-spec—SDD helps **ensure higher-quality, more maintainable code** than unstructured prompt-
-or "vibe"-driven coding.
+Keep the orientation short, then continue the wizard with Step 1.
 
-Key principles:
+## How to ask (every wizard question)
 
-- **Spec-first:** define _what_ to build (behavior, acceptance criteria, constraints) before writing code.
-- **Structured specification:** structured enough for consistent tool/agent execution.
-- **Living spec:** the spec evolves with the system and remains the reference point for change.
-- **Spec-anchored:** the spec survives implementation and is maintained alongside the code it
-  produced, so a change to a requirement can be traced to the code and tests it reaches. The
-  spec steers the code; it does not replace it, and nothing here regenerates code from a spec.
-
-Explain in 2–4 English sentences that specs are the primary reference point and that the
-`/sdd-*` commands guide the workflow. State this repo's operating protocol exactly as
-`AGENTS.md` defines it at the top — three steps, never paraphrased into your own words.
-
-## Overview: when to use which command
-
-Show the `/sdd-*` commands from the **Commands** table in `AGENTS.md` — all of them, in
-`DocLanguage`. That table is the single machine-facing roster; keep no second copy here, or the
-one command a new user never hears about will be the one you forgot to list.
-
-Name the usual order in one line, rendered from the Flow line under *Commands* in `AGENTS.md`.
-Keep this overview short, then transition into the onboarding dialog, starting with Step 0.
+- Where the environment offers a structured question/input UI, use it; otherwise plain
+  markdown — **never a code fence** around a question, fences kill wrapping and rendering.
+- Prefer proposing over asking. Everything the repo, manifests or stack already answer is
+  bundled into **one** "here is what I derived — correct anything" confirmation; only the
+  genuinely open steps are asked, one per message — never a wall of eight questions.
+- Name the source of every pre-fill — "from `package.json`", "template default in
+  `AGENTS.md`", "from my saved user memory (which you asked me to keep earlier)" — never
+  vague claims like "from your notes" or "your saved preferences": template defaults are
+  not the user's notes, and an unnamed source in a fresh project reads as spooky, not smart.
 
 ## Step 0 (MUST be the first question)
 
@@ -85,12 +88,13 @@ rendered in `DocLanguage`:
   Say honestly that the scan reads code and, depending on project size, takes time and
   noticeable tokens. Name the alternatives: describe the architecture yourself, or
   seed only the Memory Bank now and scan later. If the scan is chosen: first collect
-  wizard steps 1, 2 and 7 (only
-  the human knows mission, audience and taste), then run the `/sdd-architecture-scan`
-  workflow yourself, exactly as if the user had typed it (its body lives in
-  `.claude/commands/sdd-architecture-scan.md`). Skip wizard steps 3–6 — the scan
-  answers them from the code and writes `techContext.md` and `systemPatterns.md`
-  itself. Afterwards finish only actions B (projectbrief + activeContext), D and E.
+  wizard steps 1, 2, 7 and 8 (only the human knows mission, audience, working mode and
+  taste), then run the `/sdd-architecture-scan` workflow yourself, exactly as if the user
+  had typed it (its body lives in `.claude/commands/sdd-architecture-scan.md`). Skip wizard
+  steps 3–5 — the scan answers them from the code and writes `techContext.md` and
+  `systemPatterns.md` itself; step 6 shrinks to one confirmation question over the gates
+  the scan found. Afterwards finish only actions B (projectbrief + activeContext, plus the
+  *Quality gates* section in `techContext.md` from the step-6 confirmation), D, E and F.
 
 ## Read the repo before asking
 
@@ -111,20 +115,42 @@ language, no lecture.
 4. **Architecture style** (modular monolith / microservices / layered / hexagonal / other) —
    this one needs interpretation, so ask even when you have a guess, and say what you guessed
 5. **Repo entrypoints** (apps, services, CLIs, APIs) — pre-fill from the tree
-6. **Quality gates** (tests, lint/format, CI) — pre-fill from CI config and test scripts
-7. **Coding preferences** (comments, naming, patterns to avoid)
+6. **Quality gate** — written for someone who has never heard the term. Explain first, in
+   one or two plain sentences, what it is for: to keep AI-implemented code trustworthy, the
+   matching linter and the unit tests run after every completed implementation step, and
+   the code is fixed until both come back with zero warnings and zero errors. Then propose
+   the concrete commands from the detected stack and ask whether that is what should run —
+   exact commands with flags, e.g. JS/TS: `npx eslint .` → `npx tsc --noEmit` → `npm test`;
+   .NET: `dotnet format --verify-no-changes` → `dotnet build -warnaserror` → `dotnet test`;
+   Python: `ruff check` → `mypy` → `pytest`. Jargon ("Definition of Green") may be named as
+   the term of art, never used as the question.
+7. **TDD working mode** — explain in plain language (many users have never worked
+   test-first), present the **default**, and ask only whether it fits or should differ —
+   never a multiple-choice quiz. The default: *for new behaviour the test comes first and
+   fails through a `Not implemented` stub, so it fails for the right reason; after writing
+   or changing a test, stop and ask the user whether the test and its expectations are
+   right; only after that go, implement until green. A new test that is green immediately
+   because existing code already covers it is fine — where it is cheap, add a negative
+   control case proving the test can fail. Never implement past a just-written test
+   without the user's confirmation.* The user changes it by simply saying so.
+8. **Coding preferences** (comments, naming, patterns to avoid)
+
+Steps 6 and 7 are never answered by assumption: if the user skips them, ask each again,
+individually, before writing anything.
 
 ## Actions you must perform
 
 After collecting answers:
 
 **A) Ensure folders** (already present in this template; create only if missing):
-`.memory-bank/`, `.specs/backlog/`, `.specs/active/`, `.specs/done/`.
+`.memory-bank/`, `.specs/backlog/`, `.specs/active/`, `.specs/done/`, `.specs/plan-archive/`.
 
 **B) Initialize documentation** in `DocLanguage`:
 
 - Update `.memory-bank/projectbrief.md` with mission + primary users + success criteria.
-- Update `.memory-bank/techContext.md` with stack + build/run/test.
+- Update `.memory-bank/techContext.md` with stack + build/run/test, plus a *Quality gates*
+  section listing the confirmed Definition-of-Green commands in order — `/sdd-plan` reads
+  them from here, and `/sdd-compile` re-runs them via the plan's *Quality gates* line.
 - Create `.memory-bank/activeContext.md` only if missing or still placeholder (`TBD`) —
   otherwise leave it, it may hold live session state. **Read `.claude/rules/memory-bank.md`
   first** and follow its *Structure* section exactly — that section is the only definition of
@@ -137,14 +163,29 @@ After collecting answers:
 - Populate the `architecture:` snapshot in `AGENTS.md` from the folder/project layout.
 - If assumptions are required, write them down and ask the user to confirm (one question).
 
-**D) Style preference capture:**
+**D) Style & working preference capture:**
 
-- Seed *Style & Output Preferences* in `AGENTS.md` with what the user stated.
+- Seed *Style & Output Preferences* in `AGENTS.md` with what the user stated — in English
+  (`AGENTS.md` is wiring), one bullet per preference. Two bullets come from the wizard:
+  **Quality gate (code)** — run the Definition-of-Green commands from `techContext.md` after
+  every completed implementation step and loop until zero warnings and errors, **scoped
+  explicitly: it binds implementation steps only, never specify/clarify/plan work or
+  doc-only edits** — and **TDD** with the working mode confirmed in step 7 (default:
+  red-first via `Not implemented` stubs for new behaviour; stop after every new or changed
+  test for the user's confirmation before implementing; immediately-green tests against
+  existing code allowed, with a negative control where it is cheap).
 
 **E) Budget check:**
 
-- Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if over, propose an
-  eviction per its order before finishing.
+- Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if clearly over,
+  beyond its tolerance clause, propose one eviction per its order before finishing.
+
+**F) Baseline commit (Ask-first):**
+
+- If the repository has no commit yet, propose one now (e.g. `chore: adopt FeatherSpec and
+  seed project docs`). A first commit anchors plan baselines, scope checks and safe
+  lifecycle moves (`git mv`); without it every later safety net runs blind. The git write
+  stays behind the Ask-first gate in `AGENTS.md`.
 
 ## Output
 

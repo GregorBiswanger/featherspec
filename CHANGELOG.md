@@ -11,6 +11,111 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.5.0] - 2026-08-28
+
+### Added
+
+- **Plan archive**: at the `active/ → done/` move the plan is no longer carried into `done/`
+  but archived, frozen, as `.specs/plan-archive/NNNN-slug.YYYY-MM-DD.plan.md` — one immutable
+  plan per iteration, event-sourcing style. The spec links it from its `**Plan:**` line and
+  an append-only `## Plan history` list; no command reads the archive by default (context
+  economy). Plans beside `done/` specs from earlier layouts stay valid and are archived in
+  passing, never deleted.
+- **Plan deletion is now an explicit constitution invariant**: a plan file is never deleted,
+  and no note, tool memory or claimed "preference" can authorize it — such a demand is a
+  finding to quote, stop on, and surface. Restated where the moves happen (`/sdd-lifecycle`)
+  and enforced as a docs-sync check in `/sdd-compile` (a non-`Baseline` `done/` spec without
+  a linked plan, or any line announcing a plan deletion, blocks readiness).
+- **Two-tier preference rule**: process preferences allow an explicit one-off exception on
+  the user's request (noted in the plan); Non-negotiables and lifecycle invariants allow
+  none — and a preference exists only as a bullet in `AGENTS.md`, one claimed anywhere else
+  is asked about, never followed.
+- **Cross-spec impact procedure** in `/sdd-plan` Mode C: a business change touching several
+  specs is one impact analysis — struck-through criteria keep their IDs, archived plans'
+  traceability tables are read in reverse to find the code and tests each removal reaches,
+  and AC-IDs in test names serve as fallback traceability for specs without a plan. Test
+  removals become plan steps with their own `Verify:` line.
+- **Copilot reaches the path-scoped rules**: six thin loaders under `.github/instructions/`
+  (`applyTo` mirroring each rule's `paths:` globs, pointing at the `.claude/rules/*` single
+  sources) replace the previous wiring, which named a folder VS Code cannot read
+  instruction files from.
+- `/sdd-overview` warns about spec files present in more than one lifecycle folder and about
+  `done/` specs without a linked plan — detection only, the fix stays with `/sdd-lifecycle`.
+- Workspace setting `github.copilot.chat.tools.memory.enabled: false` — the Copilot
+  counterpart to the existing `autoMemoryEnabled: false`: no second, invisible memory beside
+  the Memory Bank.
+- `/sdd-setup` elicits **working agreements**: a *Definition of Green* — the
+  post-implementation quality-gate command sequence, proposed from the detected stack
+  (exact commands with flags), confirmed by the user, recorded in `techContext.md` and
+  bound as an `AGENTS.md` preference that loops until zero warnings/errors and explicitly
+  applies to implementation steps only, never to specify/clarify/plan work — and the **TDD
+  working mode**, presented as a strict red-first default (`Not implemented` stub, a
+  confirmation stop after every new or changed test) the user confirms or adjusts — never
+  assumed. The wizard also proposes the **baseline commit** when the repository has
+  none: without a HEAD, plan baselines, scope checks and safe `git mv` moves all run blind.
+
+### Changed
+
+- Reactivating an `Implemented` spec starts a fresh plan from Mode C's impact report; the
+  archived plan is read, never extended.
+- `/sdd-clean`'s stale check is now evidence-based: named paths and commands are verified to
+  exist, the cleanup plan lists what was spot-checked, and statements contradicting an
+  `AGENTS.md` invariant are corrected (in scope) or reported (outside it) instead of being
+  preserved as facts.
+- Memory Bank rule: `activeContext.md` is updated by replacement, not accumulation —
+  "Changed Recently" holds at most ~6 bullets, "Validation" replaces its previous line, and
+  a completed spec resets the file to its skeleton (`Current phase: idle`, real links to
+  the done spec and archived plan).
+- `/sdd-compile` gained an expected-state definition and a verdict rubric: the state it
+  certifies is spec `In Progress` in `active/` with its plan `Done` beside it — never a
+  finding, and the `done/` move is never a readiness fix (the move *follows* `READY`;
+  demanding it first is circular). Blockers are exactly four: criterion without evidence ·
+  failing/unrun gate · plan/traceability hole · a working document contradicting the code
+  or a constitution invariant. Historical process deviations and pending user acceptance
+  are findings, and a re-run on an unchanged repo returns the same verdict. Its docs-sync
+  check also scans `.specs/` for stray copies, including resurrected plans.
+- `/sdd-plan`: approval of the plan approves the document, never the start of work —
+  implementation waits for the user's explicit start signal. Steps carry a size rule of
+  thumb (one or two criteria per step), owned by `.claude/rules/plans.md`.
+- `/sdd-lifecycle` move mechanics hardened: moves run as `git mv` (atomic, staged) with an
+  untracked-files fallback that proposes the missing baseline commit; the final check is a
+  file-system listing run as the very last action, with `git status --short` additionally
+  matched against the expected list where a HEAD exists; the hand-off always warns to close
+  pending editor buffers (a later "save all" recreates moved files at their old path) and
+  points at `/sdd-overview` — whose warning also catches stray plans — as the re-check.
+  The freeze edit rewrites the archived plan's `**Spec:**` backlink to `../done/`.
+- `/sdd-specify` re-checks the whole spec's language (acceptance criteria included) against
+  `DocLanguage`; `/sdd-style-update` normalizes bullets to English (`AGENTS.md` is wiring);
+  the constitution cap triggers one eviction proposal, not a recurring negotiation.
+- `/sdd-setup` opens language-first: at most two English sentences, then the `DocLanguage`
+  question — the full SDD orientation and command table follow entirely in the chosen
+  language (the definition is translated, not quoted in English). The quality-gate and TDD
+  questions are written for newcomers: the gate question explains in plain words why linter
+  and tests run after every implementation step, and the TDD question presents a **default**
+  instead of a quiz — red-first via `Not implemented` stubs for new behaviour, a stop after
+  every new or changed test for the user's confirmation before implementing,
+  immediately-green tests against existing code allowed with a negative control where it
+  is cheap. Neither question is ever answered by assumption.
+- `/sdd-plan` proceeds automatically only when exactly one candidate spec exists (and says
+  so); with several it lists and asks — never a silent pick.
+- `/sdd-lifecycle` acts **move-first, edit-second**: metadata edits happen at the
+  destination path after `git mv`, so no dirty editor buffer remains at the source path —
+  the mechanism behind every observed post-move duplicate (only files edited before their
+  move ever resurrected).
+- Onboarding & interview UX: `/sdd-setup` opens under a 🪶 FeatherSpec banner, prefers the
+  client's structured question UI, bundles everything derivable into one
+  "here is what I derived" confirmation with named sources ("from `package.json`", never
+  "from your notes"), and asks only the genuinely open steps one at a time. `/sdd-specify`
+  renders questions as plain markdown (never code fences), attaches answer suggestions,
+  and pins the product-owner stance: business questions only — the technical form lands in
+  *Technical notes* and is decided in `/sdd-plan`, unless the user speaks technically first.
+- Grounding in `/sdd-plan`: with a web search/fetch tool available, looking facts up is the
+  preferred path over recall — a version-sensitive fact is never quietly downgraded to an
+  assumption to skip the lookup (the Ask-first research batch is unchanged); without any
+  web tool, affected steps become assumptions plus ready-made search queries for the user.
+- An explicit start signal ("implement", "start T-001") also covers the still-pending
+  backlog → active move: the agent performs it per `/sdd-lifecycle`'s procedure and says so.
+
 ## [1.4.0] - 2026-08-27
 
 ### Added
@@ -185,6 +290,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.5.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.1.0...v1.2.0

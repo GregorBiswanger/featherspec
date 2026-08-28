@@ -36,7 +36,7 @@ file — see the table below.
 This is the **only** definition of the file's shape; commands that create it point here.
 
 Three metadata lines first — `Last updated: <date>`, `Current branch: <branch>`,
-`Current phase: specify | plan | act` — then these sections:
+`Current phase: specify | plan | act | idle` — then these sections:
 
 - **Now** — one sentence: current goal of this session/work track.
 - **Active Spec** — link to the spec file(s) and the `.plan.md`, current task ID, acceptance criteria in focus.
@@ -46,11 +46,21 @@ Three metadata lines first — `Last updated: <date>`, `Current branch: <branch>
 - **Next** — numbered, concrete, immediately actionable steps.
 - **Validation** — current test/check status: done, pending, known issues.
 
+### Update by replacement, not accumulation
+
+- **Changed Recently** holds at most ~6 bullets: a new entry evicts the oldest. Slice-level
+  detail lives in the plan; this file links, it does not chronicle.
+- **Validation** states the current result and replaces the previous line — never a series
+  of dated near-duplicates.
+- When a spec reaches `done/`, reset the file to its skeleton: `Current phase: idle`, no
+  active spec, one completion line with real markdown links to the `done/` spec and its
+  archived plan, a fresh **Next**. History lives in git and the archived plan, not here.
+
 ### When to update
 
 1. At the end of each relevant coding session.
 2. After an important decision.
-3. After a phase transition (specify → plan → act) or a lifecycle move (backlog → active → done).
+3. After a phase transition (specify → plan → act → idle) or a lifecycle move (backlog → active → done).
 4. Before a context reset or new agent session.
 5. After a bugfix with regression risk.
 6. **Always** when switching from one active spec to another.
@@ -74,4 +84,6 @@ Move the following to the correct file instead of adding it to `activeContext.md
 | Stale todos | delete them, or move the live ones to the plan's `Notes:` |
 
 **Do not duplicate. Link and summarize.** Never route content into a file this template does
-not declare: the Memory Bank is these four files, and a spec's only companion is its `.plan.md`.
+not declare: the Memory Bank is these four files, and a spec's only companion beside it is
+its `.plan.md` — completed iterations live frozen in `.specs/plan-archive/` (lifecycle facts
+per `AGENTS.md`, which stays authoritative).
