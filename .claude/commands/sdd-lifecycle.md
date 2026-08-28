@@ -37,10 +37,11 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
 - **No duplicates:** a spec exists in exactly one lifecycle folder. When moving, write the
   file to the destination **and delete the original**.
 - **Duplicate check:** before moving, scan all three folders for files with the same name.
-  If found, keep the copy holding the current working state (normally the one being moved),
-  delete the rest — if unclear which is current, ask. For a duplicated plan this is the one
-  sanctioned removal: the never-deleted rule below protects the plan's content, not stray
-  redundant copies of it — confirm with the user which copy is current first. Then move.
+  Keep exactly one canonical copy — the one holding the current working state, normally the
+  one being moved — and remove only the redundant duplicates. For a duplicated plan, removal
+  happens **only after the user confirms** which copy is canonical: that is the one
+  sanctioned plan-file removal (restated from the never-deleted invariant in `AGENTS.md`,
+  which stays authoritative — it protects the plan, not stray copies of it). Then move.
 - **Plans travel with their spec** between `backlog/` and `active/`: if `NNNN-slug.plan.md`
   exists next to `NNNN-slug.md`, move and de-duplicate both together. At the `done/` move the
   plan is archived instead — see *Act* below. Spec and plan have separate status vocabularies;

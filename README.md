@@ -114,7 +114,7 @@ after itself.
 
 The payoff: agents jump straight to the right files instead of exploring — with verified
 conventions and traps as grounds for better technical decisions — and the documentation can
-never flood the context window: always loaded is only the sub-200-line constitution, while
+never flood the context window: always loaded is only the ~200-line constitution, while
 per-module depth lives in ≤ 40-line maps that load only when their module is touched.
 The full walkthrough lives in the wiki:
 [Adopting an Existing Codebase](https://github.com/GregorBiswanger/featherspec/wiki/Adopting-an-Existing-Codebase).

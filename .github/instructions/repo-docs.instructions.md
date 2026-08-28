@@ -1,5 +1,5 @@
 ---
-applyTo: "README.md, docs/**/*.md"
+applyTo: "README.md,docs/**/*.md"
 description: "FeatherSpec repository documentation language rule (thin loader)."
 ---
 
