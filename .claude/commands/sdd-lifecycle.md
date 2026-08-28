@@ -120,6 +120,9 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    `.claude/rules/memory-bank.md` (authoritative): skeleton, one completion line linking
    spec and archived plan, fresh `## Next`. On other moves set `## Active Spec`, update
    `Current phase`, refresh `## Next`, and keep within the size limit from `AGENTS.md`.
+   Either way, retarget Memory Bank links that named the moved paths (decision sources in
+   `systemPatterns.md`, links in `activeContext.md`) to the new locations — a link left on
+   the old path goes stale the moment the move lands.
 5. **Final check, then commit** — the very last action of this run, after every edit and
    save: list the source folder(s) on the file system and verify the moved files are gone.
    Where a HEAD exists, `git status --short` must additionally match the expected list —
