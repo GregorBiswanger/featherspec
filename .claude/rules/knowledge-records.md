@@ -34,7 +34,7 @@ fs-knowledge:
     candidates:                 # optional: found somewhere, proves nothing
       - {statement: "Delivery survives a broker outage.", source: ".specs/done/0001-baseline.md"}
     # conflict: [{statement, source}, …]  · deferred: {at: <date>}
-    # a decided reason instead: statement + provenance {type, source|role, origin, confirmedAt}
+    # a decided reason instead: statement + provenance {type, source (adr/spec) or role+origin (human), confirmedAt}
 ```
 ```
 
