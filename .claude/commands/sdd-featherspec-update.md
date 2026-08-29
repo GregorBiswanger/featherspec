@@ -488,4 +488,7 @@ entries compose sequentially across skipped versions.
   chosen · `/sdd-plan` treats an `unknown` rationale as unknown instead of as an assumption ·
   `/sdd-architecture-scan` may add exactly one bundled, declinable clarification offer inside
   the existing `/sdd-architecture-update` gate dialogue
+- semantic-flips (cont.): `/sdd-setup` asks Step 0 (documentation language) on every first run —
+  the shipped `DocLanguage:` value is a template default and no longer marks a run as a re-run;
+  a re-run is a repository a previous setup already touched
 - probes: `knowledge-records.md` absent ⇒ ≤1.5.0

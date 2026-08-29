@@ -24,7 +24,7 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 ## Repository Settings (managed by /sdd-setup and /sdd-featherspec-update)
 
 ```yaml
-DocLanguage: English # set by /sdd-setup; governs project docs and dialogue; wiring stays English.
+DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
 FeatherSpecVersion: 1.6.0 # managed by /sdd-featherspec-update; do not edit by hand
 ```
 

@@ -29,6 +29,15 @@ docs fixes that are safe to overwrite.
   dialogue: the unknowns that touch security, compliance or data integrity, named with their
   ids, answerable now or deferred with one word. Declining is free and asks nothing further.
 
+### Fixed
+
+- **`/sdd-setup` asks for the documentation language again.** The template ships
+  `DocLanguage: English`, and the wizard treated "`AGENTS.md` already holds a `DocLanguage`" as
+  the mark of a re-run — a condition every fresh adoption satisfies. Step 0, which the command
+  declares MUST be its first question, was therefore skipped on first runs and new projects
+  silently got English. A re-run is now what it was always meant to be: a repository a previous
+  setup already touched — a seeded Memory Bank, or a reconciled snapshot.
+
 ### Changed
 
 - **The scan no longer writes an unsourced *why* anywhere** — not in a module map, not in a

@@ -22,10 +22,13 @@ Open under a `🪶 **FeatherSpec**` banner with at most two short **English** se
 warm one-line welcome to the template and that setup starts with one question — then
 immediately ask **Step 0** (the language question). Everything before the language is
 chosen stays English and minimal: no SDD explanation, no command table yet.
-A mixed-language opening is exactly what this ordering prevents. On a re-run — `AGENTS.md`
-already holds a `DocLanguage`, or it arrived as an argument — open in that language,
-confirm it in one line instead of re-asking Step 0, and compress the orientation to one
-sentence: a re-run tunes, it does not re-onboard.
+A mixed-language opening is exactly what this ordering prevents. **A re-run is a repository a
+previous setup already touched** — the Memory Bank carries real content instead of `TBD`
+placeholders, or the snapshot has been reconciled at least once — or a run where the language
+arrived as an argument. Only then open in that language, confirm it in one line instead of
+re-asking Step 0, and compress the orientation to one sentence: a re-run tunes, it does not
+re-onboard. The `DocLanguage:` value the template ships with is a default nobody chose, so it
+never makes a run a re-run: a first setup asks Step 0 even though `AGENTS.md` carries a value.
 
 **After** `DocLanguage` is set, give the whole orientation in `DocLanguage`:
 
@@ -62,6 +65,9 @@ Keep the orientation short, then continue the wizard with Step 1.
 ## Step 0 (MUST be the first question)
 
 Ask exactly: **"In which language should the project documentation Markdown files be written?"**
+Ask it on every first setup. `AGENTS.md` always carries a `DocLanguage` value — that is the
+template's default, not the user's answer, and skipping the question because a value is present
+is the one way this step can silently fail.
 
 - If the user does not answer, infer it from the conversation language.
 - After a language is chosen, set `DocLanguage` in `AGENTS.md` (the **only** place it lives).
