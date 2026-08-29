@@ -40,6 +40,11 @@ steps to real code.
    and `.memory-bank/techContext.md` plus `.memory-bank/systemPatterns.md` — noting the quality gates
    `techContext.md` records (test, build, lint commands). A missing gate is a
    `techContext.md` finding to report, never something to invent.
+   Where `systemPatterns.md` holds `fs-knowledge:` blocks, read them by state and leave them that
+   way: an observation is a fact about the code, a `decided` rationale with its provenance is a
+   constraint you may rely on, and an `unknown` one is **not** — a step that depends on it says so
+   in its own words and offers no substitute reason. Two disagreeing sources under `conflict` stay
+   two; picking one is the user's call, not a planning shortcut.
 2. **Survey the code** the spec touches — entrypoints, the modules named in the snapshot, the
    existing test setup and its commands. Plan against the repo as it is, not as it should be.
    If your tool supports subagents, delegate broad exploration and keep only the distilled
