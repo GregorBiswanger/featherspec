@@ -11,6 +11,40 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.6.0] - 2026-08-29
+
+### Added
+
+- **Knowledge records**: `/sdd-architecture-scan` now separates what it can *see* from why it
+  was *meant* that way. An observation carries at least one evidence path; its rationale is
+  either `decided` — with provenance naming the ADR, the requirement document or the human
+  who confirmed it — or `unknown`. Records live as small YAML blocks in
+  `.memory-bank/systemPatterns.md`; every other artifact references them by id. No new
+  command, no second store, no migration: existing projects keep working untouched, and a
+  project without records never loads the rule.
+- **Conflicting sources stay conflicting**: when two trusted documents give incompatible
+  reasons for the same pattern, both are recorded under `conflict` and neither is chosen.
+  Silently adopting the one that reads best is how a false constraint becomes project truth.
+- **One bundled clarification offer** at the end of a scan, inside the existing confirmation
+  dialogue: the unknowns that touch security, compliance or data integrity, named with their
+  ids, answerable now or deferred with one word. Declining is free and asks nothing further.
+
+### Changed
+
+- **The scan no longer writes an unsourced *why* anywhere** — not in a module map, not in a
+  snapshot purpose clause, not in `techContext.md`. An explanation found in a code comment or
+  a README is kept as a `candidate` with its source; an explanation with no source is not
+  written down at all.
+- **Scouts report where an explanation is written, never what it probably means.** Their
+  report schema gains the source paths and the decision documents they found.
+- **`/sdd-plan` reads knowledge by state**: a `decided` rationale is a constraint it may rely
+  on, an `unknown` one is stated as unknown in the step that depends on it, and no assumed
+  reason is presented as an architectural constraint.
+- **`/sdd-architecture-update` maintains records through its existing gate**: evidence paths
+  and id references are retargeted in the same change set, orphaned references are reported
+  as findings, and a record whose code is gone is *proposed* for retirement — never removed,
+  and never downgraded, without confirmation.
+
 ## [1.5.0] - 2026-08-28
 
 ### Added
@@ -290,6 +324,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.6.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.2.0...v1.3.0

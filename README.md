@@ -116,6 +116,13 @@ The payoff: agents jump straight to the right files instead of exploring — wit
 conventions and traps as grounds for better technical decisions — and the documentation can
 never flood the context window: always loaded is only the ~200-line constitution, while
 per-module depth lives in ≤ 40-line maps that load only when their module is touched.
+
+And it keeps *what it can see* apart from *why it was meant that way*. An observed pattern
+always carries an evidence path; its reason is recorded only when a source states it — an ADR,
+a requirement, or you — and stays **unknown** when none does, instead of being filled with a
+plausible guess that the next session inherits as fact. Where two documents give the assistant
+incompatible reasons for the same thing, it keeps both and picks neither. You are asked about
+an unknown reason once, bundled at the end of the scan, and "later" is a complete answer.
 The full walkthrough lives in the wiki:
 [Adopting an Existing Codebase](https://github.com/GregorBiswanger/featherspec/wiki/Adopting-an-Existing-Codebase).
 
@@ -347,7 +354,7 @@ CHANGELOG.md           the template's release history (snapshot at adoption)
 .vscode/settings.json  Copilot wiring: instructions/prompts locations, local memory tool off
 
 .specs/                backlog/ · active/ · done/ · plan-archive/ — specs, plans, frozen plan history (ships empty)
-.memory-bank/          projectbrief · systemPatterns · techContext · activeContext
+.memory-bank/          projectbrief · systemPatterns (decisions, patterns, knowledge records) · techContext · activeContext
 ```
 
 A deep scan may add one more: `.architecture/` — optional curated per-module maps, created
