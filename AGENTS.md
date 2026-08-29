@@ -104,7 +104,7 @@ architecture:
 SDD context persists between sessions under `.memory-bank/`:
 
 - `.memory-bank/projectbrief.md` — mission, users, success criteria
-- `.memory-bank/systemPatterns.md` — architecture decisions & patterns
+- `.memory-bank/systemPatterns.md` — architecture decisions, patterns & knowledge records
 - `.memory-bank/activeContext.md` — short session dashboard: focus, active spec, recent
   changes, decisions in flight, blockers, next steps (**max 1–2 screen pages, ~60 lines**)
 - `.memory-bank/techContext.md` — stack, constraints, build/run/test info

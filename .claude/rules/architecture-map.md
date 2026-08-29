@@ -21,13 +21,18 @@ only when the snapshot cap would otherwise evict navigation facts. The snapshot 
 Raw per-unit reports from `/sdd-architecture-scan`'s Phase B follow the schema, in order:
 Purpose (2 sentences) · Entry points (exact paths) · Internal pattern (path patterns) ·
 Dependencies in/out (concrete contract or event files) · Deviations from repo
-conventions · Traps and frozen zones · Observed, undocumented decisions.
+conventions · Traps and frozen zones · Observed decisions — the observation with its evidence
+path, any explanation found in a source quoted with that source's path, and the ADR, decision or
+requirement documents seen; never an inferred why.
 
 - Budget: a leaf report fits the schema in **≤ 120 lines**. If an honest report cannot,
   that is the split rule firing — a structural note plus proposed child units, never
   harder compression.
 - Three nested budgets, three purposes: ≤ 5 return lines protect the orchestrator ·
   ≤ 120 report lines protect the synthesis · ≤ 40 map lines protect the end artifact.
+- A pattern's *purpose* is an observation; its *reason* is not in the code. Record where an
+  explanation is written, never what it probably is — `.claude/rules/knowledge-records.md` is
+  authoritative for what may later become a confirmed reason.
 
 > Note: path-scoped rules load when a matching file is **read**. A brand-new map has
 > not been read yet, so `/sdd-architecture-scan` restates the schema and these budgets
