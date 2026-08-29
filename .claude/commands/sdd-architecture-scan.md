@@ -208,8 +208,12 @@ source-backed explanation kept as a `candidate` naming its source, and two disag
 sources kept as a `conflict` with neither chosen. A purely inferred explanation is dropped here
 and may reappear only as an option inside a clarification question. Persist a record only where
 the rule's bar is met — wiring, validation and logging never qualify. Records go into
-`.memory-bank/systemPatterns.md` under a `## Knowledge records` heading (in `DocLanguage`; the
-machine trigger is the `fs-knowledge:` block, never the heading text), created on first use.
+`.memory-bank/systemPatterns.md` under a `## Knowledge records` heading, created on first use
+together with the rule's four-line legend — a maintainer opening that file must understand what
+they are reading without a manual. Each record is a plain `###` heading stating the observation
+in `DocLanguage`, then its block; the heading is the statement and is never repeated inside.
+One shape only: what you can see in the code becomes a record whatever its reason state, and an
+intent with no code counterpart stays a dated *Key decisions* bullet with its provenance suffix.
 
 **Maps and the snapshot budget — deterministic, no judgment calls:** every **deep**
 unit gets a curated map `.architecture/<unit>.md` (≤ 40 lines each — this restates
