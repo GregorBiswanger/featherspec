@@ -20,9 +20,9 @@ The section opens with this legend, once, in `DocLanguage` — a reader must not
 > prove nothing. `conflict` = two trusted sources disagree, and neither was chosen.
 
 Each record is a **heading a human can read** plus one small block. The heading *is* the
-observation — never repeat it inside the block:
+observation — never repeat it inside the block. Written out, a record looks like this: an `###`
+heading stating what you saw, a blank line, then a fenced `yaml` block —
 
-```markdown
 ### Order events and the outbox row are written in one transaction
 
 ```yaml
@@ -35,7 +35,6 @@ fs-knowledge:
       - {statement: "Delivery survives a broker outage.", source: ".specs/done/0001-baseline.md"}
     # conflict: [{statement, source}, …]  · deferred: {at: <date>}
     # a decided reason instead: statement + provenance {type, source (adr/spec) or role+origin (human), confirmedAt}
-```
 ```
 
 Headings and statements are in `DocLanguage`; field names stay English, so the shape survives a
