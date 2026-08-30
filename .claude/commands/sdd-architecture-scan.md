@@ -115,9 +115,12 @@ context; `.claude/rules/architecture-map.md` stays authoritative): write only
 five summary lines; the report schema — Purpose (2 sentences) · Entry points
 (exact paths) · Internal pattern (path patterns, e.g. "Application/<Feature>/ holds
 Command + Handler + Validator") · Dependencies in/out (concrete contract or event
-files) · Deviations from repo conventions · Traps and frozen zones · Observed,
-undocumented decisions (candidates for systemPatterns.md); and the leaf-report
-budget — the schema in ≤ 120 lines, where an honest report that cannot fit is the
+files) · Deviations from repo conventions · Traps and frozen zones · Observed
+decisions (the observation with its evidence path; any explanation found in a source —
+ADR, requirement, README, code comment — quoted with that source's path; the ADR,
+decision and requirement documents found, e.g. under `docs/adr/`, `docs/decisions/`,
+`adr/`, `*.adr.md`, `docs/requirements/`, `.specs/`; and never an inferred why); and
+the leaf-report budget — the schema in ≤ 120 lines, where an honest report that cannot fit is the
 split rule firing, never a reason to compress harder.
 
 <!-- Authority split, on purpose: procedural rules — the read ladder, the full-read
@@ -146,6 +149,10 @@ Full reads are budgeted: the delegation names the unit's tier and assigns the ca
 is the split rule firing — never silence, never compression. A shallow unit still
 reads heads, never names alone: minimum is the manifest plus the heads of the three
 to five most-referenced files.
+
+A pattern's purpose is an observation; its reason is not in the code. Record **where** an
+explanation is written — path, and line where it is a comment — never what it probably is,
+and never write a reason no source states. "This pattern is usually for X" is not a finding.
 
 Read and search only; run no commands and build nothing — the scan stays
 reproducible and side-effect-free, and command verification is Phase C's gated job.
@@ -180,14 +187,33 @@ synthesis finding to resolve here — not a scout error.
 Curation MUSTs for everything that survives: nothing an agent can infer from the code
 in seconds; path patterns over path lists; every documented command was executed once
 (commands that reach the network, such as package restores, fall under the ask-first
-rule in `AGENTS.md` — ask, or mark the command unverified); the *why* behind observed
-decisions goes, dated and source-linked, to `.memory-bank/systemPatterns.md`; stack,
+rule in `AGENTS.md` — ask, or mark the command unverified); observed decisions become
+knowledge records in `.memory-bank/systemPatterns.md` per the classification below — a why
+without a trusted source is never written as a why, in **no** artifact: not in a map, not in a
+snapshot purpose clause, not in `techContext.md`; stack,
 build, run and test facts go to `.memory-bank/techContext.md`. Everything curated —
 snapshot wording, module maps, Memory Bank entries — is written in `DocLanguage` from
 `AGENTS.md`, and that includes the snapshot's own values, not just prose around them.
 The snapshot obeys the same curation bar: every `entrypoints:`/`modules:` line carries
 its path plus a one-clause purpose or trap — never a bare path. A snapshot that a
 directory listing could have produced is not a fingerprint.
+
+**Classification — what the system does, and why it was meant to.** Read
+`.claude/rules/knowledge-records.md` now and apply it; it is the single source and this paragraph
+is a labelled restatement of its shape only. Build the classification **in context** from the
+scout reports — write no index, no list, no lookup file anywhere. For every decision-relevant
+pattern: one observation with at least one evidence path. Its rationale becomes `decided` only
+where a trusted source states it and passes that rule's trust test; otherwise `unknown`, with any
+source-backed explanation kept as a `candidate` naming its source, and two disagreeing trusted
+sources kept as a `conflict` with neither chosen. A purely inferred explanation is dropped here
+and may reappear only as an option inside a clarification question. Persist a record only where
+the rule's bar is met — wiring, validation and logging never qualify. Records go into
+`.memory-bank/systemPatterns.md` under a `## Knowledge records` heading, created on first use
+together with the rule's four-line legend — a maintainer opening that file must understand what
+they are reading without a manual. Each record is a plain `###` heading stating the observation
+in `DocLanguage`, then its block; the heading is the statement and is never repeated inside.
+One shape only: what you can see in the code becomes a record whatever its reason state, and an
+intent with no code counterpart stays a dated *Key decisions* bullet with its provenance suffix.
 
 **Maps and the snapshot budget — deterministic, no judgment calls:** every **deep**
 unit gets a curated map `.architecture/<unit>.md` (≤ 40 lines each — this restates
@@ -239,3 +265,15 @@ observed state; its confirmation gate remains the snapshot's only write gate. Af
 confirmed merge, set `last deep scan` in the snapshot comment via that same update,
 then ask once, rendered in `DocLanguage`: "Delete the raw analysis in `.sdd-scan/`?
 (recommended)".
+
+Carry the records into that update as part of your distilled findings. Inside its gate dialogue,
+after its questions are answered and before anything is written, make **one** offer — the only
+sanctioned sibling of the worklist gate this command has. Name the subjects and their ids in
+brackets, in plain words, for the persisted `unknown` rationales whose subjects touch security,
+compliance or data integrity, or a change someone is plausibly about to make: "N observed
+patterns have no confirmed reason — <subject> [id], … Clarify now, or later when a change touches
+them?" **Later** writes a `deferred:` marker on exactly the records you named, in the same
+confirmed merge, and asks nothing further. **Now** runs a bounded round over exactly those
+records: one question per message, in the shape `.claude/rules/knowledge-records.md` gives, each
+answerable or deferrable. Never ask "why does X exist?" — ask what the change in front of you
+must preserve.

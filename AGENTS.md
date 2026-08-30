@@ -24,8 +24,8 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 ## Repository Settings (managed by /sdd-setup and /sdd-featherspec-update)
 
 ```yaml
-DocLanguage: English # set by /sdd-setup; governs project docs and dialogue; wiring stays English.
-FeatherSpecVersion: 1.5.0 # managed by /sdd-featherspec-update; do not edit by hand
+DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
+FeatherSpecVersion: 1.6.0 # managed by /sdd-featherspec-update; do not edit by hand
 ```
 
 ## Non-negotiables
@@ -104,7 +104,7 @@ architecture:
 SDD context persists between sessions under `.memory-bank/`:
 
 - `.memory-bank/projectbrief.md` — mission, users, success criteria
-- `.memory-bank/systemPatterns.md` — architecture decisions & patterns
+- `.memory-bank/systemPatterns.md` — architecture decisions, patterns & knowledge records
 - `.memory-bank/activeContext.md` — short session dashboard: focus, active spec, recent
   changes, decisions in flight, blockers, next steps (**max 1–2 screen pages, ~60 lines**)
 - `.memory-bank/techContext.md` — stack, constraints, build/run/test info

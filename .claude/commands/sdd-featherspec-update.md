@@ -475,3 +475,20 @@ entries compose sequentially across skipped versions.
   `**Plan:**` plus `## Plan history`)
 - probes: `.github/instructions/` present ⇒ ≥1.5.0 · `sdd-clean.md` present without
   `.specs/plan-archive/` ⇒ 1.4.0
+
+### 1.6.0 — minor (2026-08-29)
+- adds: `.claude/rules/knowledge-records.md` (+ its `.github/instructions/` loader) — the
+  record shape, the two rationale states and the trusted-source test, loaded on a read of
+  `.memory-bank/systemPatterns.md` · an optional `## Knowledge records` section in
+  `systemPatterns.md`, created on the first record (the seed is untouched, nothing migrates)
+- semantic-flips: an architectural *why* is persisted only with a traceable source — the
+  scan's curation rule "the why behind observed decisions goes, dated and source-linked, to
+  systemPatterns.md" becomes "a why without a trusted source is never written as a why, in no
+  artifact" · two trusted sources that disagree are both kept under `conflict` and neither is
+  chosen · `/sdd-plan` treats an `unknown` rationale as unknown instead of as an assumption ·
+  `/sdd-architecture-scan` may add exactly one bundled, declinable clarification offer inside
+  the existing `/sdd-architecture-update` gate dialogue
+- semantic-flips (cont.): `/sdd-setup` asks Step 0 (documentation language) on every first run —
+  the shipped `DocLanguage:` value is a template default and no longer marks a run as a re-run;
+  a re-run is a repository a previous setup already touched
+- probes: `knowledge-records.md` absent ⇒ ≤1.5.0

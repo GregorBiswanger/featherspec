@@ -13,7 +13,9 @@ defined in `AGENTS.md` (loaded every session). These rules cover only what is sp
 - Keep entries concise, factual, and actionable.
 - If architecture changes, update `systemPatterns.md` and record "Changed Recently" in `activeContext.md`.
 - Date and link every decision entry in `systemPatterns.md` (spec, plan or commit) — an
-  undatable decision cannot be judged stale. Structure facts live only in the `architecture:`
+  undatable decision cannot be judged stale. A knowledge record (`fs-knowledge:`) is dated by its
+  provenance, so an `unknown` rationale carries no date and needs none; see
+  `.claude/rules/knowledge-records.md`, which is authoritative for records. Structure facts live only in the `architecture:`
   snapshot; this file holds the why.
 
 > Note: path-scoped rules load when a matching file is **read**. A brand-new Memory Bank file

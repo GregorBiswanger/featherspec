@@ -29,6 +29,9 @@ reconcile them.
 1. Read the tree and the current snapshot.
 2. Identify changes that matter architecturally: new/moved/removed top-level folders; new
    entrypoints, apps, services, packages, modules; changed boundaries or shared components.
+   Where `.memory-bank/systemPatterns.md` holds `fs-knowledge:` blocks, read
+   `.claude/rules/knowledge-records.md` now and treat those records as reconciliation targets
+   too: a moved or renamed path that a record's evidence names is drift like any other.
 3. Present a **delta report**: what changed (observed), why it matters (brief), and the
    proposed updates to the snapshot and Memory Bank docs.
 
@@ -54,7 +57,13 @@ Only after confirmation:
   `DocLanguage`, one YAML list item per entry.
 - When `.architecture/` exists, update the affected module map(s) and their
   `# last reconciled:` lines in the same change set.
-- Update `.memory-bank/systemPatterns.md` (patterns/decisions).
+- Update `.memory-bank/systemPatterns.md` (patterns, decisions and knowledge records). Retarget
+  every evidence path and id reference the change moved, in this same change set. Report as
+  findings — never fix silently — an id no record answers, a duplicate id, a provenance source
+  that no longer exists, and a record whose evidence paths have all disappeared. That last one is
+  the only case where you *propose* retiring a record: name it in the delta report and leave a
+  one-line retired-id comment only after the user confirms. Never delete a record and never turn
+  `decided` into `unknown` on your own — only the user retracts a confirmed reason.
 - Update `.memory-bank/techContext.md` when stack, build or test facts changed.
 - Update `.memory-bank/activeContext.md` (recent changes + next steps; size limit from
   `AGENTS.md`).
@@ -65,8 +74,8 @@ Only after confirmation:
 
 ## When invoked from /sdd-architecture-scan
 
-Treat the scan's distilled findings as the observed state; include its coverage figures and
-navigation self-test score in the delta report; on confirmation also set `last deep scan` in
+Treat the scan's distilled findings as the observed state — knowledge records included; include
+its coverage figures and navigation self-test score in the delta report; on confirmation also set `last deep scan` in
 the snapshot comment. The gate above stays the snapshot's only write gate. If the findings
 arrive without a recorded self-test score, do not open the gate — send the scan back to run
 its self-test first: an unverified fingerprint is not observed state. On confirmation the
@@ -75,5 +84,11 @@ distilled findings replace the snapshot's **values**, not just its structure: wo
 is never a reason to keep weaker values. Persist the self-test score in the snapshot's
 `coverage:` line, and write nothing outside this gate's sync list — the constitution's own
 wiring prose is not a reconciliation target.
+
+When the scan hands over persisted `unknown` rationales, it makes exactly one offer inside this
+gate dialogue — after the two questions above are answered and before anything is written. That
+offer is the only sanctioned sibling of this gate; its wording and its bounded round live in
+`.claude/commands/sdd-architecture-scan.md`. Declining writes the `deferred:` markers in this
+same confirmed merge.
 
 Everything must remain **DocLanguage-aware**.
