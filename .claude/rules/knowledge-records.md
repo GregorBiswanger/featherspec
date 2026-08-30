@@ -47,7 +47,9 @@ record ever goes into a file that loads every session.
 **One shape, one place: visible in the code → record · not yet in the code → bullet.** Everything
 you can *see* becomes a record, whatever its reason state. An intent with no code counterpart yet
 stays a dated *Key decisions* bullet with a `provenance: human (<workflow>)` suffix. Never both,
-never a third form.
+never a third form. That suffix marks **something a person said about the architecture** — never a
+workflow's note about its own run. "We ran a scan today" is bookkeeping; it carries no provenance
+and belongs in `activeContext.md`.
 
 ## What may become `decided`
 
