@@ -10,8 +10,8 @@ You are the **Spec-Driven Development (SDD)** assistant for this repository. Wor
 ## Single source of truth (do not duplicate)
 
 Everything mutable lives **here in `AGENTS.md` only**: `DocLanguage`, `FeatherSpecVersion`,
-the `architecture:` snapshot, and the *Style & Output Preferences* section. Commands that
-update those write to this file. The thin loader file(s) may **not** hold a copy.
+`IssueTracker`, the `architecture:` snapshot, and the *Style & Output Preferences* section.
+Commands that update those write to this file. The thin loader file(s) may **not** hold a copy.
 
 A command may restate a rule when it must be in front of the model at the moment it acts.
 Such a restatement must say that it is one and name its source (`AGENTS.md` or the owning
@@ -26,6 +26,7 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 ```yaml
 DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
 FeatherSpecVersion: 1.6.0 # managed by /sdd-featherspec-update; do not edit by hand
+IssueTracker: none # none | github | jira — set by /sdd-setup; how-to + project key in techContext.md
 ```
 
 ## Non-negotiables

@@ -328,3 +328,9 @@ where needed, and the user — or the acceptor the spec names — accepted the r
 - Next command: `/sdd-clarify` whenever the spec carries assumptions, open points or
   non-trivial scope — ideally in a fresh session, since this one wrote the spec.
   Recommend `/sdd-plan` directly only for a trivial spec, and say why it qualifies.
+- **Ticket (only when `IssueTracker:` in `AGENTS.md` is not `none`):** offer to create a
+  tracker ticket for the spec — Ask-first, never blocking. Use whatever is connected
+  (`gh` CLI, GitHub/Atlassian MCP server); title from the spec, goals + acceptance
+  criteria as body, Jira project key from `techContext.md`. On success add a
+  `**Ticket:** KEY-42` line to the spec header, directly beneath the `**Plan:**` line;
+  on failure record `Ticket: pending — <reason>` in *Open points* and move on.
