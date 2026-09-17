@@ -94,7 +94,7 @@ rendered in `DocLanguage`:
   Say honestly that the scan reads code and, depending on project size, takes time and
   noticeable tokens. Name the alternatives: describe the architecture yourself, or
   seed only the Memory Bank now and scan later. If the scan is chosen: first collect
-  wizard steps 1, 2, 7 and 8 (only the human knows mission, audience, working mode and
+  wizard steps 1, 2, 7, 8 and 9 (only the human knows mission, audience, working mode and
   taste), then run the `/sdd-architecture-scan` workflow yourself, exactly as if the user
   had typed it (its body lives in `.claude/commands/sdd-architecture-scan.md`). Skip wizard
   steps 3–5 — the scan answers them from the code and writes `techContext.md` and
@@ -140,6 +140,12 @@ language, no lecture.
    control case proving the test can fail. Never implement past a just-written test
    without the user's confirmation.* The user changes it by simply saying so.
 8. **Coding preferences** (comments, naming, patterns to avoid)
+9. **Issue tracker** — one question at the very end, after the other answers: "Where do
+   tickets for this project live — GitHub, Jira, or nowhere?" Default `none`. Record the
+   answer as `IssueTracker:` in the `AGENTS.md` settings block (`none | github | jira`).
+   For Jira, ask for the project key and add it to `techContext.md` (constraints section).
+   No live verification, no credentials talk — the agent reaches the tracker through
+   whatever is connected at use time (`gh` CLI, GitHub/Atlassian MCP server).
 
 Steps 6 and 7 are never answered by assumption: if the user skips them, ask each again,
 individually, before writing anything.
@@ -180,6 +186,10 @@ After collecting answers:
   red-first via `Not implemented` stubs for new behaviour; stop after every new or changed
   test for the user's confirmation before implementing; immediately-green tests against
   existing code allowed, with a negative control where it is cheap).
+- When the user asks for automatic syncing on *every* status change, record that as one
+  further bullet here (e.g. **Ticket sync: on every spec status change, transition the
+  spec's `**Ticket:**` to the matching tracker status, Ask-first**). Teams that don't ask
+  pay nothing; the commands propose transitions only at their own move points by default.
 
 **E) Budget check:**
 

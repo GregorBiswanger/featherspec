@@ -124,6 +124,14 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    Either way, retarget Memory Bank links that named the moved paths (decision sources in
    `systemPatterns.md`, links in `activeContext.md`) to the new locations — a link left on
    the old path goes stale the moment the move lands.
+4b. **Ticket (only when the spec carries a `**Ticket:** KEY-42` line and `IssueTracker:` in
+   `AGENTS.md` is not `none`):** fold the ticket transition into the step-2 move proposal —
+   name it in the same question ("move → active + KEY-42 → In Progress?") so one yes
+   covers both; the network write is still asked, just not twice. Into `done/`: the "Done"
+   equivalent plus a one-line completion comment; reactivation: back to "In Progress".
+   Never blocking; use whatever is connected (`gh`, GitHub/Atlassian MCP), resolve status
+   IDs at runtime. On failure record `Ticket sync: failed — <reason>` in the spec's
+   *Open points* and continue.
 5. **Final check, then commit** — the very last action of this run, after every edit and
    save: list the source folder(s) on the file system and verify the moved files are gone.
    Where a HEAD exists, `git status --short` must additionally match the expected list —
