@@ -24,6 +24,10 @@ teammate, and the next tool pick up exactly where you left off.
 Twelve `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
 GitHub Copilot, because both tools execute the **same files**.
 
+Tracking work in Jira or GitHub Issues? One wizard answer links every spec to a ticket and every
+status move to a transition — through the tracker access your tool already has, with no tracker
+knowledge inside FeatherSpec. Solo developers answer `none` and never see it.
+
 ---
 
 ## Start in two minutes
@@ -80,7 +84,11 @@ It asks which language your documentation should be written in (answer `English`
 questions about the project. It seeds the Memory Bank, captures a first architecture
 snapshot, and agrees the working rules with you: the quality gate that runs after every
 implementation step until it is clean, and the TDD working mode — proposed in plain
-language, confirmed by you, never assumed.
+language, confirmed by you, never assumed. Its last question is where your tickets live —
+GitHub, Jira, another tracker, or nowhere (the default) — recorded as `IssueTracker:` in
+`AGENTS.md`. Answer it and every finished spec offers to become a ticket, and every lifecycle
+move offers the matching transition, using whatever tracker access your tool already has
+(`gh`, the GitHub or Atlassian MCP server). Skip it and nothing changes.
 
 That is the entire installation. Nothing to build, nothing to run.
 
@@ -144,6 +152,27 @@ migrates **around** your customizations instead of over them: your specs, Memory
 edits are provably untouched, conflicts are asked — never decided — and a backup branch
 guards the whole run. `/sdd-featherspec-update check` alone answers "which version am I on?".
 Details: [Updating & Versioning](https://github.com/GregorBiswanger/featherspec/wiki/Updating-and-Versioning).
+
+---
+
+## Link specs to your issue tracker
+
+Since 1.7.0. The spec stays the source of truth; the board stays what your team looks at.
+
+1. **One answer.** `/sdd-setup` asks last: *Where do tickets live — GitHub, Jira, another
+   tracker, or nowhere?* It writes `IssueTracker: jira` into `AGENTS.md` and, for Jira, your
+   project key into the Memory Bank. No login, no token, nothing verified live.
+2. **Two offers.** `/sdd-specify` ends with *Create a ticket for this spec?* and writes
+   `**Ticket:** KAN-4` into the spec header. `/sdd-lifecycle` proposes *move → `active/` +
+   KAN-4 → In Progress?* — one yes covers both. Done closes with a one-line comment,
+   reactivation reopens.
+3. **Zero knowledge.** The agent uses `gh`, the GitHub or Atlassian MCP server, or your
+   tracker's own — so a Jira API change is never a FeatherSpec update.
+
+Every write waits for your yes. A tracker that is down never blocks the flow: the spec is finished
+anyway and the failure lands in its *Open points*. Set the `**Ticket:**` line by hand to link an
+existing ticket. Setup per platform and the full behaviour:
+[Issue Tracker Link](https://github.com/GregorBiswanger/featherspec/wiki/Issue-Tracker-Link).
 
 ---
 
@@ -322,12 +351,12 @@ moved files really left their old folder before proposing the commit.
 | Command | What it does |
 | --- | --- |
 | `/sdd-overview` | Where am I? Workflow map, current spec status, command list |
-| `/sdd-setup` | One-time wizard: doc language, Memory Bank, architecture snapshot, working agreements |
-| `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec |
+| `/sdd-setup` | One-time wizard: doc language, Memory Bank, architecture snapshot, working agreements, issue tracker |
+| `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec (+ optional tracker ticket) |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → a persisted plan of baby steps, with research and traceability |
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
-| `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` — archiving the plan at completion |
+| `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` — archiving the plan at completion, syncing the ticket if linked |
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
 | `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
@@ -400,6 +429,7 @@ Everything beyond this page lives in the **[Wiki](https://github.com/GregorBiswa
 | [Getting Started](https://github.com/GregorBiswanger/featherspec/wiki/Getting-Started) | Setup for both tools, verifying what actually loaded |
 | [Commands](https://github.com/GregorBiswanger/featherspec/wiki/Commands) | Every `/sdd-*` command in detail |
 | [Updating & Versioning](https://github.com/GregorBiswanger/featherspec/wiki/Updating-and-Versioning) | Check your version, update safely, what never gets touched |
+| [Issue Tracker Link](https://github.com/GregorBiswanger/featherspec/wiki/Issue-Tracker-Link) | Link specs to Jira or GitHub Issues — setup per tool, what syncs when |
 | [Specify Method](https://github.com/GregorBiswanger/featherspec/wiki/Specify-Method) | The interview model behind `/sdd-specify` — origin and deliberate deviations |
 | [Specs & Plans](https://github.com/GregorBiswanger/featherspec/wiki/Specs-and-Plans) | Document structure, lifecycle, traceability |
 | [Memory Bank](https://github.com/GregorBiswanger/featherspec/wiki/Memory-Bank) | The four files and what belongs in each |

@@ -1,6 +1,6 @@
 ---
 name: sdd-setup
-description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode).
+description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode), issue tracker.
 argument-hint: "[docLanguage] [projectName] [stack] — or just answer the wizard"
 ---
 

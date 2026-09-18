@@ -1,5 +1,5 @@
 ---
-description: Spec status, moves between backlog/active/done, plan archiving at completion.
+description: Spec status, moves between backlog/active/done, plan archiving at completion, ticket sync if linked.
 argument-hint: "[spec path] [newStatus — vocabulary in AGENTS.md]"
 disable-model-invocation: true
 ---
@@ -89,7 +89,9 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    the state of the accompanying plan if there is one.
 2. **Propose** a lifecycle update (draft → `backlog/`; in progress → `active/`; completed →
    `done/` with status `Implemented`; invalidated → `Deprecated`, stays in `done/` with a
-   successor link; changing again → reactivation back to `active/`).
+   successor link; changing again → reactivation back to `active/`). A spec carrying a
+   `**Ticket:**` line names its tracker transition in this same proposal (step 4b);
+   otherwise the proposal does not mention trackers.
 3. **Act — move first, edit second.** An edit made before the move leaves a dirty editor
    buffer at the source path, and its next "save all" resurrects the file there — the
    repeatedly observed duplicate mechanism. So: `git mv` first (one command per file, so
@@ -128,10 +130,13 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    `AGENTS.md` is not `none`):** fold the ticket transition into the step-2 move proposal —
    name it in the same question ("move → active + KEY-42 → In Progress?") so one yes
    covers both; the network write is still asked, just not twice. Into `done/`: the "Done"
-   equivalent plus a one-line completion comment; reactivation: back to "In Progress".
-   Never blocking; use whatever is connected (`gh`, GitHub/Atlassian MCP), resolve status
-   IDs at runtime. On failure record `Ticket sync: failed — <reason>` in the spec's
-   *Open points* and continue.
+   equivalent plus a one-line completion comment; reactivation: back to "In Progress";
+   `Deprecated`: close with a one-line comment naming the successor. GitHub Issues have no
+   status field: a one-line comment marks the active move, close on done, reopen on
+   reactivation — never create labels. Never blocking; use whatever is connected (`gh`,
+   GitHub/Atlassian MCP, the tracker's own MCP server), resolve status IDs at runtime. On
+   failure record `Ticket sync: failed — <reason>` in the spec's *Open points* and continue.
+   With `none` or without a `**Ticket:**` line, say nothing about the tracker.
 5. **Final check, then commit** — the very last action of this run, after every edit and
    save: list the source folder(s) on the file system and verify the moved files are gone.
    Where a HEAD exists, `git status --short` must additionally match the expected list —

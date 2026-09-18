@@ -11,6 +11,30 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.7.0] - 2026-09-19
+
+### Added
+
+- **Issue tracker link** (opt-in): `/sdd-setup` asks one last question — where tickets live
+  (GitHub, Jira, another tracker, or nowhere; default `none`) — and records it as
+  `IssueTracker:` in the managed settings block. When set, `/sdd-specify` offers to create a
+  ticket for the finished spec and `/sdd-lifecycle` names the matching ticket transition in
+  its move proposal (active, done, reactivation, deprecation) — one yes covers move and
+  transition, the network write stays Ask-first, and a tracker failure never blocks the SDD
+  flow. The link is one optional `**Ticket:**` line in the spec header. FeatherSpec ships no
+  tracker API knowledge: the agent uses whatever is connected (`gh`, the GitHub or Atlassian
+  MCP server, or the tracker's own). Teams that want every status change synced add one
+  bullet to *Style & Output Preferences*; everyone else pays one line of context. Designed
+  and verified by @TheEifelYeti (#15).
+
+### Changed
+
+- `/sdd-plan`'s start signal keeps a pending ticket transition behind the Ask-first gate,
+  like the commit.
+- `/sdd-setup`'s budget check counts every line of `AGENTS.md`, blank lines included, and
+  names the counting commands — PowerShell's `Measure-Object -Line` drops blank lines and
+  let an over-budget file pass as under the cap.
+
 ## [1.6.0] - 2026-08-29
 
 ### Added
@@ -333,6 +357,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.7.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.3.0...v1.4.0

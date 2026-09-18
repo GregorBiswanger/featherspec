@@ -323,14 +323,16 @@ where needed, and the user — or the acceptor the spec names — accepted the r
   user should resolve.
 - Give a verdict: either the spec is sufficient for a first implementation, or name the
   missing pieces explicitly as blocking.
+- **Ticket (only when `IssueTracker:` in `AGENTS.md` is not `none`):** before proposing
+  the commit, offer to create a tracker ticket for the spec — Ask-first, never blocking —
+  so the commit below carries the result. Use whatever is connected (`gh` CLI,
+  GitHub/Atlassian MCP server, the tracker's own MCP server); title from the spec, goals +
+  acceptance criteria as body, project key from `techContext.md`. On success add a
+  `**Ticket:** KEY-42` line (GitHub: `#42`) to the spec header, directly beneath the
+  `**Plan:**` line; on failure record `Ticket: pending — <reason>` in *Open points* and
+  move on. A no leaves the spec untouched. With `none`, say nothing about tickets.
 - Propose one commit of the spec file (git writes stay behind the Ask-first gate in
   `AGENTS.md`) — an uncommitted spec is invisible to the next session's history checks.
 - Next command: `/sdd-clarify` whenever the spec carries assumptions, open points or
   non-trivial scope — ideally in a fresh session, since this one wrote the spec.
   Recommend `/sdd-plan` directly only for a trivial spec, and say why it qualifies.
-- **Ticket (only when `IssueTracker:` in `AGENTS.md` is not `none`):** offer to create a
-  tracker ticket for the spec — Ask-first, never blocking. Use whatever is connected
-  (`gh` CLI, GitHub/Atlassian MCP server); title from the spec, goals + acceptance
-  criteria as body, Jira project key from `techContext.md`. On success add a
-  `**Ticket:** KEY-42` line to the spec header, directly beneath the `**Plan:**` line;
-  on failure record `Ticket: pending — <reason>` in *Open points* and move on.

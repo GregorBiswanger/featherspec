@@ -492,3 +492,15 @@ entries compose sequentially across skipped versions.
   the shipped `DocLanguage:` value is a template default and no longer marks a run as a re-run;
   a re-run is a repository a previous setup already touched
 - probes: `knowledge-records.md` absent ⇒ ≤1.5.0
+
+### 1.7.0 — minor (2026-09-19)
+- adds: `/sdd-setup` wizard step 9 (issue tracker, default `none`) · ticket offer at the end of
+  `/sdd-specify` and ticket transitions folded into `/sdd-lifecycle`'s move proposal (both
+  Ask-first, never blocking) · optional `**Ticket:**` spec-header line beneath `**Plan:**`
+  (declared in `.claude/rules/specs.md`) · opt-in always-sync bullet for *Style & Output
+  Preferences* — no tracker API knowledge ships; the agent uses whatever is connected
+- slot-edits: managed block gains the `IssueTracker:` line, default `none` (confirm
+  individually; an existing project keeps `none` until `/sdd-setup` is re-run or the user
+  sets it)
+- data-notes: none — specs without a `**Ticket:**` line are the normal case
+- probes: `IssueTracker:` line present ⇒ ≥1.7.0

@@ -1,6 +1,6 @@
 ---
 name: sdd-lifecycle
-description: Spec status, moves between backlog/active/done, plan archiving at completion.
+description: Spec status, moves between backlog/active/done, plan archiving at completion, ticket sync if linked.
 argument-hint: "[spec path] [newStatus — vocabulary in AGENTS.md]"
 ---
 
