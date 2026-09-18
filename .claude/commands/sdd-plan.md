@@ -266,8 +266,9 @@ A business change that touches many specs is one impact analysis, not many blind
   a still-pending backlog → active move: perform it as part of starting, following
   `/sdd-lifecycle`'s procedure exactly as if the user had typed it (its body lives in
   `.claude/commands/sdd-lifecycle.md`), with the start signal counting as the yes to its
-  move proposal — only the commit stays behind the Ask-first gate — and say so. In Mode C
-  the same explicit go applies.
+  move proposal — only the commit, and the tracker transition when the spec carries a
+  `**Ticket:**` line, stay behind the Ask-first gate — ask for the transition explicitly —
+  and say so. In Mode C the same explicit go applies.
 - Your own todo or task list is scratch state that dies with the session. The plan file is the
   durable one — when the two differ, the file wins and gets corrected.
 - Keep the plan lean — it is a working document, not a design essay. Requirements belong in the

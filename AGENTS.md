@@ -25,8 +25,8 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 
 ```yaml
 DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
-FeatherSpecVersion: 1.6.0 # managed by /sdd-featherspec-update; do not edit by hand
-IssueTracker: none # none | github | jira — set by /sdd-setup; how-to + project key in techContext.md
+FeatherSpecVersion: 1.7.0 # managed by /sdd-featherspec-update; do not edit by hand
+IssueTracker: none # none | github | jira | <other> — set by /sdd-setup
 ```
 
 ## Non-negotiables
@@ -182,14 +182,14 @@ model. This table is the **only** machine-facing command list — commands rende
 | Command | Purpose |
 | --- | --- |
 | `/sdd-overview` | Workflow overview, current spec status, command list |
-| `/sdd-setup` | Onboarding wizard: `DocLanguage`, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode) |
+| `/sdd-setup` | Onboarding wizard: `DocLanguage`, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode), issue tracker |
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
 | `/sdd-architecture-scan` | Deep, resumable analysis of an existing codebase → fingerprint (first run and refresh) |
-| `/sdd-lifecycle` | Spec status, moves between backlog/active/done, plan archiving at completion |
+| `/sdd-lifecycle` | Spec status, moves between backlog/active/done, plan archiving at completion, ticket sync if linked |
 | `/sdd-style-update` | Capture coding style preferences into `AGENTS.md` |
 | `/sdd-featherspec-update` | Template version check + safe update from a newer release (customizations preserved) |
 | `/sdd-clean` | Context cleanup: dedupe and compact the persistent markdown safely, with a token report |

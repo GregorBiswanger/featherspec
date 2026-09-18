@@ -23,10 +23,10 @@ is defined in `AGENTS.md` (loaded every session). These rules cover only what is
   (`_none yet_` = unplanned; a sibling `.plan.md` link = iteration in flight; a
   `plan-archive/` path = completed iteration, or a reactivated spec whose fresh plan
   `/sdd-plan` Mode C has not written yet); never edit it by hand.
-- An optional `**Ticket:** KEY-42` line beneath `**Plan:**` links the spec to its tracker
-  ticket (GitHub issue or Jira issue). Written by `/sdd-specify` on ticket creation; may
-  also be set by hand to link an existing ticket. Only present when `IssueTracker:` in
-  `AGENTS.md` is not `none`.
+- An optional `**Ticket:** KEY-42` line (GitHub: `#42`; the id may be a link whose text is
+  the id) beneath `**Plan:**` links the spec to its tracker ticket (GitHub issue or Jira
+  issue). Written by `/sdd-specify` on ticket creation; may also be set by hand to link an
+  existing ticket. Only present when `IssueTracker:` in `AGENTS.md` is not `none`.
 - `## Plan history`, when present, is written by `/sdd-lifecycle` only: one dated line per
   archived plan, append-only.
 

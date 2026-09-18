@@ -1,5 +1,5 @@
 ---
-description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode).
+description: Onboarding wizard — DocLanguage, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode), issue tracker.
 argument-hint: "[docLanguage] [projectName] [stack] — or just answer the wizard"
 disable-model-invocation: true
 ---
@@ -99,8 +99,11 @@ rendered in `DocLanguage`:
   had typed it (its body lives in `.claude/commands/sdd-architecture-scan.md`). Skip wizard
   steps 3–5 — the scan answers them from the code and writes `techContext.md` and
   `systemPatterns.md` itself; step 6 shrinks to one confirmation question over the gates
-  the scan found. Afterwards finish only actions B (projectbrief + activeContext, plus the
-  *Quality gates* section in `techContext.md` from the step-6 confirmation), D, E and F.
+  the scan found. Of the pre-collected answers only the project key from step 9 reaches
+  `techContext.md`, and only when `IssueTracker` is not `none`; for `none` nothing
+  tracker-related is written anywhere but `AGENTS.md`. Afterwards finish only actions B
+  (projectbrief + activeContext, plus the *Quality gates* section in `techContext.md` from
+  the step-6 confirmation), D, E and F.
 
 ## Read the repo before asking
 
@@ -141,11 +144,12 @@ language, no lecture.
    without the user's confirmation.* The user changes it by simply saying so.
 8. **Coding preferences** (comments, naming, patterns to avoid)
 9. **Issue tracker** — one question at the very end, after the other answers: "Where do
-   tickets for this project live — GitHub, Jira, or nowhere?" Default `none`. Record the
-   answer as `IssueTracker:` in the `AGENTS.md` settings block (`none | github | jira`).
-   For Jira, ask for the project key and add it to `techContext.md` (constraints section).
-   No live verification, no credentials talk — the agent reaches the tracker through
-   whatever is connected at use time (`gh` CLI, GitHub/Atlassian MCP server).
+   tickets for this project live — GitHub, Jira, another tracker, or nowhere?" Default
+   `none`. Record the answer as the value of `IssueTracker:` in the `AGENTS.md` settings
+   block (the comment stays as shipped; `none | github | jira | <tracker name>`). For Jira
+   or another tracker, ask for the project key. No live verification, no credentials talk —
+   the agent reaches the tracker through whatever is connected at use time (`gh` CLI,
+   GitHub/Atlassian MCP server, the tracker's own MCP server).
 
 Steps 6 and 7 are never answered by assumption: if the user skips them, ask each again,
 individually, before writing anything.
@@ -162,7 +166,9 @@ After collecting answers:
 - Update `.memory-bank/projectbrief.md` with mission + primary users + success criteria.
 - Update `.memory-bank/techContext.md` with stack + build/run/test, plus a *Quality gates*
   section listing the confirmed Definition-of-Green commands in order — `/sdd-plan` reads
-  them from here, and `/sdd-compile` re-runs them via the plan's *Quality gates* line.
+  them from here, and `/sdd-compile` re-runs them via the plan's *Quality gates* line;
+  plus the tracker's project key in the constraints section when `IssueTracker:` is not
+  `none` — for `none`, nothing tracker-related is written.
 - Create `.memory-bank/activeContext.md` only if missing or still placeholder (`TBD`) —
   otherwise leave it, it may hold live session state. **Read `.claude/rules/memory-bank.md`
   first** and follow its *Structure* section exactly — that section is the only definition of
@@ -194,7 +200,9 @@ After collecting answers:
 **E) Budget check:**
 
 - Measure `AGENTS.md` against the cap in `.claude/rules/constitution.md`; if clearly over,
-  beyond its tolerance clause, propose one eviction per its order before finishing.
+  beyond its tolerance clause, propose one eviction per its order before finishing. Count
+  every line, blank lines included (`wc -l`, or `(Get-Content AGENTS.md).Count` in
+  PowerShell — never `Measure-Object -Line`, which drops blank lines).
 
 **F) Baseline commit (Ask-first):**
 

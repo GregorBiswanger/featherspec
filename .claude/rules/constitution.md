@@ -17,8 +17,8 @@ paths:
   and the surplus belongs in a path-scoped rule under `.claude/rules/`. The cap triggers
   **one** eviction proposal, not a recurring negotiation: a line or two over it after a
   legitimate gate or preference addition is acceptable until the next natural edit.
-- `DocLanguage`, `IssueTracker`, the `architecture:` snapshot, and *Style & Output Preferences* live **only**
-  here. Never copy them into `CLAUDE.md` or any other loader.
+- `DocLanguage`, `IssueTracker`, the `architecture:` snapshot, and *Style & Output Preferences*
+  live **only** here. Never copy them into `CLAUDE.md` or any other loader.
 - Maintain *Style & Output Preferences* as a living record.
 - Keep the `architecture:` snapshot synchronized with the real repo structure.
 - `DocLanguage` controls the language of project documentation (Memory Bank + specs + README),
