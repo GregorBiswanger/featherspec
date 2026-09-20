@@ -38,6 +38,10 @@ docs fixes that are safe to overwrite.
 
 - `/sdd-specify` no longer reconstructs existing behaviour itself: its former *Baseline mode*
   now delegates to `/sdd-reverse-specify`, the single home of that workflow.
+- A changed `Baseline` now has a defined path: `/sdd-lifecycle` reactivates it like an
+  `Implemented` spec, and `/sdd-plan` Mode C builds its impact report from the spec's
+  *Technical Reference* instead of an archived plan, then writes its first plan. Before, a
+  Baseline could only be followed by a successor spec.
 - `AGENTS.md` is back under its 200-line cap: three lines of explanatory prose were
   tightened to make room for the new command row.
 

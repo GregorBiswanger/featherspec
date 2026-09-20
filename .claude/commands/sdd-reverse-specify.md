@@ -4,10 +4,10 @@ argument-hint: "[target: path | folder | symbol | plan file] (optional)"
 disable-model-invocation: true
 ---
 
-<!-- Single source for the /sdd-reverse-specify workflow. Claude Code runs this file
-     directly; GitHub Copilot reaches it through the thin loader in
-     .github/prompts/sdd-reverse-specify.prompt.md. Deliberately no shell injection and no
-     argument-variable substitution: Copilot supports neither. -->
+<!-- Single source for the /sdd-reverse-specify workflow, for Claude Code and GitHub Copilot
+     alike: Claude Code runs this file directly, GitHub Copilot reaches it through the thin
+     loader in .github/prompts/sdd-reverse-specify.prompt.md. Deliberately no shell injection
+     and no argument-variable substitution: Copilot supports neither. -->
 
 # /sdd-reverse-specify — Reverse Specification
 

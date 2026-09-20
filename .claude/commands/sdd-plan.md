@@ -217,7 +217,10 @@ final step runs them all>
 A changed spec whose plan is archived (or still beside it in `done/`, from a pre-1.5 layout)
 means an `Implemented` spec is changing: report the impact first (steps 1–3), then propose
 the reactivation move — spec back to `active/`, `In Progress` — via `/sdd-lifecycle`; a new
-slice of work gets a successor spec instead.
+slice of work gets a successor spec instead. A changed `Baseline` is the same case without a
+predecessor — it has no plan by design: build the impact report from its `## Technical
+Reference` and the survey instead of a traceability table, then reactivate and write its
+first plan exactly as below.
 
 1. Follow the spec's `**Plan:**` line or `## Plan history` to its most recent plan (usually
    in `.specs/plan-archive/`) and read only what the impact needs: which acceptance criteria
