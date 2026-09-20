@@ -77,7 +77,7 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   and note it in `activeContext.md` — no `Deprecated`, no move to `done/`.
 - **`Baseline` specs** (existing behaviour, brownfield) live in `done/` without a plan and are
   exempt from the evidence gate — but require the `/sdd-clarify` pass noted in the spec
-  (see `/sdd-specify`, Baseline mode).
+  (see `/sdd-reverse-specify`, which creates them).
 - **No plan beside the spec, and none in the archive?** Ask why and record the answer in the
   spec. `Baseline` needs no plan; for anything else, skipping the plan is the user's recorded
   decision, a forgotten plan is not. (The fast path in `AGENTS.md` means no spec *and* no

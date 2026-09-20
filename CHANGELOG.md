@@ -11,6 +11,36 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.8.0] - 2026-09-20
+
+### Added
+
+- **Reverse specification** — `/sdd-reverse-specify [target]` (#14): reconstructs existing
+  behaviour from code, tests, contracts or a technical plan into a **human-validated**
+  `Baseline` spec. Works on a file, folder, symbol or plan, or on the whole application via
+  the architecture fingerprint. It proposes a capability map in domain language first (a
+  technical module is never a spec boundary), sends isolated `sdd-reverse-scout` agents to
+  collect evidence for one capability at a time, and writes a temporary
+  `.sdd-reverse/candidates/*.reverse-spec.md` whose rules carry `[Inferred]` or `[Uncertain]`
+  — never a percentage. Validation asks about the doubts only: conflicts first, uncertain
+  behaviour next, inferred behaviour as batched confirmations; `[Confirmed]` comes from a
+  human alone. Conflicts between description, plan, tests and code are shown, never
+  resolved silently; a suspected bug becomes a question, unreferenced code never a rule.
+  Promotion writes a normal spec to `.specs/done/` (`Status: Baseline`, `Plan: _none_`,
+  `Origin`, `Validated by`, a `Technical Reference` of at most eight lines) — no
+  retrospective plan, no parallel lifecycle. Resumable from its files at any point.
+- `/sdd-setup` offers reverse specification once, at the end of the existing-software path,
+  with recommended starting areas derived from the confirmed snapshot. Declining changes
+  nothing; the wizard holds no reverse logic of its own.
+- `/sdd-overview` reports open reverse candidates.
+
+### Changed
+
+- `/sdd-specify` no longer reconstructs existing behaviour itself: its former *Baseline mode*
+  now delegates to `/sdd-reverse-specify`, the single home of that workflow.
+- `AGENTS.md` is back under its 200-line cap: three lines of explanatory prose were
+  tightened to make room for the new command row.
+
 ## [1.7.0] - 2026-09-19
 
 ### Added
@@ -357,6 +387,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.8.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...v1.5.0

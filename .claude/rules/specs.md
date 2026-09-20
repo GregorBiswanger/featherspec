@@ -29,6 +29,10 @@ is defined in `AGENTS.md` (loaded every session). These rules cover only what is
   existing ticket. Only present when `IssueTracker:` in `AGENTS.md` is not `none`.
 - `## Plan history`, when present, is written by `/sdd-lifecycle` only: one dated line per
   archived plan, append-only.
+- A `Baseline` created by `/sdd-reverse-specify` carries `**Plan:** _none_` plus two optional
+  provenance lines beneath it — `**Origin:** Reverse — Brownfield | Reverse — Technical Plan`
+  and `**Validated by:** <names> · <date>` — and a `## Technical Reference` of at most eight
+  lines (paths and symbols only). Provenance only: it is a normal spec from then on.
 
 Plan files (`.specs/**/*.plan.md`) have their own craft rules in `plans.md` — status
 vocabulary, step upkeep, and traceability live there, not here.

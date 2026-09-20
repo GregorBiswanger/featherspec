@@ -211,7 +211,34 @@ After collecting answers:
   lifecycle moves (`git mv`); without it every later safety net runs blind. The git write
   stays behind the Ask-first gate in `AGENTS.md`.
 
+## Reverse specification offer (existing software only — after actions B, D, E and F)
+
+Only when this run took the scan path and its snapshot merge was confirmed, make **one**
+offer, rendered in `DocLanguage`, shaped like the scan briefing: one line of value — the
+fingerprint says *where* the code is, reverse specification recovers *what* the software
+does, as specs the team confirms — one line of cost — it reads code again, one analysis
+round per capability — then the question: "Shall I look for the existing functional
+capabilities and reconstruct them as specifications?"
+
+Recommend where to start, from the confirmed snapshot alone — the raw scan files may
+already be gone: modules carrying a `map:` reference (deep tier: central or high-churn), and
+areas whose knowledge records in `.memory-bank/systemPatterns.md` carry an `unknown`
+rationale touching security, compliance or data integrity. Name three to five areas, each
+with half a sentence of reason.
+
+- **The recommended areas** → run the `/sdd-reverse-specify` workflow yourself, exactly as
+  if the user had typed it with those areas as targets (its body lives in
+  `.claude/commands/sdd-reverse-specify.md`).
+- **The whole application** → the same workflow without a target.
+- **No, finish setup** → write nothing and change nothing; name `/sdd-reverse-specify` among
+  the next commands below.
+
+Hand the project one-liner and the audience from wizard steps 1 and 2 over as the functional
+description. This wizard holds no reverse logic of its own, and declining never blocks or
+changes anything that follows — the command stays available at any later time.
+
 ## Output
 
 - Summarize what you created/updated and what you inferred.
-- Suggest 1–3 next commands: `/sdd-specify`, `/sdd-plan`, `/sdd-architecture-update`, `/sdd-lifecycle`.
+- Suggest 1–3 next commands: `/sdd-specify`, `/sdd-plan`, `/sdd-architecture-update`,
+  `/sdd-lifecycle` — for existing software also `/sdd-reverse-specify`.

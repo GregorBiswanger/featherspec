@@ -21,8 +21,8 @@ criteria, then into a **plan** of baby steps — and only then writes code. Spec
 and progress all live on disk as Markdown in your repository, so the next session, the next
 teammate, and the next tool pick up exactly where you left off.
 
-Twelve `/sdd-*` commands drive that loop, and they behave identically in Claude Code and in
-GitHub Copilot, because both tools execute the **same files**.
+Thirteen `/sdd-*` commands drive that loop — identical in Claude Code and GitHub Copilot,
+because both tools execute the **same files**.
 
 Tracking work in Jira or GitHub Issues? One wizard answer links every spec to a ticket and every
 status move to a transition — through the tracker access your tool already has, with no tracker
@@ -131,6 +131,18 @@ a requirement, or you — and stays **unknown** when none does, instead of being
 plausible guess that the next session inherits as fact. Where two documents give the assistant
 incompatible reasons for the same thing, it keeps both and picks neither. You are asked about
 an unknown reason once, bundled at the end of the scan, and "later" is a complete answer.
+**And the behaviour itself?** The fingerprint says *where* things are;
+`/sdd-reverse-specify` recovers *what the software already does* — from code, tests,
+contracts, or a technical plan that was built without a spec. Point it at a file, a folder or
+a symbol, or let the wizard offer it after the scan. It first proposes a map of capabilities
+in your users' words — never one spec per class — then isolated scouts collect evidence for
+one capability at a time, and you are walked through the doubts only: conflicts first,
+uncertain behaviour next, the rest as quick confirmations. Code shows what the system does,
+not what was meant: nothing becomes a spec without a human's yes, a suspected bug becomes a
+question instead of a requirement, and what you confirm lands as a normal `Baseline` spec in
+`.specs/done/`. No retrospective plans, no repository-wide documentation dump — reconstruct
+what is about to change or must be protected, and defer the rest at no cost.
+
 The full walkthrough lives in the wiki:
 [Adopting an Existing Codebase](https://github.com/GregorBiswanger/featherspec/wiki/Adopting-an-Existing-Codebase).
 
@@ -346,7 +358,7 @@ moved files really left their old folder before proposing the commit.
 
 ---
 
-## The twelve commands
+## The thirteen commands
 
 | Command | What it does |
 | --- | --- |
@@ -359,6 +371,7 @@ moved files really left their old folder before proposing the commit.
 | `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` — archiving the plan at completion, syncing the ticket if linked |
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
 | `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
+| `/sdd-reverse-specify` | Existing code, tests or a plan → evidence → your validation → a normal `Baseline` spec |
 | `/sdd-style-update` | Capture a coding-style preference so it sticks |
 | `/sdd-featherspec-update` | Check your template version and update safely — customizations preserved |
 | `/sdd-clean` | Keep the persistent context lean: dedupe, drop stale content, compact — with a token report |
@@ -374,12 +387,12 @@ AGENTS.md              the constitution — rules, doc language, template versio
 CLAUDE.md              one line: @AGENTS.md
 CHANGELOG.md           the template's release history (snapshot at adoption)
 
-.claude/commands/      the twelve workflow bodies (Claude runs them directly)
+.claude/commands/      the thirteen workflow bodies (Claude runs them directly)
 .claude/rules/         path-scoped craft rules, loaded when a matching file is read
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
 .github/instructions/  thin loaders so Copilot gets the path-scoped rules too
-.github/agents/        the Copilot persona, plus the scan's scout agent in VS Code dialect
+.github/agents/        the Copilot persona, plus the two scout agents in VS Code dialect
 .vscode/settings.json  Copilot wiring: instructions/prompts locations, local memory tool off
 
 .specs/                backlog/ · active/ · done/ · plan-archive/ — specs, plans, frozen plan history (ships empty)
@@ -388,6 +401,8 @@ CHANGELOG.md           the template's release history (snapshot at adoption)
 
 A deep scan may add one more: `.architecture/` — optional curated per-module maps, created
 only when the snapshot's line cap would otherwise evict navigation detail.
+Reverse specification works in `.sdd-reverse/` — a capability worklist and the candidates
+awaiting your validation; a promoted candidate leaves it, and nothing there is ever auto-loaded.
 
 Everything mutable lives in `AGENTS.md` and the two data folders. Workflow bodies exist exactly
 once, under `.claude/commands/`; `.github/prompts/` holds thin pointers to them.
