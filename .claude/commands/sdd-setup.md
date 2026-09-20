@@ -103,7 +103,8 @@ rendered in `DocLanguage`:
   `techContext.md`, and only when `IssueTracker` is not `none`; for `none` nothing
   tracker-related is written anywhere but `AGENTS.md`. Afterwards finish only actions B
   (projectbrief + activeContext, plus the *Quality gates* section in `techContext.md` from
-  the step-6 confirmation), D, E and F.
+  the step-6 confirmation), D, E and F. Then — and only then — make the reverse
+  specification offer described below, as its own question.
 
 ## Read the repo before asking
 
@@ -214,7 +215,9 @@ After collecting answers:
 ## Reverse specification offer (existing software only — after actions B, D, E and F)
 
 Only when this run took the scan path and its snapshot merge was confirmed, make **one**
-offer, rendered in `DocLanguage`, shaped like the scan briefing: one line of value — the
+offer — as its own final question, after every action above is finished and summarized,
+never folded into a list of optional follow-ups — rendered in `DocLanguage` and shaped like
+the scan briefing: one line of value — the
 fingerprint says *where* the code is, reverse specification recovers *what* the software
 does, as specs the team confirms — one line of cost — it reads code again, one analysis
 round per capability — then the question: "Shall I look for the existing functional
@@ -224,7 +227,7 @@ Recommend where to start, from the confirmed snapshot alone — the raw scan fil
 already be gone: modules carrying a `map:` reference (deep tier: central or high-churn), and
 areas whose knowledge records in `.memory-bank/systemPatterns.md` carry an `unknown`
 rationale touching security, compliance or data integrity. Name three to five areas, each
-with half a sentence of reason.
+with half a sentence of reason, and offer exactly three answers:
 
 - **The recommended areas** → run the `/sdd-reverse-specify` workflow yourself, exactly as
   if the user had typed it with those areas as targets (its body lives in
