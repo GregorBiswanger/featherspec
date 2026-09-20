@@ -187,6 +187,7 @@ model. This table is the **only** machine-facing command list — commands rende
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
+| `/sdd-review` | Two-axis review of the changes since a fixed point: Standards (repo rules + smells) and Spec (does the change do what the spec asked?) — reported side by side |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
 | `/sdd-architecture-scan` | Deep, resumable analysis of an existing codebase → fingerprint (first run and refresh) |
 | `/sdd-lifecycle` | Spec status, moves between backlog/active/done, plan archiving at completion, ticket sync if linked |
