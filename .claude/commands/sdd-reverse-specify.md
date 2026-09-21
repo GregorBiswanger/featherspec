@@ -89,7 +89,8 @@ rules. Technical modules are never capabilities; record per row which entry poin
 modules the capability spans.
 
 Write `.sdd-reverse/_worklist.md`: a table with columns #, Capability, Actor, Entry
-points, Spans, Priority, Status, Candidate. Priority: what the user called about to change
+points, Spans, Priority, Status, Candidate — column names and status values stay in English,
+commands read them; cells are in `DocLanguage`. Priority: what the user called about to change
 or to be protected first, then the snapshot's central or high-churn modules.
 
 **Map gate (the first of two gates).** One line on what the list is (a guess at what the
@@ -250,7 +251,9 @@ name the numbers that are wrong or unsure". A question states the behaviour in p
 words, where the evidence sits in one clause, and asks whether it is intended business
 behaviour. Ask about what an actor sees, does or decides; the language lint applies to every
 question, the two sides of a conflict included — when a mechanism decides the outcome, ask
-about the outcome. The
+about the outcome. A doubt only running the code can settle (does a library fire this event?)
+is no question for people: it stays under *Open points* as a check for a developer, and the
+question asks only whether the behaviour is wanted. The
 user may **confirm**, **correct**, **reject** or stay **unsure**; for a conflict or a
 suspicious behaviour also offer what it might be: intended · bug · legacy · workaround ·
 undocumented exception · unknown.
