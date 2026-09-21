@@ -174,7 +174,8 @@ The body uses the document structure and the five criterion shapes of `/sdd-spec
 Users and roles · Scope (in scope / out of scope: boundaries the code visibly draws) ·
 Functional flow · Business rules (`BR-NN`) · Error cases · Acceptance criteria (`AC-NNN`,
 **shall**, describing what *is*) · Assumptions · Open points — then `## Conflicts` and
-`## Evidence`. Promotion is then a move, not a rewrite.
+`## Evidence`. Headings are written in `DocLanguage`, except `## Conflicts`, `## Evidence` and
+`## Technical Reference`: commands find those by name. Promotion is then a move, not a rewrite.
 
 **State each behaviour once.** *Acceptance criteria* carry the testable behaviour;
 *Business rules* hold only what several criteria share — an invariant, a policy, a literal
@@ -199,7 +200,8 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
 **Language lint before writing.** A rule or criterion that names a class, method, file,
 table, endpoint, HTTP verb or status code is rewritten to the behaviour an actor can
 observe; the technology belongs in `## Evidence` (`| ID | Evidence | Second source |`,
-pointers only — never pasted code). One worked example:
+pointers only, each with its full path from the repository root — never pasted code). One
+worked example:
 
 ```text
 Bad:  AC-004 [Inferred] OrderController.Approve returns 403 when user.Role != "Manager".
