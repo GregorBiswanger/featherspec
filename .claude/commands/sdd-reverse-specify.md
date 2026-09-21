@@ -183,8 +183,6 @@ limit — and never repeat a criterion in other words. A small capability may ne
 criteria and no rule: length is not thoroughness, and every line is a line someone must
 validate. Implementation qualities — a secret in the source, a missing index, a slow path
 — are not behaviour an actor can observe: at most one line each under *Open points*.
-Mechanics — where state is stored, a fixed wait, a retry loop — are written as the effect
-an actor notices; a number stays in a criterion only when a different value would be noticed.
 
 **Markers.** Every business rule and every criterion carries exactly one, right after
 its ID. They are the whole vocabulary — never a percentage, a score or a probability:
@@ -198,15 +196,19 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
 - `[Confirmed]` — a human validated it. Synthesis never writes this marker; only Phase C does.
 
 **Language lint before writing.** A rule or criterion that names a class, method, file,
-table, endpoint, HTTP verb or status code is rewritten to the behaviour an actor can
-observe; the technology belongs in `## Evidence` (`| ID | Evidence | Second source |`,
-pointers only, each with its full path from the repository root — never pasted code). One
-worked example:
+table, endpoint, HTTP verb or status code — or a mechanism: where state is stored, a library,
+a build variant, a retry count, a fixed wait — is rewritten to the behaviour an actor can
+observe; a number stays only when an actor would notice a different value. The technology
+belongs in `## Evidence` (`| ID | Evidence | Second source |`, pointers only, each with its
+full path from the repository root — never pasted code). Two worked examples:
 
 ```text
 Bad:  AC-004 [Inferred] OrderController.Approve returns 403 when user.Role != "Manager".
 Good: AC-004 [Inferred] If someone other than a manager tries to approve an order, then
       the system shall refuse the approval.      (Evidence: src/Orders/Approval.cs:41)
+Bad:  AC-012 [Inferred] The token sits in localStorage; a 30-minute setTimeout clears it.
+Good: AC-012 [Inferred] If a signed-in person does nothing for 30 minutes, then the system
+      shall sign them out.                       (Evidence: src/auth/session.ts:22)
 ```
 
 Text an actor sees — a message, a label, a button — is quoted in backticks exactly as the
@@ -246,8 +248,9 @@ Order: conflicts first, then `[Uncertain]`, each as one question per message; th
 `[Inferred]` in rounds of five to seven as **one** numbered confirmation — "confirm all, or
 name the numbers that are wrong or unsure". A question states the behaviour in plain
 words, where the evidence sits in one clause, and asks whether it is intended business
-behaviour. Ask about what an actor sees, does or decides — never about a storage place, a
-protocol or a timer; when such a mechanism decides the outcome, ask about the outcome. The
+behaviour. Ask about what an actor sees, does or decides; the language lint applies to every
+question, the two sides of a conflict included — when a mechanism decides the outcome, ask
+about the outcome. The
 user may **confirm**, **correct**, **reject** or stay **unsure**; for a conflict or a
 suspicious behaviour also offer what it might be: intended · bug · legacy · workaround ·
 undocumented exception · unknown.
