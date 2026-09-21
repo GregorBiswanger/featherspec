@@ -192,7 +192,8 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
   second agreeing source (test, contract, plan) is noted in *Evidence*.
 - `[Uncertain]` — there is evidence, but its functional meaning is unclear: sources
   disagree, the behaviour looks accidental (dead branch, workaround, leftover), or only
-  names and comments hint at it. Say in half a sentence what makes it uncertain.
+  names and comments hint at it. After the marker, say in half a sentence what makes it
+  uncertain — the brackets hold the marker word alone, never the reason.
 - `[Confirmed]` — a human validated it. Synthesis never writes this marker; only Phase C does.
 
 **Language lint before writing.** A rule or criterion that names a class, method, file,
