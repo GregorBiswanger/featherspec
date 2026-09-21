@@ -26,9 +26,10 @@ docs fixes that are safe to overwrite.
   behaviour next, inferred behaviour as batched confirmations; `[Confirmed]` comes from a
   human alone. Conflicts between description, plan, tests and code are shown, never
   resolved silently; a suspected bug becomes a question, unreferenced code never a rule.
-  Promotion writes a normal spec to `.specs/done/` (`Status: Baseline`, `Plan: _none_`,
-  `Origin`, `Validated by`, a `Technical Reference` of at most eight lines) — no
-  retrospective plan, no parallel lifecycle. Resumable from its files at any point.
+  Questions and criteria stay in business language; text people see is quoted exactly as the
+  code has it. Promotion writes a normal spec to `.specs/done/` (`Status: Baseline`,
+  `Plan: _none_`, `Origin`, `Validated by`, a `Technical Reference` of at most eight lines) —
+  no retrospective plan, no parallel lifecycle. Resumable from its files at any point.
 - `/sdd-setup` offers reverse specification once, at the end of the existing-software path,
   with recommended starting areas derived from the confirmed snapshot. Declining changes
   nothing; the wizard holds no reverse logic of its own.

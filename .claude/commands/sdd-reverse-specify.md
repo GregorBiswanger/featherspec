@@ -182,6 +182,8 @@ limit — and never repeat a criterion in other words. A small capability may ne
 criteria and no rule: length is not thoroughness, and every line is a line someone must
 validate. Implementation qualities — a secret in the source, a missing index, a slow path
 — are not behaviour an actor can observe: at most one line each under *Open points*.
+Mechanics — where state is stored, a fixed wait, a retry loop — are written as the effect
+an actor notices; a number stays in a criterion only when a different value would be noticed.
 
 **Markers.** Every business rule and every criterion carries exactly one, right after
 its ID. They are the whole vocabulary — never a percentage, a score or a probability:
@@ -203,6 +205,10 @@ Bad:  AC-004 [Inferred] OrderController.Approve returns 403 when user.Role != "M
 Good: AC-004 [Inferred] If someone other than a manager tries to approve an order, then
       the system shall refuse the approval.      (Evidence: src/Orders/Approval.cs:41)
 ```
+
+Text an actor sees — a message, a label, a button — is quoted in backticks exactly as the
+code has it, character for character: a later test asserts that string. Write `DocLanguage`
+in its own script; only a file slug is ever transliterated.
 
 **Never settle what only people can settle.**
 
@@ -237,13 +243,16 @@ Order: conflicts first, then `[Uncertain]`, each as one question per message; th
 `[Inferred]` in rounds of five to seven as **one** numbered confirmation — "confirm all, or
 name the numbers that are wrong or unsure". A question states the behaviour in plain
 words, where the evidence sits in one clause, and asks whether it is intended business
-behaviour. The user may **confirm**, **correct**, **reject** or stay **unsure**; for a
-conflict or a suspicious behaviour also offer what it might be: intended · bug · legacy ·
-workaround · undocumented exception · unknown.
+behaviour. Ask about what an actor sees, does or decides — never about a storage place, a
+protocol or a timer; when such a mechanism decides the outcome, ask about the outcome. The
+user may **confirm**, **correct**, **reject** or stay **unsure**; for a conflict or a
+suspicious behaviour also offer what it might be: intended · bug · legacy · workaround ·
+undocumented exception · unknown.
 
 Apply every answer to the candidate at once: confirmed → `[Confirmed]`; corrected → the
-corrected wording, `[Confirmed]`; rejected → removed, one line under *Open points*
-("rejected as not a business rule: …"); unsure → stays `[Uncertain]`, tagged `reviewed`.
+corrected wording, `[Confirmed]`; rejected → removed, its ID never reused, one line under
+*Open points* naming it ("AC-004 rejected as not a business rule: …"); unsure → stays
+`[Uncertain]`, tagged `reviewed`.
 When the valid behaviour differs from what the code does — a bug verdict, or a correction
 the code contradicts — ask once to be sure, then write the valid behaviour as the rule and
 record under *Open points*: `Known deviation: the implementation does X (pointer) —
