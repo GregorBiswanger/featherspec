@@ -262,7 +262,7 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
   system), or only names and comments hint at it. After the marker, say in half a sentence
   what makes it uncertain — the brackets hold the marker word alone, never the reason.
   Behaviour that merely looks wrong and a check the code does not make are findings, not
-  `[Uncertain]`.
+  `[Uncertain]` — unless another source disagrees with the code: then it is a conflict first.
 - `[Confirmed]` — a person confirmed it. Synthesis never writes this marker; only Phase C
   does. Findings carry no marker and no ID.
 
@@ -296,7 +296,8 @@ in its own script; only a file slug is ever transliterated.
   the other source ("a test expects …"). A conflict needs two sources that cannot both be
   true — description vs code counts; a source that is merely silent or less precise does not.
 - A test shows what someone expected: a test the code cannot satisfy is a conflict, never
-  the source of an `[Inferred]` statement.
+  the source of an `[Inferred]` statement or its second source — also when the same
+  behaviour is a finding too.
 - Unreferenced code never becomes a rule, a criterion or a finding; it gets one *Check* line.
 - More than 25 criteria is a split proposal at the next gate, not a longer file.
 
