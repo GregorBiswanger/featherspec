@@ -194,6 +194,8 @@ code* in scope (`path › symbol`, how checked) · *Open questions*.
   callers). Unreachable code goes under *Unreferenced code*, never under *Observed*.
 - The target bounds where you start, not where the capability ends: follow its flow to the
   touchpoints it needs, record them, stop there.
+- A failure is followed per reason — each rejection or error on its own — into every later
+  use of what it left behind: does that use fail too, or succeed with the wrong data?
 
 Once every lens of the capability has its report, set the worklist row to `analyzed` in the
 same change set.
@@ -202,7 +204,8 @@ same change set.
 
 Read only this capability's reports and `_context.md`. **Evidence probe first:** open three
 cited pointers — prefer literal values, conditions you worded yourself (only if, as soon as,
-after) and anything plausible from names alone — and the pointer behind every finding. A
+after) or left out (a statement without one claims "always"), and anything plausible from
+names alone — and the pointer behind every finding. A
 pointer that does not resolve, or does not support its statement, is a hard fail: fix or
 drop the statement, then probe again. A name-derived rule in a spec is inherited by every
 later change.
