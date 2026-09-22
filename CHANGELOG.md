@@ -22,14 +22,18 @@ docs fixes that are safe to overwrite.
   technical module is never a spec boundary), sends isolated `sdd-reverse-scout` agents to
   collect evidence for one capability at a time, and writes a temporary
   `.sdd-reverse/candidates/*.reverse-spec.md` whose rules carry `[Inferred]` or `[Uncertain]`
-  — never a percentage. Validation asks about the doubts only: conflicts first, uncertain
-  behaviour next, inferred behaviour as batched confirmations; `[Confirmed]` comes from a
-  human alone. Conflicts between description, plan, tests and code are shown, never
-  resolved silently; a suspected bug becomes a question, unreferenced code never a rule.
-  Questions and criteria stay in business language; text people see is quoted exactly as the
-  code has it. Promotion writes a normal spec to `.specs/done/` (`Status: Baseline`,
-  `Plan: _none_`, `Origin`, `Validated by`, a `Technical Reference` of at most eight lines) —
-  no retrospective plan, no parallel lifecycle. Resumable from its files at any point.
+  — never a percentage. Validation checks understanding, never intent: each question states
+  what the system does today and asks whether that is how the person knows it — conflicts
+  first, uncertain behaviour next, inferred behaviour as batched confirmations; nobody is
+  asked what the system should do, and `[Confirmed]` comes from a human alone. Behaviour that
+  could harm or mislead a person, and checks the code does not make, become *findings*
+  stated as their consequence — never a rule; so does a belief the code contradicts.
+  Conflicts between description, plan, tests and code are shown, never resolved silently;
+  unreferenced code never becomes a rule. Questions and criteria stay in business language;
+  text people see is quoted exactly as the code has it. Promotion writes a normal spec to
+  `.specs/done/` (`Status: Baseline`, `Plan: _none_`, `Origin`, `Validated by`, a
+  `Technical Reference` of at most eight lines) — no retrospective plan, no parallel
+  lifecycle. Resumable from its files at any point.
 - `/sdd-setup` offers reverse specification once, at the end of the existing-software path,
   with recommended starting areas derived from the confirmed snapshot. Declining changes
   nothing; the wizard holds no reverse logic of its own.

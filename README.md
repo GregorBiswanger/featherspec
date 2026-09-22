@@ -137,9 +137,10 @@ contracts, or a technical plan that was built without a spec. Point it at a file
 a symbol, or let the wizard offer it after the scan. It first proposes a map of capabilities
 in your users' words — never one spec per class — then isolated scouts collect evidence for
 one capability at a time, and you are walked through the doubts only: conflicts first,
-uncertain behaviour next, the rest as quick confirmations. Code shows what the system does,
-not what was meant: nothing becomes a spec without a human's yes, a suspected bug becomes a
-question instead of a requirement, and what you confirm lands as a normal `Baseline` spec in
+uncertain behaviour next, the rest as quick confirmations. You are only asked whether the
+assistant understood what the software does today — never what it should do: nothing becomes
+a spec without a human's yes, whatever could harm or mislead a person is kept as a *finding*
+instead of a requirement, and what you confirm lands as a normal `Baseline` spec in
 `.specs/done/`. No retrospective plans, no repository-wide documentation dump — reconstruct
 what is about to change or must be protected, and defer the rest at no cost.
 

@@ -11,31 +11,71 @@ disable-model-invocation: true
 
 # /sdd-reverse-specify — Reverse Specification
 
-The reverse counterpart of `/sdd-specify`. `/sdd-specify` asks *what should the system do?*
-This command asks *what does the system already appear to do — and which of it is valid
-business behaviour?* Two truths govern every step: code shows what the system does, never
-what was meant; and nothing reconstructed becomes a specification without a human's yes.
+## Your role and the one outcome
+
+You work as a requirements engineer documenting an existing system for its product owner.
+The outcome is one Baseline spec per capability: what the system does **today**, in business
+language, confirmed by a person who knows it. The code shows what the system does, never
+what anyone meant. People confirm that you understood the system; how it *should* behave is
+never asked here — that is decided later, through `/sdd-specify`, starting from the
+Baseline. Why it matters: the person answering may be a trainee who cannot tell when a
+question drifts, and every later change is planned against what they sign — a wish stated
+as fact, or a surprise that got lost, misleads everyone after them.
+
+Done means: every rule and criterion describes behaviour the code has, and no belief or wish
+changed one; every behaviour that could harm or mislead a person is recorded as a
+*finding*; nothing became a spec without a person's yes; and no question asked for a value,
+limit, message or decision the system does not already have. Questions about the work
+itself — which capabilities, whose name, promote now? — stay the user's to answer.
 
 The user may name a target after the command — a file, folder, symbol, module, API or a
 technical plan. The target is the **analysis boundary, never the spec boundary**: one class
 may carry several capabilities, and one capability may span several classes.
 
 Speak plainly, in `DocLanguage`, throughout: assume the user has never seen this workflow.
-Every question and every gate opens with one short line saying why it is asked and what the
-answer changes; every term of art (capability, candidate, marker, scout) gets a one-clause
+Every gate opens with one short line saying why it is asked and what the answer changes;
+every term of art (capability, candidate, marker, scout, finding) gets a one-clause
 introduction on first use. One question per message. Never a code fence around a question.
+
+## What belongs in a Baseline — sort every observation into exactly one place
+
+Spec content is whatever an actor would notice if it were different: what they can do and
+see, a limit, a message, how long they wait, what happens to them when something fails —
+how many items fit in a basket, what a declined payment does to an order. How the system
+achieves it is not spec content. Here all of it is written as the system behaves **now**:
+
+- **Rule or criterion** — behaviour the code has, as an actor experiences it.
+- **Finding** — behaviour that could harm or mislead a person, or a missing check that lets
+  that happen: someone gets what is not theirs, loses what they entered, pays twice, is left
+  without an answer. Stated as what the person experiences, never as a guess at why, and a
+  finding whatever anyone replies. Torn between the two: harm → finding, otherwise rule.
+- **Evidence only** — how it is done: storage, libraries, retries, classes. Before filing
+  something here, ask what a person experiences because of it — state that survives a
+  failed step and is used again later is the classic hidden finding.
+- **Not here** — what should be: a value to choose, a limit to add, a decision to take.
+  That is the question of `/sdd-specify`, once someone decides to change the system.
+
+```text
+Rule:      BR-02 [Inferred] A member may borrow at most five books at the same time.
+Finding:   A member whose card has expired can still reserve a book; the reservation is
+           never handed out.          (not: "the pickup job skips expired cards")
+Finding:   A member can reserve any number of books — one member can block every copy.
+Evidence:  The loan list is cached in the browser.   → a pointer in ## Evidence, no text
+Not here:  How many days should the grace period be? → never asked
+```
 
 ## Where am I? (state router — the files decide, not the conversation)
 
 - No `.sdd-reverse/_worklist.md` → **Phase 0**, then **Phase A**; stop at the map gate.
 - A named target the worklist does not cover yet → Phase A on that target only; add its
   rows, keep the rest.
-- A row `validating` → offer to continue its validation (**Phase C**) or to leave it for
-  later; "later" is a full answer and moves on.
+- A row `validating` → offer to continue its validation (**Phase C**) or to leave it paused;
+  paused, go on with the next line.
+- A row `analyzed` → the lenses still missing (**Phase B**), then synthesis, then Phase C.
 - A row `pending` → **Phase B** for the highest-priority pending row — one capability per
   run unless the user asks for more — then synthesis, then Phase C.
 - A candidate the user calls sufficiently validated → **Phase D**.
-- No row `pending` or `validating` → the cleanup question, nothing else.
+- No row `pending`, `analyzed` or `validating` → the cleanup question, nothing else.
 
 Row status vocabulary: `pending | analyzed | validating | promoted | deferred | rejected`.
 
@@ -44,12 +84,12 @@ Row status vocabulary: `pending | analyzed | validating | promoted | deferred | 
 Three short points (~6 lines), before the first question, never on a resume:
 
 - **Value:** behaviour that today lives only in code becomes a spec the team has confirmed —
-  later changes start from known rules instead of rediscovery.
+  later changes start from known behaviour instead of rediscovery.
 - **Cost:** reading agents (scouts) open code in isolated contexts; every capability is one
   analysis round, and rounds cost time and tokens. Nothing is analysed before the map gate.
 - **Levers:** reconstruct what is about to change or must be protected; everything else
   stays `deferred` and costs nothing. The work resumes from its files at any point, and
-  validation can happen later, by anyone who knows the behaviour.
+  anyone who knows how the system behaves can confirm it, in a later session.
 
 ## Phase 0 — Scope and context
 
@@ -57,8 +97,8 @@ Three short points (~6 lines), before the first question, never on a resume:
   and confirmed in one line; a plan file switches to plan mode — `Origin: Reverse —
   Technical Plan`: the plan is evidence of the intended approach, the implementation is
   evidence of what was delivered, tests and contracts are further evidence. Where they
-  disagree, that is a conflict to show — never pick one. The plan stays historical
-  evidence; a retrospective plan is never written.
+  disagree, the statement says what was delivered, and the plan's version stands beside it
+  as a conflict. The plan stays historical evidence; a retrospective plan is never written.
 - **Without a target:** ask exactly one question — the whole application, or a specific
   area? The whole application is navigated through the `architecture:` snapshot in
   `AGENTS.md` and the `.architecture/` maps; if the snapshot is still `TBD`, say so and
@@ -129,7 +169,8 @@ discipline below · return at most five summary lines.
 | state | authz | failure | data) · evidence `path:line` · *Literal values* — every
 threshold, limit, default, rounding direction and message as written in the code, with
 evidence; where the code checks no upper or lower bound, say so · *Inputs and
-outputs* in business meaning, no field dumps · *Disagreements* — code vs test, code vs
+outputs* in business meaning, no field dumps · *Leftover state* — what stays stored after a
+failed or cancelled step, and where it is used again · *Disagreements* — code vs test, code vs
 comment, code vs plan, both pointers, neither chosen · *Unreferenced code* in scope
 (`path › symbol`, how checked) · *Open questions*.
 
@@ -148,12 +189,14 @@ comment, code vs plan, both pointers, neither chosen · *Unreferenced code* in s
 - The target bounds where you start, not where the capability ends: follow its flow to the
   touchpoints it needs, record them, stop there.
 
-After every scout return, set the worklist row to `analyzed` in the same change set.
+Once every lens of the capability has its report, set the worklist row to `analyzed` in the
+same change set.
 
 ## Synthesis — the candidate
 
-Read only this capability's reports. **Evidence probe first:** open three cited pointers —
-prefer literal values and anything plausible from names alone. A pointer that does not
+Read only this capability's reports and `_context.md`. **Evidence probe first:** open three
+cited pointers — prefer literal values and anything plausible from names alone — and the
+pointer behind every finding. A pointer that does not
 resolve, or does not support its statement, is a hard fail: fix or drop the statement,
 then probe again. A name-derived rule in a spec is inherited by every later change.
 
@@ -174,31 +217,40 @@ The body uses the document structure and the five criterion shapes of `/sdd-spec
 (`.claude/commands/sdd-specify.md` stays authoritative — this is a restatement): Summary ·
 Users and roles · Scope (in scope / out of scope: boundaries the code visibly draws) ·
 Functional flow · Business rules (`BR-NN`) · Error cases · Acceptance criteria (`AC-NNN`,
-**shall**, describing what *is*) · Assumptions · Open points — then `## Conflicts` and
-`## Evidence`. Headings are written in `DocLanguage`, except `## Conflicts`, `## Evidence` and
-`## Technical Reference`: commands find those by name. Promotion is then a move, not a rewrite.
+**shall**, describing what the system does today) · Assumptions (conditions outside the
+system, never a belief) · Open points — each line opens with one label in `DocLanguage`:
+*Finding* (closing with its pointer) · *Check* (for a developer) · *Wish* · *Removed*; only
+reviewed uncertainty keeps its marker instead — then `## Conflicts` and `## Evidence`.
+Headings are written in `DocLanguage`, except `## Conflicts`, `## Evidence` and
+`## Technical Reference`: commands find those by name. Promotion is then a move, not a
+rewrite.
 
 **State each behaviour once.** *Acceptance criteria* carry the testable behaviour;
 *Business rules* hold only what several criteria share — an invariant, a policy, a literal
-limit — and never repeat a criterion in other words. A small capability may need three
-criteria and no rule: length is not thoroughness, and every line is a line someone must
-validate. Implementation qualities — a secret in the source, a missing index, a slow path
-— are not behaviour an actor can observe: at most one line each under *Open points*.
+limit — and never repeat a criterion in other words. Summary, flow, scope and error cases
+add nothing new: each behaviour they mention also stands, by ID, as a rule or criterion. A
+small capability may need three criteria and no rule: length is not thoroughness, and every
+line is a line someone must confirm. Implementation qualities — a secret in the source, a
+missing index, a slow path — are not behaviour an actor can observe: at most one *Check*
+line each.
 
 **Markers.** Every business rule and every criterion carries exactly one, right after
 its ID. They are the whole vocabulary — never a percentage, a score or a probability:
 
 - `[Inferred]` — read in a reachable code body, unambiguous, and no source disagrees. A
   second agreeing source (test, contract, plan) is noted in *Evidence*.
-- `[Uncertain]` — there is evidence, but its functional meaning is unclear: sources
-  disagree, the behaviour looks accidental (dead branch, workaround, leftover), or only
-  names and comments hint at it. After the marker, say in half a sentence what makes it
-  uncertain — the brackets hold the marker word alone, never the reason.
-- `[Confirmed]` — a human validated it. Synthesis never writes this marker; only Phase C does.
+- `[Uncertain]` — the code alone does not settle what an actor experiences: sources
+  disagree, the outcome depends on something outside the repository (a setting, another
+  system), or only names and comments hint at it. After the marker, say in half a sentence
+  what makes it uncertain — the brackets hold the marker word alone, never the reason.
+  Behaviour that merely looks wrong and a check the code does not make are findings, not
+  `[Uncertain]`.
+- `[Confirmed]` — a person confirmed it. Synthesis never writes this marker; only Phase C
+  does. Findings carry no marker and no ID.
 
-**Language lint before writing.** A rule or criterion that names a class, method, file,
-table, endpoint, HTTP verb or status code — or a mechanism: where state is stored, a library,
-a build variant, a retry count, a fixed wait — is rewritten to the behaviour an actor can
+**Language lint before writing.** A rule, criterion or finding that names a class, method,
+file, table, endpoint, HTTP verb or status code — or a mechanism: where state is stored, a
+library, a build variant, a retry count, a fixed wait — is rewritten to what an actor can
 observe; a number stays only when an actor would notice a different value. The technology
 belongs in `## Evidence` (`| ID | Evidence | Second source |`, pointers only, each with its
 full path from the repository root — never pasted code). Two worked examples:
@@ -216,63 +268,91 @@ Text an actor sees — a message, a label, a button — is quoted in backticks e
 code has it, character for character: a later test asserts that string. Write `DocLanguage`
 in its own script; only a file slug is ever transliterated.
 
-**Never settle what only people can settle.**
+**Keep what the code does apart from what anyone meant.**
 
 - Sources disagree → one row in `## Conflicts` (`C-NN | sources | what each says, with
-  pointers`), the affected rule `[Uncertain]`. A conflict needs two sources that cannot
-  both be true — description vs code counts; a source that is merely silent or less
-  precise does not.
-- Rules and criteria are written from what the code does. A test shows what someone
-  expected: a test the code cannot satisfy is a conflict, never the source of an
-  `[Inferred]` statement.
-- Behaviour that looks like a bug, a workaround or legacy is written `[Uncertain]` with
-  the reason — never dropped, never stated as a rule.
-- Unreferenced code never becomes a rule or a criterion; it appears once under *Open
-  points* as a question.
+  pointers`); the statement says what the reachable code does, is `[Uncertain]` and names
+  the other source ("a test expects …"). A conflict needs two sources that cannot both be
+  true — description vs code counts; a source that is merely silent or less precise does not.
+- A test shows what someone expected: a test the code cannot satisfy is a conflict, never
+  the source of an `[Inferred]` statement.
+- Unreferenced code never becomes a rule, a criterion or a finding; it gets one *Check* line.
 - More than 25 criteria is a split proposal at the next gate, not a longer file.
 
 Set the row to `validating`, name the candidate path in its last column. Keep the session
-dashboard honest per `AGENTS.md`: one or two lines in `.memory-bank/activeContext.md` naming
-this command and the worklist — never candidate content, and nothing in `AGENTS.md` ever
-points into `.sdd-reverse/`.
+dashboard honest per `AGENTS.md`, and quiet: touch `.memory-bank/activeContext.md` only when
+a row changes status — one or two lines naming this command and the worklist, never
+candidate content, never after single answers. Nothing in `AGENTS.md` ever points into
+`.sdd-reverse/`.
 
-## Phase C — Validation (the second gate, step by step)
+## Phase C — Validation: check your understanding, not their intent
 
-Open with three lines: what was reconstructed (counts per marker and conflicts), that the
-user decides what is valid business behaviour, and that anyone who knows the behaviour may
-answer — a product owner for business rules, a developer for technical-domain rules. Two
-answers are always open: **unsure** settles one question as "don't know", and **later**
-parks the whole validation at any point — the row stays `validating`, and the candidate
-file keeps the state between sessions and between people.
+The person confirms that you understood the system — nothing more. Every question is about
+what the system does today; what it should do is the question of `/sdd-specify` and is not
+asked here, not even as a follow-up. Read the candidate and, to check an answer, the code
+the answer is about.
 
-Order: conflicts first, then `[Uncertain]`, each as one question per message; then
-`[Inferred]` in rounds of five to seven as **one** numbered confirmation — "confirm all, or
-name the numbers that are wrong or unsure". A question states the behaviour in plain
-words, where the evidence sits in one clause, and asks whether it is intended business
-behaviour. Ask about what an actor sees, does or decides; the language lint applies to every
-question, the two sides of a conflict included — when a mechanism decides the outcome, ask
-about the outcome. A doubt only running the code can settle (does a library fire this event?)
-is no question for people: it stays under *Open points* as a check for a developer, and the
-question asks only whether the behaviour is wanted. The
-user may **confirm**, **correct**, **reject** or stay **unsure**; for a conflict or a
-suspicious behaviour also offer what it might be: intended · bug · legacy · workaround ·
-undocumented exception · unknown.
+Open with a short paragraph in `DocLanguage`: what was reconstructed (rules and criteria per
+marker, findings); that you now check your understanding, and nothing about how the system
+should behave is decided here; and the four answers, as words in `DocLanguage` —
+**correct** · **not correct** · **don't know** · **pause** (German: stimmt · stimmt nicht ·
+weiß nicht · Pause). Any other reply to a statement counts as *don't know*; only the pause
+word stops the validation — the row stays `validating`, and the candidate keeps the state
+between sessions and between people. Anyone who knows how the system behaves may answer: a
+user, a product owner, a developer for technical-domain rules.
 
-Apply every answer to the candidate at once: confirmed → `[Confirmed]`; corrected → the
-corrected wording, `[Confirmed]`; rejected → removed, its ID never reused, one line under
-*Open points* naming it ("AC-004 rejected as not a business rule: …"); unsure → stays
-`[Uncertain]`, tagged `reviewed`.
-When the valid behaviour differs from what the code does — a bug verdict, or a correction
-the code contradicts — ask once to be sure, then write the valid behaviour as the rule and
-record under *Open points*: `Known deviation: the implementation does X (pointer) —
-declared <verdict> by <who>`. This command never changes code; a fix is normal future work
-through `/sdd-specify`. A reason the validator volunteers is kept with the rule,
-attributed; never ask for reasons unprompted.
+Order — a round or a list is one message:
 
-Ask once under which name the validation is recorded, offering `git config user.name` as
-the default; several validators are listed; no meaningful name → no line. Close with the
-question whether the user considers this capability sufficiently validated — a no leaves
-the candidate where it is.
+1. `[Uncertain]` statements, conflicts first — one per message.
+2. `[Inferred]` statements in rounds of five to seven, as **one** numbered message: "all
+   correct — or name the numbers that are not correct or you don't know".
+3. All findings in one message, for information — recorded so they are not lost, nothing to
+   decide — ending with the question under which name the validation is recorded
+   (`git config user.name` as the default; several names allowed; no meaningful name → no
+   line).
+4. Whether the person considers this capability sufficiently validated. A no leaves the
+   candidate where it is: say what remains and that the next run resumes it.
+
+A question states the behaviour in the present tense and asks whether that is how the person
+knows it. An `[Uncertain]` statement adds one plain clause on what makes it uncertain — "it
+depends on a setting outside the app", never which one. A statement, a conflict, and the
+follow-up after a bare "not correct":
+
+```text
+Today, a member with a loan 21 days overdue cannot borrow another book. Is that how you
+know it?
+Today, a reservation lapses after 7 days; a test expects 10. Is 7 days how you know it?
+What does the system do instead, as you know it?
+```
+
+**Check every question before sending it**, and rewrite it until all three hold:
+
+- It describes what the system does now — nothing about what it should do.
+- Someone who knows the system from using, supporting or owning it can answer it without
+  reading code: no file path, class, storage, library, setting name, status code or retry.
+- It asks for no value, message, limit, time span, rule or decision the system does not
+  already have — such a question is a finding, or it belongs to `/sdd-specify`.
+
+**Apply every answer to the candidate at once:**
+
+- *Correct* → `[Confirmed]`.
+- *Don't know* → `[Uncertain]`, whatever the marker was, with `reviewed` after it.
+- *Not correct* → unless the person already said, ask once what the system does instead, as
+  they know it. Treat that as a claim about today and look for it in the code — not only at
+  the cited pointer. A line that supports it: you misread — fix the statement,
+  `[Confirmed]`. None: remove the statement (its ID is never reused) and record a *Finding*
+  with both sides — "the system does X (pointer); <who> knows it as Y, or does not
+  recognise it; AC-009 removed". A belief never becomes a rule the code does not have.
+- Not business behaviour at all, says the person → remove it (its ID never reused) with one
+  *Removed* line naming the ID and why.
+- The person says what the system should do → verbatim as a *Wish*, attributed: input for
+  `/sdd-specify`, never a rule here, no follow-up. A reason the person volunteers stays with
+  its rule, attributed; never ask for reasons.
+- A reply to a finding never changes what it is: keep the comment beside it, attributed. If
+  the person calls it wrong, check its evidence; drop it only if you misread.
+
+Nothing from this dialogue goes into `AGENTS.md`: a reminder to stay with business behaviour
+restates this command.
 
 ## Phase D — Promotion to a normal Baseline spec
 
@@ -285,7 +365,8 @@ the user moves it to *Open points* as reviewed and unresolved. Then propose all 
   Reverse — Brownfield` (or `Reverse — Technical Plan`) · `**Validated by:** <names> ·
   <date>`. `Origin` is provenance only — from here on it is a normal spec.
 - Markers disappear when everything is confirmed. Reviewed, unresolved uncertainty stays
-  visible under *Open points*, each line keeping `[Uncertain]`.
+  visible under *Open points*, each line keeping `[Uncertain]`. A conflict still open becomes
+  a *Finding*; findings and wishes stay as written — a Baseline also says what surprised.
 - Replace `## Evidence` and `## Conflicts` by `## Technical Reference`, **≤ 8 lines**, paths
   and symbols only: architecture reference (`AGENTS.md` → module) · primary implementation
   (a path pattern) · main contract · deciding tests · in plan mode the historical plan ·
@@ -293,15 +374,20 @@ the user moves it to *Open points* as reviewed and unresolved. Then propose all 
   design history. The spec must read complete without the reports.
 - **Never write a plan**, never touch `backlog/` or `active/`: a Baseline lives in `done/`
   without one. A later change runs the normal flow — `/sdd-plan` reads the Technical Reference.
-- Delete the candidate and this capability's reports (this workflow's own files), set the
-  row to `promoted` with the spec path, add one line to `.memory-bank/activeContext.md`.
+- Delete this capability's workflow files by their exact paths —
+  `.sdd-reverse/candidates/<slug>.reverse-spec.md` and each
+  `.sdd-reverse/reports/<slug>.<lens>.md` — listing the folder rather than searching it:
+  editors often leave git-ignored folders out of search. Set the row to `promoted` with the
+  spec path, add one line to `.memory-bank/activeContext.md`.
 
-Hand off: name the file, what stayed open, and recommend `/sdd-clarify` on it in a fresh
-context — a Baseline needs that pass. Propose the commit (Ask-first, per `AGENTS.md`).
+Hand off: name the file and the findings and wishes it carries — changing any of them starts
+with `/sdd-specify`, which asks what should be. Recommend `/sdd-clarify` on the Baseline in a
+fresh context: a stranger's read finds wording that misleads. Propose the commit (Ask-first,
+per `AGENTS.md`).
 
 ## Cleanup
 
-When no row is `pending` or `validating`, ask once, in `DocLanguage`: "Delete the raw
-analysis in `.sdd-reverse/reports/`? (recommended)" — and, when no `deferred` row remains,
-the whole `.sdd-reverse/` folder. Deferred rows keep `_context.md` and `_worklist.md`
-alive: they are the memory of what was seen and not yet reconstructed.
+When no row is `pending`, `analyzed` or `validating`, ask once, in `DocLanguage`: "Delete
+the raw analysis in `.sdd-reverse/reports/`? (recommended)" — and, when no `deferred` row
+remains, the whole `.sdd-reverse/` folder. Deferred rows keep `_context.md` and
+`_worklist.md` alive: they are the memory of what was seen and not yet reconstructed.
