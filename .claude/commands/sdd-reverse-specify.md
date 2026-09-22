@@ -53,7 +53,9 @@ achieves it is not spec content. Here all of it is written as the system behaves
   something here, ask what a person experiences because of it — state that survives a
   failed step and is used again later is the classic hidden finding.
 - **Not here** — what should be: a value to choose, a limit to add, a decision to take.
-  That is the question of `/sdd-specify`, once someone decides to change the system.
+  That is the question of `/sdd-specify`, once someone decides to change the system. A wish
+  someone voices anyway, in any phase, is kept verbatim as a *Wish*, attributed — never a
+  rule, never the reason inside a finding.
 
 ```text
 Rule:      BR-02 [Inferred] A member may borrow at most five books at the same time.
@@ -170,7 +172,8 @@ discipline below · return at most five summary lines.
 threshold, limit, default, rounding direction and message as written in the code, with
 evidence; where the code checks no upper or lower bound, say so · *Inputs and
 outputs* in business meaning, no field dumps · *Leftover state* — what stays stored after a
-failed or cancelled step, and where it is used again · *Disagreements* — code vs test, code vs
+failed or cancelled step, where it is used again, and what that later use does for each way
+the step can fail · *Disagreements* — code vs test, code vs
 comment, code vs plan, both pointers, neither chosen · *Unreferenced code* in scope
 (`path › symbol`, how checked) · *Open questions*.
 
@@ -195,10 +198,16 @@ same change set.
 ## Synthesis — the candidate
 
 Read only this capability's reports and `_context.md`. **Evidence probe first:** open three
-cited pointers — prefer literal values and anything plausible from names alone — and the
-pointer behind every finding. A pointer that does not
-resolve, or does not support its statement, is a hard fail: fix or drop the statement,
-then probe again. A name-derived rule in a spec is inherited by every later change.
+cited pointers — prefer literal values, conditions you worded yourself (only if, as soon as,
+after) and anything plausible from names alone — and the pointer behind every finding. A
+pointer that does not resolve, or does not support its statement, is a hard fail: fix or
+drop the statement, then probe again. A name-derived rule in a spec is inherited by every
+later change.
+
+**Follow leftover state.** For each item under *Leftover state*, take every way the step can
+fail — each rejection reason on its own — to the next place that uses the state, and write
+down what the person then experiences. Something rejected that is later used as if it had
+been accepted is a finding.
 
 Write `.sdd-reverse/candidates/<capability-slug>.reverse-spec.md`, in `DocLanguage`:
 
@@ -329,14 +338,16 @@ What does the system do instead, as you know it?
 
 - It describes what the system does now — nothing about what it should do.
 - Someone who knows the system from using, supporting or owning it can answer it without
-  reading code: no file path, class, storage, library, setting name, status code or retry.
+  reading code: no file path, class, server, storage, library, setting name, status code or
+  retry.
 - It asks for no value, message, limit, time span, rule or decision the system does not
   already have — such a question is a finding, or it belongs to `/sdd-specify`.
 
 **Apply every answer to the candidate at once:**
 
 - *Correct* → `[Confirmed]`.
-- *Don't know* → `[Uncertain]`, whatever the marker was, with `reviewed` after it.
+- *Don't know* → `[Uncertain] reviewed`, whatever the marker was — the word after the
+  brackets, never inside.
 - *Not correct* → unless the person already said, ask once what the system does instead, as
   they know it. Treat that as a claim about today and look for it in the code — not only at
   the cited pointer. A line that supports it: you misread — fix the statement,
@@ -345,9 +356,8 @@ What does the system do instead, as you know it?
   recognise it; AC-009 removed". A belief never becomes a rule the code does not have.
 - Not business behaviour at all, says the person → remove it (its ID never reused) with one
   *Removed* line naming the ID and why.
-- The person says what the system should do → verbatim as a *Wish*, attributed: input for
-  `/sdd-specify`, never a rule here, no follow-up. A reason the person volunteers stays with
-  its rule, attributed; never ask for reasons.
+- The person says what the system should do → a *Wish*, as above; no follow-up. A reason the
+  person volunteers stays with its rule, attributed; never ask for reasons.
 - A reply to a finding never changes what it is: keep the comment beside it, attributed. If
   the person calls it wrong, check its evidence; drop it only if you misread.
 
