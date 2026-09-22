@@ -205,10 +205,10 @@ same change set.
 Read only this capability's reports and `_context.md`. **Evidence probe first:** open three
 cited pointers — prefer literal values, conditions you worded yourself (only if, as soon as,
 after) or left out (a statement without one claims "always"), and anything plausible from
-names alone — and the pointer behind every finding. A
-pointer that does not resolve, or does not support its statement, is a hard fail: fix or
-drop the statement, then probe again. A name-derived rule in a spec is inherited by every
-later change.
+names alone — and the pointer behind every finding. A pointer that does not resolve from the
+repository root, or does not support its statement, is a hard fail: fix or drop the
+statement, then probe again. A name-derived rule in a spec is inherited by every later
+change.
 
 **Follow leftover state.** For each item under *Leftover state*, take every way the step can
 fail — each rejection reason on its own — to the next place that uses the state, and write
