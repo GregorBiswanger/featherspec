@@ -35,7 +35,9 @@ may carry several capabilities, and one capability may span several classes.
 Speak plainly, in `DocLanguage`, throughout: assume the user has never seen this workflow.
 Every gate opens with one short line saying why it is asked and what the answer changes;
 every term of art (capability, candidate, marker, scout, finding) gets a one-clause
-introduction on first use. One question per message. Never a code fence around a question.
+introduction on first use. Progress notes too stay in `DocLanguage` and business words —
+paths and code terms live in the files. One question per message. Never a code fence around
+a question.
 
 ## What belongs in a Baseline — sort every observation into exactly one place
 
@@ -172,10 +174,10 @@ discipline below · return at most five summary lines.
 threshold, limit, default, rounding direction and message as written in the code, with
 evidence; where the code checks no upper or lower bound, say so · *Inputs and
 outputs* in business meaning, no field dumps · *Leftover state* — what stays stored after a
-failed or cancelled step, where it is used again, and what that later use does for each way
-the step can fail · *Disagreements* — code vs test, code vs
-comment, code vs plan, both pointers, neither chosen · *Unreferenced code* in scope
-(`path › symbol`, how checked) · *Open questions*.
+failed or cancelled step, where it is used again, and — for each way the step can fail, one
+by one — what that later use then does, followed to its end on every side · *Disagreements*
+— code vs test, code vs comment, code vs plan, both pointers, neither chosen · *Unreferenced
+code* in scope (`path › symbol`, how checked) · *Open questions*.
 
 **Discipline (binds scouts and the sequential fallback alike):**
 
@@ -206,8 +208,9 @@ later change.
 
 **Follow leftover state.** For each item under *Leftover state*, take every way the step can
 fail — each rejection reason on its own — to the next place that uses the state, and write
-down what the person then experiences. Something rejected that is later used as if it had
-been accepted is a finding.
+down what the person then experiences. Decide each case from the code of that later use, not
+from how it looks: a later use that succeeds with rejected data is the dangerous case, and
+something rejected that is later used as if it had been accepted is a finding.
 
 Write `.sdd-reverse/candidates/<capability-slug>.reverse-spec.md`, in `DocLanguage`:
 
@@ -260,7 +263,9 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
 **Language lint before writing.** A rule, criterion or finding that names a class, method,
 file, table, endpoint, HTTP verb or status code — or a mechanism: where state is stored, a
 library, a build variant, a retry count, a fixed wait — is rewritten to what an actor can
-observe; a number stays only when an actor would notice a different value. The technology
+observe; a number stays only when an actor would notice a different value. Where behaviour
+differs by build or environment, state what people using the released system experience;
+the other variant is a *Check* for a developer. The technology
 belongs in `## Evidence` (`| ID | Evidence | Second source |`, pointers only, each with its
 full path from the repository root — never pasted code). Two worked examples:
 
@@ -338,8 +343,8 @@ What does the system do instead, as you know it?
 
 - It describes what the system does now — nothing about what it should do.
 - Someone who knows the system from using, supporting or owning it can answer it without
-  reading code: no file path, class, server, storage, library, setting name, status code or
-  retry.
+  reading code: no file path, class, server, storage, library, setting name, build or
+  version, status code, retry or attempt count.
 - It asks for no value, message, limit, time span, rule or decision the system does not
   already have — such a question is a finding, or it belongs to `/sdd-specify`.
 
