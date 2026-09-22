@@ -32,7 +32,8 @@ The user may name a target after the command — a file, folder, symbol, module,
 technical plan. The target is the **analysis boundary, never the spec boundary**: one class
 may carry several capabilities, and one capability may span several classes.
 
-Speak plainly, in `DocLanguage`, throughout: assume the user has never seen this workflow.
+Speak plainly, in `DocLanguage` from your first word (read it from `AGENTS.md` before you
+write anything), throughout: assume the user has never seen this workflow.
 Every gate opens with one short line saying why it is asked and what the answer changes;
 every term of art (capability, candidate, marker, scout, finding) gets a one-clause
 introduction on first use. Progress notes too stay in `DocLanguage` and business words —
@@ -208,9 +209,11 @@ later change.
 
 **Follow leftover state.** For each item under *Leftover state*, take every way the step can
 fail — each rejection reason on its own — to the next place that uses the state, and write
-down what the person then experiences. Decide each case from the code of that later use, not
-from how it looks: a later use that succeeds with rejected data is the dangerous case, and
-something rejected that is later used as if it had been accepted is a finding.
+down what the person then experiences — what they see, and what their actions change for
+others. Decide each case from the code of that later use, not from how it looks: a later use
+that succeeds with rejected data is the dangerous case, and something rejected that is later
+used as if it had been accepted is a finding. When one outcome has several triggers (opening
+the app, a lost connection), state each on its own, with its own conditions.
 
 Write `.sdd-reverse/candidates/<capability-slug>.reverse-spec.md`, in `DocLanguage`:
 
@@ -263,9 +266,10 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
 **Language lint before writing.** A rule, criterion or finding that names a class, method,
 file, table, endpoint, HTTP verb or status code — or a mechanism: where state is stored, a
 library, a build variant, a retry count, a fixed wait — is rewritten to what an actor can
-observe; a number stays only when an actor would notice a different value. Where behaviour
-differs by build or environment, state what people using the released system experience;
-the other variant is a *Check* for a developer. The technology
+observe; a number stays only when an actor would notice a different value. Never name a
+build or environment in a statement or a question: for people using the released system
+"in production" is always true, so state what they experience and drop the condition — the
+other variant is a *Check* for a developer. The technology
 belongs in `## Evidence` (`| ID | Evidence | Second source |`, pointers only, each with its
 full path from the repository root — never pasted code). Two worked examples:
 
@@ -328,9 +332,10 @@ Order — a round or a list is one message:
    candidate where it is: say what remains and that the next run resumes it.
 
 A question states the behaviour in the present tense and asks whether that is how the person
-knows it. An `[Uncertain]` statement adds one plain clause on what makes it uncertain — "it
-depends on a setting outside the app", never which one. A statement, a conflict, and the
-follow-up after a bare "not correct":
+knows it — in a round too: "the system refuses", never the criterion's *shall* form. An
+`[Uncertain]` statement adds one plain clause on what makes it uncertain — "it depends on a
+setting outside the app", never which one. A statement, a conflict, and the follow-up after a
+bare "not correct":
 
 ```text
 Today, a member with a loan 21 days overdue cannot borrow another book. Is that how you
