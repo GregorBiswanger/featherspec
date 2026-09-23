@@ -22,7 +22,10 @@ docs fixes that are safe to overwrite.
   technical module is never a spec boundary), sends isolated `sdd-reverse-scout` agents to
   collect evidence for one capability at a time, and writes a temporary
   `.sdd-reverse/candidates/*.reverse-spec.md` whose rules carry `[Inferred]` or `[Uncertain]`
-  — never a percentage. Validation checks understanding, never intent: each question states
+  — never a percentage. Before anyone sees the candidate, a check scout tries to prove every
+  rule, criterion and finding wrong in the code, and synthesis walks its reports once more so
+  that no limit, rounding direction, ordering or unchecked bound is left behind.
+  Validation checks understanding, never intent: each question states
   what the system does today and asks whether that is how the person knows it — conflicts
   first, uncertain behaviour next, inferred behaviour as batched confirmations; nobody is
   asked what the system should do, and `[Confirmed]` comes from a human alone. Behaviour that
