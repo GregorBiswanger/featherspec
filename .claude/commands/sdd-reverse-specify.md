@@ -166,7 +166,7 @@ never large parts of the repository.
 Every delegation restates for the scout (its context is fresh): the capability, actor,
 entry points and spans · the lens · the report path
 `.sdd-reverse/reports/<capability-slug>.<lens>.md` (lens slug: `flow` | `rules` | `tests` |
-`all`) · `DocLanguage` · the schema and the
+`all` | `check`) · `DocLanguage` · the schema and the
 discipline below · return at most five summary lines.
 
 **Report schema (≤ 120 lines):** header lines `capability:`, `lens:`, `full reads: n/cap` ·
@@ -300,6 +300,22 @@ in its own script; only a file slug is ever transliterated.
   behaviour is a finding too.
 - Unreferenced code never becomes a rule, a criterion or a finding; it gets one *Check* line.
 - More than 25 criteria is a split proposal at the next gate, not a longer file.
+
+**Cover the reports.** Walk the reports once more against the candidate: every *Observed
+behaviour* and every *Literal value* — each limit, threshold, rounding direction, ordering,
+default, message, and every bound the code does not check — now sits in a rule, a criterion,
+a finding or `## Evidence`. Anything you leave out gets one line under *Open points* saying
+why. A limit or an ordering an actor would notice belongs in a rule or criterion, never only
+in the flow text.
+
+**Then try to prove it wrong.** Before anyone sees the candidate, dispatch one more scout —
+lens `check`, with the candidate's path — that tries to prove every rule, criterion and finding
+false in the code: a condition missing or wrong, an order, a trigger not covered, a
+consequence that goes further than written. It opens every evidence pointer too and names the
+ones that do not resolve from the repository root. It reports per ID *holds*, *wrong* or
+*narrower*, each with its line; fix the candidate from that report, and decide a finding you
+add or rewrite because of it from the code of that later use, like any other. Without
+delegation, do this pass yourself in a fresh turn, reading only the code the pointers name.
 
 Set the row to `validating`, name the candidate path in its last column. Keep the session
 dashboard honest per `AGENTS.md`, and quiet: touch `.memory-bank/activeContext.md` only when
