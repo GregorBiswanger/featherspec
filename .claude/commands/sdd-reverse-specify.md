@@ -325,6 +325,9 @@ ones that do not resolve from the repository root. It reports per ID *holds*, *w
 *narrower*, each with its line; fix the candidate from that report, and decide a finding you
 add or rewrite because of it from the code of that later use, like any other. Without
 delegation, do this pass yourself in a fresh turn, reading only the code the pointers name.
+A narrower statement is still written in what a person notices: the condition gets sharper,
+the words do not get more technical — "if the trainer stops the exercise", not "if the client
+gets the stop event".
 Renumber last: until a person has seen the candidate, IDs are yours to close up, and the one
 it goes out with runs without a gap. From the first question on they are fixed — a dropped ID
 is never reused and leaves its line under *Open points*.
@@ -429,9 +432,13 @@ the user moves it to *Open points* as reviewed and unresolved. Then propose all 
   `.claude/rules/specs.md`: `**Status:** Baseline` · `**Plan:** _none_` · `**Origin:**
   Reverse — Brownfield` (or `Reverse — Technical Plan`) · `**Validated by:** <names> ·
   <date>`. `Origin` is provenance only — from here on it is a normal spec.
-- Markers disappear when everything is confirmed. Reviewed, unresolved uncertainty stays
-  visible under *Open points*, each line keeping `[Uncertain]`. A conflict still open becomes
-  a *Finding*; findings and wishes stay as written — a Baseline also says what surprised.
+- Promotion is a move, not a rewrite: every rule and criterion keeps its place. Markers
+  disappear from all of them — the ones a person confirmed and the ones only the code carries
+  — because the code settles both, and the line below is what tells them apart. Only a
+  statement the code itself does not settle moves under *Open points*, keeping `[Uncertain]`.
+  A conflict still open becomes a *Finding*; findings and wishes stay as written — a Baseline
+  also says what surprised. Thinning the rules because one person did not know a case is the
+  one mistake to avoid here: what the code settles belongs above, whoever happened to know it.
 - One line under *Open points* says how far the validation reached: which IDs a person
   confirmed, and which no one confirmed because nobody knew the case or nobody could have
   seen it — those rest on the code alone. Without that line a reader cannot tell the two
