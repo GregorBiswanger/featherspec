@@ -116,7 +116,8 @@ Three short points (~6 lines), before the first question, never on a resume:
   question usually suffices: what is this area for?
 
 Write `.sdd-reverse/_context.md` (≤ 40 lines, `DocLanguage`): mode, target, origin, the
-description with a source per statement, inclusions and exclusions. Its first line says it
+description with a source per statement, inclusions and exclusions. Count the lines before
+you write and shorten the description until it fits; 41 is over. Its first line says it
 is a hypothesis: the description and the code are two sources of evidence that may disagree.
 
 ## Phase A — Capability map (cheap: no deep reading yet)
@@ -237,8 +238,9 @@ Users and roles · Scope (in scope / out of scope: boundaries the code visibly d
 Functional flow · Business rules (`BR-NN`) · Error cases · Acceptance criteria (`AC-NNN`,
 **shall**, describing what the system does today) · Assumptions (conditions outside the
 system, never a belief) · Open points — each line opens with one label in `DocLanguage`:
-*Finding* (closing with its pointer) · *Check* (for a developer) · *Wish* · *Removed*; only
-reviewed uncertainty keeps its marker instead — then `## Conflicts` and `## Evidence`.
+*Finding* (closing with its pointer) · *Check* (for a developer) · *Wish* · *Removed* — one
+of these four, followed by a colon, never a label of your own; only reviewed uncertainty
+keeps its marker instead — then `## Conflicts` and `## Evidence`.
 Headings are written in `DocLanguage`, except `## Conflicts`, `## Evidence` and
 `## Technical Reference`: commands find those by name. Promotion is then a move, not a
 rewrite.
@@ -260,7 +262,9 @@ its ID. They are the whole vocabulary — never a percentage, a score or a proba
 - `[Uncertain]` — the code alone does not settle what an actor experiences: sources
   disagree, the outcome depends on something outside the repository (a setting, another
   system), or only names and comments hint at it. After the marker, say in half a sentence
-  what makes it uncertain — the brackets hold the marker word alone, never the reason.
+  what makes it uncertain — the brackets hold the marker word alone, never the reason:
+  `BR-02 [Uncertain] A bill is only split from two people on — a test in this repository
+  expects one person to be answered.`, never `BR-02 [Uncertain — a test expects …]`.
   Behaviour that merely looks wrong and a check the code does not make are findings, not
   `[Uncertain]` — unless another source disagrees with the code: then it is a conflict first.
 - `[Confirmed]` — a person confirmed it. Synthesis never writes this marker; only Phase C
@@ -274,7 +278,8 @@ build or environment in a statement or a question: for people using the released
 "in production" is always true, so state what they experience and drop the condition — the
 other variant is a *Check* for a developer. The technology
 belongs in `## Evidence` (`| ID | Evidence | Second source |`, pointers only, each with its
-full path from the repository root — never pasted code). Two worked examples:
+full path from the repository root — never pasted code). Every pointer carries that full
+path, a repeated file included; a bare file name is a defect. Two worked examples:
 
 ```text
 Bad:  AC-004 [Inferred] OrderController.Approve returns 403 when user.Role != "Manager".
@@ -283,6 +288,10 @@ Good: AC-004 [Inferred] If someone other than a manager tries to approve an orde
 Bad:  AC-012 [Inferred] The token sits in localStorage; a 30-minute setTimeout clears it.
 Good: AC-012 [Inferred] If a signed-in person does nothing for 30 minutes, then the system
       shall sign them out.                       (Evidence: src/auth/session.ts:22)
+Bad:  AC-013 [Inferred] On reconnect the client retries 60 times at one-second intervals.
+Good: AC-013 [Inferred] If the meeting no longer exists, then the system shall go on trying
+      to rejoin for about a minute and then stop without a message.
+                                                 (Evidence: src/app/meeting.service.ts:37)
 ```
 
 Text an actor sees — a message, a label, a button — is quoted in backticks exactly as the
@@ -316,6 +325,9 @@ ones that do not resolve from the repository root. It reports per ID *holds*, *w
 *narrower*, each with its line; fix the candidate from that report, and decide a finding you
 add or rewrite because of it from the code of that later use, like any other. Without
 delegation, do this pass yourself in a fresh turn, reading only the code the pointers name.
+Renumber last: until a person has seen the candidate, IDs are yours to close up, and the one
+it goes out with runs without a gap. From the first question on they are fixed — a dropped ID
+is never reused and leaves its line under *Open points*.
 
 Set the row to `validating`, name the candidate path in its last column. Keep the session
 dashboard honest per `AGENTS.md`, and quiet: touch `.memory-bank/activeContext.md` only when
@@ -345,7 +357,9 @@ Order — a round or a list is one message:
 2. `[Inferred]` statements in rounds of five to seven, as **one** numbered message: "all
    correct — or name the numbers that are not correct or you don't know".
 3. All findings in one message, for information — recorded so they are not lost, nothing to
-   decide — ending with the question under which name the validation is recorded
+   decide. The same message lists, one line each, the statements no one can have seen: they
+   are carried by the code and their evidence, and showing them is their review. It ends
+   with the question under which name the validation is recorded
    (`git config user.name` as the default; several names allowed; no meaningful name → no
    line).
 4. Whether the person considers this capability sufficiently validated. A no leaves the
@@ -364,20 +378,31 @@ Today, a reservation lapses after 7 days; a test expects 10. Is 7 days how you k
 What does the system do instead, as you know it?
 ```
 
-**Check every question before sending it**, and rewrite it until all three hold:
+**Check every question before sending it**, and rewrite it until all four hold:
 
 - It describes what the system does now — nothing about what it should do.
-- Someone who knows the system from using, supporting or owning it can answer it without
-  reading code: no file path, class, server, storage, library, setting name, build or
-  version, status code, retry or attempt count.
+- Name to yourself where this person would have met it: which screen, which moment, what
+  they saw or did not see. No such place — nothing anyone looks at differs, or only a
+  developer or another program would notice (where something is kept, the order two things
+  happen in, a number of attempts, a span in which nothing changes, a file path, class,
+  server, library, setting name, build or version, status code) — then it is no question.
+- It would have been this person's own screen. What only another role sees — a trainer's
+  list for a participant — is asked of that role or left as it is; silence is no agreement.
 - It asks for no value, message, limit, time span, rule or decision the system does not
   already have — such a question is a finding, or it belongs to `/sdd-specify`.
+
+A count, an interval or a duration never appears in a question: ask about what the person
+notices — "it keeps trying for a while and then stops without a word" — and leave the figure
+in the candidate with its pointer. A statement that fails the second or third check is not
+dropped and not weakened: it stays as it is, on its evidence, and goes into the findings
+message as carried by the code.
 
 **Apply every answer to the candidate at once:**
 
 - *Correct* → `[Confirmed]`.
-- *Don't know* → `[Uncertain] reviewed`, whatever the marker was — the word after the
-  brackets, never inside.
+- *Don't know* → the statement keeps the marker it has and gains the word `reviewed` after
+  the brackets, never inside: that someone has not met a case says nothing about how clearly
+  the code settles it. Markers report the code, never how far the validation reached.
 - *Not correct* → unless the person already said, ask once what the system does instead, as
   they know it. Treat that as a claim about today and look for it in the code — not only at
   the cited pointer. A line that supports it: you misread — fix the statement,
@@ -407,8 +432,13 @@ the user moves it to *Open points* as reviewed and unresolved. Then propose all 
 - Markers disappear when everything is confirmed. Reviewed, unresolved uncertainty stays
   visible under *Open points*, each line keeping `[Uncertain]`. A conflict still open becomes
   a *Finding*; findings and wishes stay as written — a Baseline also says what surprised.
-- Replace `## Evidence` and `## Conflicts` by `## Technical Reference`, **≤ 8 lines**, paths
-  and symbols only: architecture reference (`AGENTS.md` → module) · primary implementation
+- One line under *Open points* says how far the validation reached: which IDs a person
+  confirmed, and which no one confirmed because nobody knew the case or nobody could have
+  seen it — those rest on the code alone. Without that line a reader cannot tell the two
+  apart.
+- Replace `## Evidence` and `## Conflicts` by `## Technical Reference`, **≤ 8 lines** — one
+  line per entry, so shorten or drop an entry rather than let it wrap — paths and symbols
+  only: architecture reference (`AGENTS.md` → module) · primary implementation
   (a path pattern) · main contract · deciding tests · in plan mode the historical plan ·
   `analysed at <hash> · <date>`. No directory trees, no code walkthroughs, no invented
   design history. The spec must read complete without the reports.

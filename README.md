@@ -131,18 +131,19 @@ a requirement, or you — and stays **unknown** when none does, instead of being
 plausible guess that the next session inherits as fact. Where two documents give the assistant
 incompatible reasons for the same thing, it keeps both and picks neither. You are asked about
 an unknown reason once, bundled at the end of the scan, and "later" is a complete answer.
-**And the behaviour itself?** The fingerprint says *where* things are;
-`/sdd-reverse-specify` recovers *what the software already does* — from code, tests,
-contracts, or a technical plan that was built without a spec. Point it at a file, a folder or
-a symbol, or let the wizard offer it after the scan. It first proposes a map of capabilities
-in your users' words — never one spec per class — then isolated scouts collect evidence for
-one capability at a time, and you are walked through the doubts only: conflicts first,
-uncertain behaviour next, the rest as quick confirmations. You are only asked whether the
-assistant understood what the software does today — never what it should do: nothing becomes
-a spec without a human's yes, whatever could harm or mislead a person is kept as a *finding*
-instead of a requirement, and what you confirm lands as a normal `Baseline` spec in
-`.specs/done/`. No retrospective plans, no repository-wide documentation dump — reconstruct
-what is about to change or must be protected, and defer the rest at no cost.
+**And the behaviour itself?** The fingerprint says *where* things are; `/sdd-reverse-specify`
+recovers *what the software already does* — from code, tests, contracts, or a technical plan
+that was built without a spec. Point it at a file, a folder or a symbol, or let the wizard offer
+it after the scan. It first proposes a map of capabilities in your users' words — never one spec
+per class — then isolated scouts collect evidence for one capability at a time, and you are
+walked through the doubts only: conflicts first, uncertain behaviour next, the rest as quick
+confirmations. You are only asked whether the assistant understood what the software does today
+— never what it should do, and never about something you could not have seen: a retry count or a
+stored value is shown, not asked. Nothing becomes a spec without a human's yes, whatever could
+harm or mislead a person is kept as a *finding* instead of a requirement, and what you confirm
+lands as a normal `Baseline` spec in `.specs/done/`. No retrospective plans, no repository-wide
+documentation dump — reconstruct what is about to change or must be protected, and defer the
+rest at no cost.
 
 The full walkthrough lives in the wiki:
 [Adopting an Existing Codebase](https://github.com/GregorBiswanger/featherspec/wiki/Adopting-an-Existing-Codebase).

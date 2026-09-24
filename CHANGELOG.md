@@ -28,7 +28,12 @@ docs fixes that are safe to overwrite.
   Validation checks understanding, never intent: each question states
   what the system does today and asks whether that is how the person knows it — conflicts
   first, uncertain behaviour next, inferred behaviour as batched confirmations; nobody is
-  asked what the system should do, and `[Confirmed]` comes from a human alone. Behaviour that
+  asked what the system should do, and `[Confirmed]` comes from a human alone. Nor is anyone
+  asked about what they could not have seen — a retry count, a stored value, the order two
+  things happen in: those are shown, not asked, and stay in the spec on their evidence. A
+  marker reports how clearly the code settles a statement, never how much of it a person
+  recognised, so "don't know" leaves it as it is and the promoted spec says in one line which
+  IDs a person confirmed and which rest on the code alone. Behaviour that
   could harm or mislead a person, and checks the code does not make, become *findings*
   stated as their consequence — never a rule; so does a belief the code contradicts.
   Conflicts between description, plan, tests and code are shown, never resolved silently;
