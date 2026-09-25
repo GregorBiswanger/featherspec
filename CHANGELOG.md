@@ -41,7 +41,10 @@ docs fixes that are safe to overwrite.
   text people see is quoted exactly as the code has it. Promotion writes a normal spec to
   `.specs/done/` (`Status: Baseline`, `Plan: _none_`, `Origin`, `Validated by`, a
   `Technical Reference` of at most eight lines) — no retrospective plan, no parallel
-  lifecycle. Resumable from its files at any point.
+  lifecycle. A `Clarified:` line records the `/sdd-clarify` read that is due before a change
+  is planned against a Baseline, and `/sdd-plan` refuses to plan one without it. Scouts never
+  copy a password, token, key or connection string out of the code — the place becomes a
+  developer check instead. Resumable from its files at any point.
 - `/sdd-setup` offers reverse specification once, at the end of the existing-software path,
   with recommended starting areas derived from the confirmed snapshot. Declining changes
   nothing; the wizard holds no reverse logic of its own.

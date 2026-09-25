@@ -226,8 +226,9 @@ capabilities and reconstruct them as specifications?"
 Recommend where to start, from the confirmed snapshot alone — the raw scan files may
 already be gone: modules carrying a `map:` reference (deep tier: central or high-churn), and
 areas whose knowledge records in `.memory-bank/systemPatterns.md` carry an `unknown`
-rationale touching security, compliance or data integrity. Name three to five areas, each
-with half a sentence of reason, and offer exactly three answers:
+rationale touching security, compliance or data integrity. Name at most five areas — only as
+many as the snapshot carries, and say so plainly when that is one or none — each with half a
+sentence of reason, and offer exactly three answers:
 
 - **The recommended areas** → run the `/sdd-reverse-specify` workflow yourself, exactly as
   if the user had typed it with those areas as targets (its body lives in

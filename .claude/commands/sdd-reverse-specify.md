@@ -72,6 +72,8 @@ Not here:  How many days should the grace period be? → never asked
 ## Where am I? (state router — the files decide, not the conversation)
 
 - No `.sdd-reverse/_worklist.md` → **Phase 0**, then **Phase A**; stop at the map gate.
+- A row `proposed` → back to the **map gate**: the map was written down but never confirmed,
+  and nothing is analysed before it is.
 - A named target the worklist does not cover yet → Phase A on that target only; add its
   rows, keep the rest.
 - A row `validating` → offer to continue its validation (**Phase C**) or to leave it paused;
@@ -82,7 +84,8 @@ Not here:  How many days should the grace period be? → never asked
 - A candidate the user calls sufficiently validated → **Phase D**.
 - No row `pending`, `analyzed` or `validating` → the cleanup question, nothing else.
 
-Row status vocabulary: `pending | analyzed | validating | promoted | deferred | rejected`.
+Row status vocabulary: `proposed | pending | analyzed | validating | promoted | deferred |
+rejected`.
 
 ## On a fresh start — say what this buys and costs (once, in `DocLanguage`)
 
@@ -134,10 +137,18 @@ read, change and delete of one thing into one capability unless they differ in a
 rules. Technical modules are never capabilities; record per row which entry points and
 modules the capability spans.
 
+Every row's file slug is unique in the worklist — two capabilities that normalise to the
+same slug (the same verb and object for another actor or area) get the row number appended,
+so reports and candidates never overwrite each other and cleanup never hits the wrong file.
+
 Write `.sdd-reverse/_worklist.md`: a table with columns #, Capability, Actor, Entry
 points, Spans, Priority, Status, Candidate — column names and status values stay in English,
 commands read them; cells are in `DocLanguage`. Priority: what the user called about to change
 or to be protected first, then the snapshot's central or high-churn modules.
+
+Until the gate below is answered, every row's Status is `proposed`: written down so the map
+survives a lost session, but not yet work to do. The answer turns the accepted rows into
+`pending` in the same write.
 
 **Map gate (the first of two gates).** One line on what the list is (a guess at what the
 software lets people do), one on why the user decides (only people know what counts as one
@@ -174,7 +185,9 @@ discipline below · return at most five summary lines.
 *Observed behaviours* — one line each: the behaviour in domain language · kind (flow | rule
 | state | authz | failure | data) · evidence `path:line` · *Literal values* — every
 threshold, limit, default, rounding direction and message as written in the code, with
-evidence; where the code checks no upper or lower bound, say so · *Inputs and
+evidence; where the code checks no upper or lower bound, say so. **Never a secret:** a
+password, token, key, certificate or connection string is never copied, not even shortened —
+name the place as a *Check* for a developer and move on · *Inputs and
 outputs* in business meaning, no field dumps · *Leftover state* — what stays stored after a
 failed or cancelled step, where it is used again, and — for each way the step can fail, one
 by one — what that later use then does, followed to its end on every side · *Disagreements*
@@ -228,7 +241,7 @@ Write `.sdd-reverse/candidates/<capability-slug>.reverse-spec.md`, in `DocLangua
 > Continue with /sdd-reverse-specify.
 
 **Status:** Reverse candidate
-**Origin:** Reverse — Brownfield
+**Origin:** <as `_context.md` records it: Reverse — Brownfield or Reverse — Technical Plan>
 **Analyzed at:** <short commit hash, or "no commit"> · <date>
 ```
 
@@ -394,9 +407,13 @@ What does the system do instead, as you know it?
 - It asks for no value, message, limit, time span, rule or decision the system does not
   already have — such a question is a finding, or it belongs to `/sdd-specify`.
 
-A count, an interval or a duration never appears in a question: ask about what the person
-notices — "it keeps trying for a while and then stops without a word" — and leave the figure
-in the candidate with its pointer. A statement that fails the second or third check is not
+A count, an interval or a duration belongs in a question only when the person could have seen
+that very figure: 21 days on the overdue notice, five books on the shelf, four digits in the
+code they type. When only the behaviour around it is visible and the figure itself is not —
+it keeps trying for a while and then stops without a word, something stays somewhere for a
+minute — the figure stays in the candidate with its pointer, and the question asks what the
+person notices instead.
+A statement that fails the second or third check is not
 dropped and not weakened: it stays as it is, on its evidence, and goes into the findings
 message as carried by the code.
 
@@ -436,8 +453,10 @@ the user moves it to *Open points* as reviewed and unresolved. Then propose all 
   disappear from all of them — the ones a person confirmed and the ones only the code carries
   — because the code settles both, and the line below is what tells them apart. Only a
   statement the code itself does not settle moves under *Open points*, keeping `[Uncertain]`.
-  A conflict still open becomes a *Finding*; findings and wishes stay as written — a Baseline
-  also says what surprised. Thinning the rules because one person did not know a case is the
+  A conflict still open stays under *Open points* — as a *Finding* when its consequence can
+  harm or mislead someone, otherwise as reviewed `[Uncertain]` naming both sources, because a
+  disagreement is not by itself harm. Findings and wishes stay as written — a Baseline also
+  says what surprised. Thinning the rules because one person did not know a case is the
   one mistake to avoid here: what the code settles belongs above, whoever happened to know it.
 - One line under *Open points* says how far the validation reached: which IDs a person
   confirmed, and which no one confirmed because nobody knew the case or nobody could have
@@ -458,8 +477,10 @@ the user moves it to *Open points* as reviewed and unresolved. Then propose all 
   spec path, add one line to `.memory-bank/activeContext.md`.
 
 Hand off: name the file and the findings and wishes it carries — changing any of them starts
-with `/sdd-specify`, which asks what should be. Recommend `/sdd-clarify` on the Baseline in a
-fresh context: a stranger's read finds wording that misleads. Propose the commit (Ask-first,
+with `/sdd-specify`, which asks what should be. `/sdd-clarify` on the Baseline in a fresh
+context is due before anyone plans a change against it — a stranger's read finds wording that
+misleads — and its date goes into the spec header as `**Clarified:** <date>`; offer it now and
+say the line stays absent until it has run. Propose the commit (Ask-first,
 per `AGENTS.md`).
 
 ## Cleanup

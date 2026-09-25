@@ -32,7 +32,9 @@ is defined in `AGENTS.md` (loaded every session). These rules cover only what is
 - A `Baseline` created by `/sdd-reverse-specify` carries `**Plan:** _none_` plus two optional
   provenance lines beneath it — `**Origin:** Reverse — Brownfield | Reverse — Technical Plan`
   and `**Validated by:** <names> · <date>` — and a `## Technical Reference` of at most eight
-  lines (paths and symbols only). Provenance only: it is a normal spec from then on.
+  lines (paths and symbols only). A `**Clarified:** <date>` line appears once `/sdd-clarify`
+  has read it; until then the line is absent and no change may be planned against the spec.
+  Provenance only: it is a normal spec from then on.
 
 Plan files (`.specs/**/*.plan.md`) have their own craft rules in `plans.md` — status
 vocabulary, step upkeep, and traceability live there, not here.
