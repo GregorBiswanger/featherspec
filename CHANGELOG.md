@@ -11,7 +11,7 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
-## [1.8.0] - 2026-09-20
+## [1.8.0] - 2026-09-25
 
 ### Added
 
