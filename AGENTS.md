@@ -25,7 +25,7 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 
 ```yaml
 DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
-FeatherSpecVersion: 1.7.0 # managed by /sdd-featherspec-update; do not edit by hand
+FeatherSpecVersion: 1.8.0 # managed by /sdd-featherspec-update; do not edit by hand
 IssueTracker: none # none | github | jira | <other> — set by /sdd-setup
 ```
 
@@ -153,7 +153,7 @@ Lifecycle invariants — the move procedure itself lives in `/sdd-lifecycle`:
   and links its successor (or `successor: none — behaviour removed`). Its archived plan
   stays frozen; an abandonment note lands in the spec's `## Plan history`.
 - `Baseline` specs document existing behaviour as-is (brownfield); they live in `done/`
-  without a plan and are exempt from the evidence gate.
+  without a plan, exempt from the evidence gate — `/sdd-reverse-specify` creates them.
 - Every lifecycle move updates the Memory Bank in the same change set.
 
 ### Plans
@@ -169,15 +169,13 @@ made while archiving completes the freeze).
 The plan declares its own status near the top:
 `**Status:** Not started | In Progress | Blocked | Done`
 
-The plan is the **persisted state of the work**: baby steps, the current step, each step's
-touched paths, and a traceability table from criteria to steps, code and deciding test. Keep
-it current in the same change set as the code — a new session must resume from it alone.
+The plan is the **persisted state of the work** — baby steps, current step, touched paths,
+traceability from criteria to steps, code and deciding test: a new session resumes from it alone.
 
 ## Commands
 
-Each `/sdd-*` command is one body file under `.claude/commands/` — Claude Code runs it
-directly, GitHub Copilot via a thin loader in `.github/prompts/`; neither is advertised to the
-model. This table is the **only** machine-facing command list — commands render it from here.
+Each `/sdd-*` command is one body file under `.claude/commands/`; GitHub Copilot reaches it via a
+thin loader in `.github/prompts/`. This table is the **only** machine-facing command list.
 
 | Command | Purpose |
 | --- | --- |
@@ -189,6 +187,7 @@ model. This table is the **only** machine-facing command list — commands rende
 | `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
 | `/sdd-architecture-scan` | Deep, resumable analysis of an existing codebase → fingerprint (first run and refresh) |
+| `/sdd-reverse-specify` | Existing code, tests or plan → evidence → human validation → `Baseline` spec (brownfield, code-first) |
 | `/sdd-lifecycle` | Spec status, moves between backlog/active/done, plan archiving at completion, ticket sync if linked |
 | `/sdd-style-update` | Capture coding style preferences into `AGENTS.md` |
 | `/sdd-featherspec-update` | Template version check + safe update from a newer release (customizations preserved) |
@@ -197,6 +196,5 @@ model. This table is the **only** machine-facing command list — commands rende
 Flow — the only source of the recommended order; commands render it from here:
 `/sdd-specify` → `/sdd-clarify` → `/sdd-plan` → human reads the plan → `/sdd-lifecycle`
 (backlog → active) → implement → `/sdd-compile` → `/sdd-lifecycle` (active → done).
-`/sdd-architecture-update` runs unprompted whenever structure drifts; type it only as fallback.
 The backlog → active move also rides on an explicit start signal (see `/sdd-plan`).
-Brownfield: run `/sdd-architecture-scan` before the first spec.
+Brownfield: `/sdd-architecture-scan` before the first spec; `/sdd-reverse-specify` for what exists.

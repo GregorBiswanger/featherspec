@@ -8,3 +8,6 @@ CLAUDE.local.md
 
 # Volatile template-update working state — deleting it loses nothing curated
 .sdd-update/
+
+# Raw reverse-specification evidence — candidates and the worklist are kept, reports are volatile
+.sdd-reverse/reports/

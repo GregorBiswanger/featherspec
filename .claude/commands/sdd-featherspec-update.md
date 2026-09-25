@@ -504,3 +504,17 @@ entries compose sequentially across skipped versions.
   sets it)
 - data-notes: none — specs without a `**Ticket:**` line are the normal case
 - probes: `IssueTracker:` line present ⇒ ≥1.7.0
+
+### 1.8.0 — minor (2026-09-25)
+- adds: `/sdd-reverse-specify` (body + loader) · `sdd-reverse-scout` agents (both tools) ·
+  reverse-specification offer at the end of `/sdd-setup`'s existing-software path ·
+  `.sdd-reverse/` working location, `.gitignore` line `.sdd-reverse/reports/` · optional
+  `**Origin:**`, `**Validated by:**` and `**Clarified:**` spec-header lines plus
+  `## Technical Reference` on reverse-created Baselines (declared in
+  `.claude/rules/specs.md`) · reverse-candidate
+  report line in `/sdd-overview`
+- semantic-flips: `/sdd-specify`'s *Baseline mode* section is replaced by a delegation to
+  `/sdd-reverse-specify` — a project that customized that section keeps its text as a
+  conflict to resolve, never silently
+- data-notes: none — Baselines without `**Origin:**` stay valid and need no migration
+- probes: `.claude/commands/sdd-reverse-specify.md` present ⇒ ≥1.8.0

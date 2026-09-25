@@ -72,12 +72,15 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   `active/` (`In Progress`); `/sdd-plan` Mode C starts a **fresh** plan beside it from its
   impact report — the archived plan stays frozen and is read, not extended. A new slice of
   work gets a successor spec instead — when unsure which case it is, ask. `Deprecated` stays
-  reserved for behaviour a successor replaces or removes.
+  reserved for behaviour a successor replaces or removes. A `Baseline` whose behaviour is
+  changing is reactivated the same way: it has no archived plan, so `/sdd-plan` writes its
+  first one; once proven it is `Implemented` like any other spec and keeps its `**Origin:**`.
 - **Abandoning a spec that was never implemented:** delete it only on the user's instruction
   and note it in `activeContext.md` — no `Deprecated`, no move to `done/`.
 - **`Baseline` specs** (existing behaviour, brownfield) live in `done/` without a plan and are
-  exempt from the evidence gate — but require the `/sdd-clarify` pass noted in the spec
-  (see `/sdd-specify`, Baseline mode).
+  exempt from the evidence gate — but require the `/sdd-clarify` pass, noted in the spec as
+  `**Clarified:**`, before a change is planned against them
+  (see `/sdd-reverse-specify`, which creates them).
 - **No plan beside the spec, and none in the archive?** Ask why and record the answer in the
   spec. `Baseline` needs no plan; for anything else, skipping the plan is the user's recorded
   decision, a forgotten plan is not. (The fast path in `AGENTS.md` means no spec *and* no

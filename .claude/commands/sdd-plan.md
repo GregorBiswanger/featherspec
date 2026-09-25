@@ -33,6 +33,7 @@ steps to real code.
 | The spec's `**Plan:**` line says `_none yet_` (no plan anywhere) | **A — plan from scratch** |
 | A plan sits beside the spec and work is unfinished | **B — resume** |
 | The spec changed after its plan (beside it, or archived in `.specs/plan-archive/`) | **C — re-plan the delta** |
+| A `Baseline` is to change — `**Plan:** _none_`, it never had one | **C**, without a predecessor |
 
 ## Mode A — plan from scratch
 
@@ -217,9 +218,15 @@ final step runs them all>
 A changed spec whose plan is archived (or still beside it in `done/`, from a pre-1.5 layout)
 means an `Implemented` spec is changing: report the impact first (steps 1–3), then propose
 the reactivation move — spec back to `active/`, `In Progress` — via `/sdd-lifecycle`; a new
-slice of work gets a successor spec instead.
+slice of work gets a successor spec instead. A changed `Baseline` is the same case without a
+predecessor — it has no plan by design: build the impact report from its `## Technical
+Reference` and the survey instead of a traceability table, then reactivate and write its
+first plan exactly as below.
 
-1. Follow the spec's `**Plan:**` line or `## Plan history` to its most recent plan (usually
+1. A `Baseline` has no predecessor: check that it carries `**Clarified:**` — if not, run
+   `/sdd-clarify` on it first — then build the impact from its `## Technical Reference` and
+   the survey, and go on at step 3. Otherwise follow the spec's `**Plan:**` line or
+   `## Plan history` to its most recent plan (usually
    in `.specs/plan-archive/`) and read only what the impact needs: which acceptance criteria
    are new, changed, or gone?
 2. Read that plan's traceability table **in reverse** — for every touched criterion, list the

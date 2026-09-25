@@ -11,6 +11,56 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.8.0] - 2026-09-25
+
+### Added
+
+- **Reverse specification** — `/sdd-reverse-specify [target]` (#14): reconstructs existing
+  behaviour from code, tests, contracts or a technical plan into a **human-validated**
+  `Baseline` spec. Works on a file, folder, symbol or plan, or on the whole application via
+  the architecture fingerprint. It proposes a capability map in domain language first (a
+  technical module is never a spec boundary), sends isolated `sdd-reverse-scout` agents to
+  collect evidence for one capability at a time, and writes a temporary
+  `.sdd-reverse/candidates/*.reverse-spec.md` whose rules carry `[Inferred]` or `[Uncertain]`
+  — never a percentage. Before anyone sees the candidate, a check scout tries to prove every
+  rule, criterion and finding wrong in the code, and synthesis walks its reports once more so
+  that no limit, rounding direction, ordering or unchecked bound is left behind.
+  Validation checks understanding, never intent: each question states
+  what the system does today and asks whether that is how the person knows it — conflicts
+  first, uncertain behaviour next, inferred behaviour as batched confirmations; nobody is
+  asked what the system should do, and `[Confirmed]` comes from a human alone. Nor is anyone
+  asked about what they could not have seen — a retry count, a stored value, the order two
+  things happen in: those are shown, not asked, and stay in the spec on their evidence. A
+  marker reports how clearly the code settles a statement, never how much of it a person
+  recognised, so "don't know" leaves it as it is and the promoted spec says in one line which
+  IDs a person confirmed and which rest on the code alone. Behaviour that
+  could harm or mislead a person, and checks the code does not make, become *findings*
+  stated as their consequence — never a rule; so does a belief the code contradicts.
+  Conflicts between description, plan, tests and code are shown, never resolved silently;
+  unreferenced code never becomes a rule. Questions and criteria stay in business language;
+  text people see is quoted exactly as the code has it. Promotion writes a normal spec to
+  `.specs/done/` (`Status: Baseline`, `Plan: _none_`, `Origin`, `Validated by`, a
+  `Technical Reference` of at most eight lines) — no retrospective plan, no parallel
+  lifecycle. A `Clarified:` line records the `/sdd-clarify` read that is due before a change
+  is planned against a Baseline, and `/sdd-plan` refuses to plan one without it. Scouts never
+  copy a password, token, key or connection string out of the code — the place becomes a
+  developer check instead. Resumable from its files at any point.
+- `/sdd-setup` offers reverse specification once, at the end of the existing-software path,
+  with recommended starting areas derived from the confirmed snapshot. Declining changes
+  nothing; the wizard holds no reverse logic of its own.
+- `/sdd-overview` reports open reverse candidates.
+
+### Changed
+
+- `/sdd-specify` no longer reconstructs existing behaviour itself: its former *Baseline mode*
+  now delegates to `/sdd-reverse-specify`, the single home of that workflow.
+- A changed `Baseline` now has a defined path: `/sdd-lifecycle` reactivates it like an
+  `Implemented` spec, and `/sdd-plan` Mode C builds its impact report from the spec's
+  *Technical Reference* instead of an archived plan, then writes its first plan. Before, a
+  Baseline could only be followed by a successor spec.
+- `AGENTS.md` is back under its 200-line cap: three lines of explanatory prose were
+  tightened to make room for the new command row.
+
 ## [1.7.0] - 2026-09-19
 
 ### Added
@@ -357,6 +407,7 @@ docs fixes that are safe to overwrite.
 - Rule duplication removed so the single-source promise holds.
 - `.gitignore` for local agent configuration.
 
+[1.8.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/GregorBiswanger/featherspec/compare/v1.4.0...v1.5.0

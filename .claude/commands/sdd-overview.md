@@ -30,6 +30,8 @@ Inspect the workspace and report, in `DocLanguage`:
   and a `done/` spec that is not `Baseline` whose `**Plan:**` line names no plan (beside it
   or in `.specs/plan-archive/`). Detection only — the fix belongs to `/sdd-lifecycle`.
 - If the snapshot comment names a `last deep scan` date: report it plus the count of `unmapped:` entries.
+- If `.sdd-reverse/_worklist.md` exists: report its row counts per status and name the
+  candidates still `validating` — detection only; `/sdd-reverse-specify` continues them.
 - Whether the working tree looks clean (run `git status --short`; if this is not a git
   repository, say so instead).
 

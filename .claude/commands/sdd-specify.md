@@ -27,14 +27,14 @@ number and `AC-` IDs stable, and record resolved items in *Open points*. A new f
 for a new slice of work. If the named path does not exist, list `.specs/` and ask — never
 invent a spec from a wrong path.
 
-## Baseline mode (brownfield)
+## Existing behaviour (brownfield) — not this command's job
 
-Asked to document existing behaviour instead of a change? Skip the interview. Survey the code
-(delegate to a subagent if your tool has them), then write the spec from observed behaviour:
-scope, business rules, error cases, acceptance criteria describing what *is*. Status
-`Baseline`, file goes directly to `.specs/done/`, no plan. Unknowns become *Open points*,
-never guesses. A Baseline still gets its `/sdd-clarify` pass (fresh context) — note it in the
-spec; an undecidable Baseline is a guess wearing a status.
+Asked to document behaviour that already exists instead of a change? That is reverse
+specification. Recommend `/sdd-reverse-specify` and, on a yes, run that workflow yourself,
+exactly as if the user had typed it (its body lives in
+`.claude/commands/sdd-reverse-specify.md`), passing on whatever the user named as the target.
+This command holds no reconstruction logic of its own: evidence, human validation and the
+`Baseline` promotion live there only.
 
 ## Language
 
