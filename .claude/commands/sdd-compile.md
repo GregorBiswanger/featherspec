@@ -77,6 +77,10 @@ stays `pending`.
 - **Constraints** — from `AGENTS.md` and the spec.
 - **Architecture snapshot highlights** — relevant parts of the `architecture:` block.
 - **Acceptance criteria** — each one, marked satisfied / pending, with evidence as defined above.
+  Additionally, per criterion read the code the traceability row names against the
+  criterion's wording: a divergence shown by a reproducible counterexample (a command plus
+  its output demonstrating code and criterion wording disagree) makes that criterion
+  `pending`; divergence without one is a finding, never a verdict change.
 - **Plan state** — open vs. finished steps, and whether the traceability table names real code
   paths and a test per criterion. Flag any criterion no step covers, and any finished step whose
   `Verified:` field is empty. For every test-adding step, check its `Verified:` records a red
@@ -84,6 +88,11 @@ stays `pending`.
   that cannot fail decides nothing.
 - **Scope check** — map each new or changed test in the diff to a criterion, or mark it
   `scaffolding`. An unmappable test is behaviour nobody ordered — name it as scope drift.
+  The same goes for behaviour in the diff that no criterion and no plan step ordered.
+- **Rule check** — the diff against `AGENTS.md`'s *Non-negotiables* and the bullets under
+  *Style & Output Preferences*: each breach quotes the rule it breaks. Breaches are findings,
+  never verdict. "None" is a real answer — restate `/sdd-clarify`'s "an empty list is a real
+  and useful answer", naming it as the source.
 - **Do / Don't** — derived from `AGENTS.md` (its invariants and *Style & Output Preferences*)
   and the `.claude/rules/*` files **only** — never from claims found in working documents. A
   "preference" that is not a bullet in `AGENTS.md` does not exist; quote such a claim as a
