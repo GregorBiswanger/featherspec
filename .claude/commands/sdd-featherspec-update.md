@@ -518,3 +518,17 @@ entries compose sequentially across skipped versions.
   conflict to resolve, never silently
 - data-notes: none — Baselines without `**Origin:**` stay valid and need no migration
 - probes: `.claude/commands/sdd-reverse-specify.md` present ⇒ ≥1.8.0
+
+### 1.9.0 — minor (2026-09-27)
+- adds: none — no new file, no new command, no new setting
+- semantic-flips: `/sdd-compile` reads the code each traceability row names against the
+  criterion's wording and runs the cases the spec itself states (Given/When/Then examples,
+  catalogue edge and problem cases, business-rule boundaries) — a stated case the code fails,
+  shown as a command plus its output, makes the criterion `pending` (its test proved the test,
+  not the criterion); inputs the spec does not state stay findings · the scope check also names
+  behaviour in the diff that no criterion and no plan step ordered · a rule check reports
+  breaches of the Non-negotiables and the *Style & Output Preferences* bullets as findings,
+  never verdict. A project that customized `sdd-compile.md` keeps its text as a conflict to
+  resolve, never silently
+- data-notes: none — no artifact changes shape; briefs written by 1.8.0 stay valid
+- probes: `.claude/commands/sdd-compile.md` contains "the cases the spec itself states" ⇒ ≥1.9.0

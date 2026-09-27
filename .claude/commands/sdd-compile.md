@@ -1,5 +1,5 @@
 ---
-description: Final readiness check — verdict, evidence per acceptance criterion, tests, docs sync.
+description: Final readiness check — verdict, evidence and spec fidelity per acceptance criterion, tests, rule check, docs sync.
 argument-hint: "[path-to-spec.md] [runTests:true|false]"
 disable-model-invocation: true
 ---
@@ -78,9 +78,13 @@ stays `pending`.
 - **Architecture snapshot highlights** — relevant parts of the `architecture:` block.
 - **Acceptance criteria** — each one, marked satisfied / pending, with evidence as defined above.
   Additionally, per criterion read the code the traceability row names against the
-  criterion's wording: a divergence shown by a reproducible counterexample (a command plus
-  its output demonstrating code and criterion wording disagree) makes that criterion
-  `pending`; divergence without one is a finding, never a verdict change.
+  criterion's wording, and run the cases the spec itself states — its Given/When/Then
+  examples, the edge and problem cases of its catalogue, the boundaries its business rules
+  name. A stated case the code fails, shown as a command plus its output, makes that
+  criterion `pending` — its test proved the test, not the criterion. Anything the spec does
+  not state — exploratory inputs, magnitudes, encodings — is a finding, never verdict
+  material: the verdict is a function of the spec's text and the code, and a re-run on an
+  unchanged repository must return it unchanged.
 - **Plan state** — open vs. finished steps, and whether the traceability table names real code
   paths and a test per criterion. Flag any criterion no step covers, and any finished step whose
   `Verified:` field is empty. For every test-adding step, check its `Verified:` records a red
@@ -91,8 +95,8 @@ stays `pending`.
   The same goes for behaviour in the diff that no criterion and no plan step ordered.
 - **Rule check** — the diff against `AGENTS.md`'s *Non-negotiables* and the bullets under
   *Style & Output Preferences*: each breach quotes the rule it breaks. Breaches are findings,
-  never verdict. "None" is a real answer — restate `/sdd-clarify`'s "an empty list is a real
-  and useful answer", naming it as the source.
+  never verdict. "None" is a real and useful answer — say so rather than manufacturing a
+  breach (restated from `/sdd-clarify`).
 - **Do / Don't** — derived from `AGENTS.md` (its invariants and *Style & Output Preferences*)
   and the `.claude/rules/*` files **only** — never from claims found in working documents. A
   "preference" that is not a bullet in `AGENTS.md` does not exist; quote such a claim as a
