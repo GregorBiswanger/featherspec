@@ -11,6 +11,28 @@ template-semver — **MAJOR** means derived projects need a real migration step,
 means additive capability that merges into a customized project, **PATCH** means wording and
 docs fixes that are safe to overwrite.
 
+## [1.9.0] - 2026-09-27
+
+### Changed
+
+- **`/sdd-compile` checks spec fidelity, not only evidence** (#16): a green test proves that
+  the code does what the *test* says — not what the *spec* says, and an agent that writes code
+  and test together makes the test confirm the code. The readiness brief now reads the code
+  each traceability row names against the criterion's wording and runs the cases the spec
+  itself states — its Given/When/Then examples, the edge and problem cases of its catalogue,
+  the boundaries its business rules name. A stated case the code fails, shown as a command
+  plus its output, makes that criterion `pending`: its test proved the test, not the
+  criterion. Inputs the spec does not state — exploratory magnitudes, encodings — are
+  findings, never verdict material, so a re-run on an unchanged repository still returns the
+  same verdict. The scope check also names behaviour in the diff that no criterion and no
+  plan step ordered, not only unmappable tests, and a new rule check reports breaches of the
+  Non-negotiables and the *Style & Output Preferences* bullets — findings, never verdict; the
+  four blocker classes stay exactly four. Nine lines in one command, no new command, no new
+  setting, `AGENTS.md` unchanged at 200 lines. Designed by @TheEifelYeti as a two-axis
+  `/sdd-review` command, folded into the gate on review, and verified with seeded defects on
+  a finished project: 1.8.0 certified a half-down rounding defect whose tests had been bent to
+  match as `READY`; 1.9.0 returns `NOT READY` with the spec's own example as the counterexample.
+
 ## [1.8.0] - 2026-09-25
 
 ### Added

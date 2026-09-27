@@ -25,7 +25,7 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 
 ```yaml
 DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
-FeatherSpecVersion: 1.8.0 # managed by /sdd-featherspec-update; do not edit by hand
+FeatherSpecVersion: 1.9.0 # managed by /sdd-featherspec-update; do not edit by hand
 IssueTracker: none # none | github | jira | <other> — set by /sdd-setup
 ```
 
@@ -184,7 +184,7 @@ thin loader in `.github/prompts/`. This table is the **only** machine-facing com
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |
-| `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
+| `/sdd-compile` | Readiness check: verdict, evidence and spec fidelity per acceptance criterion, tests, rule check, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |
 | `/sdd-architecture-scan` | Deep, resumable analysis of an existing codebase → fingerprint (first run and refresh) |
 | `/sdd-reverse-specify` | Existing code, tests or plan → evidence → human validation → `Baseline` spec (brownfield, code-first) |

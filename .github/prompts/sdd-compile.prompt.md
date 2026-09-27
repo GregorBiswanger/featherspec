@@ -1,6 +1,6 @@
 ---
 name: sdd-compile
-description: Final readiness check — verdict, evidence per acceptance criterion, tests, docs sync.
+description: Final readiness check — verdict, evidence and spec fidelity per acceptance criterion, tests, rule check, docs sync.
 argument-hint: "[path-to-spec.md] [runTests:true|false]"
 ---
 

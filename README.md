@@ -199,7 +199,7 @@ flowchart LR
   P --> R["👀 you read the plan<br/>cheapest review there is"]
   R --> A["📂 /sdd-lifecycle<br/>backlog → active"]
   A --> I["⚙️ implement<br/>step by step"]
-  I --> C["✅ /sdd-compile<br/>verdict + evidence"]
+  I --> C["✅ /sdd-compile<br/>verdict + evidence + spec fidelity"]
   C --> L["📦 /sdd-lifecycle<br/>active → done"]
   L -.->|next iteration| S
 ```
@@ -340,6 +340,15 @@ not a sentence describing the code. If the suite did not run, the verdict is `un
 matter how good the criteria look — an agent grading its own homework is the one thing this
 brief exists to prevent.
 
+A green test is not the last word either: it proves that the code does what the *test* says,
+and an agent that wrote code and test together made the test agree with the code. So the brief
+also reads the code against each criterion's wording and runs the cases the spec itself states
+— its examples, its edge cases, the boundaries its rules name. A stated case the code fails,
+shown as a command and its output, marks the criterion pending, whatever the test says. Anything
+the spec does not state stays a finding; the verdict is a function of your spec and your code,
+so the same code gets the same verdict tomorrow. A rule check lists breaches of `AGENTS.md`'s
+non-negotiables and style bullets, quoting the rule — findings for you to weigh, never verdict.
+
 The important discipline: you check against **the criteria you wrote**, not against a gut
 feeling. If "actually I'd also like X" comes up now, that is not a bug — it was never in the
 spec. That is the next iteration.
@@ -369,7 +378,7 @@ moved files really left their old folder before proposing the commit.
 | `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec (+ optional tracker ticket) |
 | `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
 | `/sdd-plan` | Spec → a persisted plan of baby steps, with research and traceability |
-| `/sdd-compile` | Readiness check: verdict, evidence per acceptance criterion, tests, docs sync |
+| `/sdd-compile` | Readiness check: verdict, evidence and spec fidelity per acceptance criterion, tests, rule check, docs sync |
 | `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` — archiving the plan at completion, syncing the ticket if linked |
 | `/sdd-architecture-update` | Detect structural drift, update the snapshot (asks first) |
 | `/sdd-architecture-scan` | Deep, resumable scan of an existing codebase → architecture fingerprint |
