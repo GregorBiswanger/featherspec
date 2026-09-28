@@ -448,6 +448,8 @@ spells out exactly what each tool reads, with caveats and sources.
 
 ## Learn more
 
+- **[MySpec](https://myspec.dev)** — Interactive spec discovery platform compiling guided developer interviews into 4-file specification bundles (`constitution.md`, `requirements.md`, `solution.md`, `tasks.md`) with Model Context Protocol (MCP) server integration.
+
 Everything beyond this page lives in the **[Wiki](https://github.com/GregorBiswanger/featherspec/wiki)**:
 
 | Page | What's in it |
