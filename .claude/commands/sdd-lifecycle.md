@@ -137,7 +137,17 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    `Deprecated`: close with a one-line comment naming the successor. GitHub Issues have no
    status field: a one-line comment marks the active move, close on done, reopen on
    reactivation — never create labels. Never blocking; use whatever is connected (`gh`,
-   GitHub/Atlassian MCP, the tracker's own MCP server), resolve status IDs at runtime. On
+   GitHub/Atlassian MCP, the tracker's own MCP server), resolve status IDs at runtime.
+   **Drift check, before proposing the transition (read-only, same tooling):** read the
+   remote ticket's current state and compare it with the transition this move is about to
+   fire — the same check a moment earlier would have been the write. Remote already in the
+   target state → name it and propose skipping the redundant transition. Remote ahead of
+   the spec (e.g. "Done" while the spec is `In Progress`) → say so, treat it as a hint,
+   never as evidence — propose `/sdd-compile`; the move stays gated on it. Remote behind or
+   reopened → the normal transition fires as today; a reopened remote additionally offers
+   the existing reactivation proposal. Remote unreadable → drift is unknown, proceed as
+   today; the write attempt itself reports failures as below. Divergence is named, never
+   silently overwritten (#20). On
    failure record `Ticket sync: failed — <reason>` in the spec's *Open points* and continue.
    With `none` or without a `**Ticket:**` line, say nothing about the tracker.
 5. **Final check, then commit** — the very last action of this run, after every edit and

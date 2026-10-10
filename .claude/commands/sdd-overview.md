@@ -30,6 +30,11 @@ Inspect the workspace and report, in `DocLanguage`:
   and a `done/` spec that is not `Baseline` whose `**Plan:**` line names no plan (beside it
   or in `.specs/plan-archive/`). Detection only — the fix belongs to `/sdd-lifecycle`.
 - If the snapshot comment names a `last deep scan` date: report it plus the count of `unmapped:` entries.
+- For every spec with a `**Ticket:**` line while `IssueTracker:` in `AGENTS.md` is not `none`:
+  read the remote ticket's current state and, **where it differs from the spec's status**,
+  show one line per ticket (`spec: In Progress · tracker: Done — /sdd-lifecycle proposes the
+  next move`). Identical states stay silent — this is drift visibility, not tracker
+  reporting (#20). Remote unreadable → one line saying so; the check never fails the overview.
 - If `.sdd-reverse/_worklist.md` exists: report its row counts per status and name the
   candidates still `validating` — detection only; `/sdd-reverse-specify` continues them.
 - Whether the working tree looks clean (run `git status --short`; if this is not a git
