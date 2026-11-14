@@ -60,7 +60,8 @@ Three metadata lines first — `Last updated: <date>`, `Current branch: <branch>
 
 ### When to update
 
-1. At the end of each relevant coding session.
+1. Whenever plan work stops — a stage ends, a blocker, before reporting "done" — and at the
+   end of each relevant coding session. Not after every single step.
 2. After an important decision.
 3. After a phase transition (specify → plan → act → idle) or a lifecycle move (backlog → active → done).
 4. Before a context reset or new agent session.
@@ -88,4 +89,6 @@ Move the following to the correct file instead of adding it to `activeContext.md
 **Do not duplicate. Link and summarize.** Never route content into a file this template does
 not declare: the Memory Bank is these four files, and a spec's only companion beside it is
 its `.plan.md` — completed iterations live frozen in `.specs/plan-archive/` (lifecycle facts
-per `AGENTS.md`, which stays authoritative).
+per `AGENTS.md`, which stays authoritative). The one transient guest is a return note from
+parallel work, `activeContext.<spec number>-<step ID>.md`: `.claude/rules/parallel-work.md`
+defines it, and it is deleted once the main session has integrated it.

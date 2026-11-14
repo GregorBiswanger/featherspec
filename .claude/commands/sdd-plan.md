@@ -65,7 +65,7 @@ steps to real code.
    lands under `## Research` in the plan file — chat is not persistence. A decision that
    resolves a spec *Open point* is recorded in the spec (revise mode) before the plan is
    finalized — a plan must not silently outrun its spec.
-5. **Decompose into baby steps** (see below).
+5. **Decompose into baby steps** and group them into stages (see below).
 6. **Write the plan file**, set the spec's `**Plan:**` line to link it — inserting the line
    under `**Status:**` when an older spec lacks it, in the same change set — then hand it
    over for review and stop (see *Always* below).
@@ -99,29 +99,61 @@ Restates the step discipline from `.claude/rules/plans.md`, which stays authorit
 brand-new plan has not loaded that path-scoped rule yet. A step is one focused change that
 can be finished and checked on its own:
 
-- **One concern per step** — a schema change, one endpoint, one component, one test suite.
-- **Small enough** to complete in one sitting and to read in one diff.
+- **One behaviour slice per step** — the test and the code for the criteria that the same
+  tests decide and the same code serves, typically three to five. Never split by layer or
+  file: a stub, a type, an export or a test without its code is not a step — it lands in the
+  step that needs it. Every step costs a full red-green cycle and a tick; evidence is
+  recorded per criterion, so cutting a slice thinner buys no extra proof.
+- **Small enough** to complete in one sitting and to read in one diff — about 150 changed
+  lines at most.
 - **Verifiable**: every step carries a `Verify:` line — a command whose output decides the step
   (test, build, lint, script). Only where the domain genuinely has no machine check — visual
   layout, wording, a third-party sandbox — write `manual: <what a person looks at>` and say why
   no command can settle it. If you cannot state either, the step is too big or too vague; split it.
 - **Recorded**: the step's `Verified:` field stays empty until the `Verify:` line was actually
   run. A tick without a recorded result is a claim, not a verification.
-- **Red first**: when a step adds a test for a criterion, record its failing run in `Verified:`
-  before the implementation lands. A test that was never red decides nothing. This binds new
-  behaviour only — a criterion preserving existing behaviour is decided by its existing test
-  staying green.
+- **Red first**: when a step adds a test for a criterion, the test runs red before the
+  implementation lands, and `Verified:` records both runs — what was red, then the green
+  result. A test that was never red decides nothing. This binds new behaviour only — a
+  criterion preserving existing behaviour is decided by its existing test staying green.
 - **Ordered so the repo keeps working** after every step; risky or blocking parts come first.
 - **Gated at the end**: the final step runs every quality gate the plan's `Quality gates:`
   line names — a plan that ends without the full gate run is unfinished. Its `Covers:` line
   names every criterion the gates re-prove. Where an `AGENTS.md` quality-gate preference
   already runs the full sequence per step, the final step is the recorded proof of the last
-  clean run.
+  clean run. The docs sync rides in this same step — README, Memory Bank, and the
+  `architecture:` snapshot entries it adds or changes, **named exactly**: approving the plan
+  confirms exactly those entries (see `/sdd-architecture-update`).
 - **Tied to the spec**: each step names the acceptance criteria it serves, every criterion is
-  covered by at least one step, and pure scaffolding steps say so explicitly. Rule of thumb:
-  a step covers one or two criteria — one covering more than three is a split candidate.
+  covered by at least one step. Rule of thumb: a step covering one or two criteria with a
+  few lines of code is a merge candidate, one covering more than six a split candidate.
 
 If the step list runs long, the spec was probably two specs. Say so before writing the file.
+
+## Stages
+
+Steps are grouped into **stages**: a stage is a run of steps that need no human decision in
+between. Work still stops after every step; the stage end is the checkpoint where plan and
+Memory Bank are brought level, and the most a user can ask for in one go besides the whole
+plan. List them under `## Stages`, one line each:
+
+- A stage is one coherent slice a person can judge at its end, typically two to four steps.
+  It ends before any step that needs an Ask-first action or a real decision. A stop that a
+  working agreement asks for — a TDD test review — happens inside a stage and does not end it.
+- `→` joins steps that build on each other. `‖` joins steps that are **independent**: no
+  shared file — each carries a `Files:` line with its own test file; a file both would
+  touch (a manifest, a registration, a shared type) gets its own step before or after
+  them — neither needs the other's result, and each `Verify:` runs only its own tests and
+  passes without the other step. Independent steps may run in parallel later, by subagents
+  or other agents.
+- **Look for `‖` in every plan, unasked.** Once the steps are cut, check each pair that
+  does not build on the other against those criteria and put the pairs that pass into one
+  stage; where the work spans separate modules, shape the slices that way. Close the stage
+  list with one line on the result: which stages may run in parallel, or `No parallel
+  stage:` and the reason. Mark only what the criteria carry — also when the user asks for
+  more: name the criterion that fails and what would make it true (the shared contract as
+  its own earlier step). Within one module, and whenever in doubt, write `→`: a wrong `‖`
+  costs more than it saves.
 
 ## Plan file structure
 
@@ -157,29 +189,43 @@ final step runs them all>
 - Survey: impacted files and callers, implicit contracts, assumptions this plan rests on
 - [Title](https://example.org/doc) — what it settled, retrieved <date>
 
+## Stages
+
+1. T-001 → T-002 — <what this stage delivers>
+2. T-003 ‖ T-004 — independent: separate files
+3. T-005 — docs sync and final gates
+
+Parallel: stage 2 — or `No parallel stage: <reason>`.
+
 ## Steps
 
 ### T-001 — <short imperative title>
 
-- [ ] **Covers:** AC-001, AC-002
+- **Covers:** AC-001, AC-002
 - **Do:** what changes, in which files or modules
 - **Verify:** the command whose output decides this step (or `manual: …` plus the reason)
-- **Verified:** _(empty until it was actually run: date · command · result)_
-- **Notes:** _(filled while implementing: deviations, findings)_
+- [ ] **Verified (T-001):** —
+- **Notes:** —
 
-### T-002 — <short imperative title>
+### T-003 — <short imperative title>
 
-- [ ] **Covers:** AC-003
+- **Covers:** AC-003
+- **Files:** `src/…`, `tests/…` _(only on `‖` steps: every file the step may touch)_
 - **Do:** …
 - **Verify:** …
-- **Verified:** —
+- [ ] **Verified (T-003):** —
 - **Notes:** —
 
 ## Traceability
 
 | Acceptance criterion | Steps | Code / files | Test | State |
 | --- | --- | --- | --- | --- |
-| AC-001 | T-001, T-004 | _(filled when the step lands)_ | _(the test that fails without the code)_ | open |
+| AC-001 | T-001, T-004 | — | — | open |
+
+The checkbox sits on the `Verified` line and carries the step ID, so finishing a step is one
+unambiguous edit: tick it and replace `—` with date · command · result. `Notes:` stays `—`
+unless the step deviated from `Do:` or found something a later step needs. `Code / files`
+and `Test` are filled with real paths and the deciding test at the stage end, not per step.
 
 `State` is one of `open | built | verified`. A criterion is `built` when the code exists and
 `verified` only when a recorded run proves it. If no test can decide it, write
@@ -198,6 +244,10 @@ final step runs them all>
 
 1. Read the plan first, then the spec. `Current step` and `Session handoff` say where the work
    stands — verify that against `git status --short` and the actual code before trusting it.
+   Ticks are written per step, everything else at the stage end: after an interrupted session
+   the ticks and the code lead, so bring traceability and handoff level with them first. A
+   return note in `.memory-bank/` (`activeContext.<…>.md`) is parallel work that came back
+   and is not integrated yet — integrate it first, per `.claude/rules/parallel-work.md`.
    If the pair still sits in `backlog/` or the spec still says `Draft` while work is starting,
    propose the move to `active/` + `In Progress` first — or, when the user has already given
    the explicit start signal, perform it per *Always* below; `/sdd-lifecycle`'s procedure
@@ -205,13 +255,18 @@ final step runs them all>
 2. Report in three lines: what is done, what is next, what blocks it. If
    `activeContext.md`'s `Last updated` is older than the newest commit, say so — the
    dashboard is stale.
-3. Continue from the next open step only when the user asks you to. After each finished step,
-   update the plan **in the same change set**: tick the box, fill `Notes`, write the real paths
-   into the traceability table, move `Current step`, refresh `Last updated` and the handoff.
-   Then propose one commit named after the step ID — git writes stay behind the Ask-first gate
-   in `AGENTS.md`.
-4. When every step is ticked and its criteria hold, set the plan status to `Done` and point the
-   user at `/sdd-compile`.
+3. Continue from the next open step only when the user asks you to — and then **one step**,
+   as `.claude/rules/plans.md` defines it (loaded now that the plan is read; it is
+   authoritative): name the step in one line, work it to its end, make the one
+   tick-and-`Verified` edit, then stop with a short report and a commit proposal carrying
+   the step ID — git writes stay behind the Ask-first gate in `AGENTS.md`. A whole stage or
+   the whole plan in one go only when the user asks for it. A stop that a working agreement
+   asks for — the test review — holds in every case and is never collected in advance. A
+   plan with `‖` stages: ask once how to run them, as the rule describes.
+4. When every step is ticked and its criteria hold, set the plan status to `Done` and stop.
+   Recommend `/sdd-compile` as the user's next command — in a new session, best with a strong
+   model from another model family than the one that implemented. Never start it yourself: a
+   "continue" is not that command.
 
 ## Mode C — the spec changed
 
@@ -241,7 +296,8 @@ first plan exactly as below.
    its steps carry the removals and adaptations from the impact report, and the spec's
    `**Plan:**` line points at it again. The archived plan stays frozen — read it, never
    extend or renumber it. Only a still-active plan (work in flight, never archived) is
-   extended in place instead: append steps, **never renumber** existing IDs, strike obsolete
+   extended in place instead: append steps and their stage line, **never renumber** existing IDs,
+   strike obsolete
    steps with a one-line reason.
 
 ### Impact across several specs
@@ -262,8 +318,10 @@ A business change that touches many specs is one impact analysis, not many blind
 
 - Write the plan and every report in `DocLanguage`.
 - **Planning does not change code, and the plan is not yours to approve.** In Mode A and C, stop
-  after writing the file and hand it to the user: name the plan, say how many steps it has, name
-  the riskiest one, and say plainly that reading these steps now is cheaper than reading the diff
+  after writing the file and hand it to the user: name the plan, say how many steps and stages it
+  has and
+  which stages may run in parallel (or that none can), name the riskiest one, and say plainly that
+  reading these steps now is cheaper than reading the diff
   later — a wrong step costs hundreds of lines, a wrong line costs one. Ask which steps look
   wrong before anything is implemented. Every other artifact here has a named reader; this one
   is the most expensive to get wrong. Once approved, propose one commit of the plan (Ask-first

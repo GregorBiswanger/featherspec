@@ -49,6 +49,11 @@ Before writing anything, ask:
 - "Is this the change you expected?"
 - "Anything else I should include (e.g., context not visible in the code)?"
 
+Inside plan work this gate adds no stop of its own. Where the approved plan's docs step
+already names these very snapshot entries, that approval is the confirmation: write, and say
+so in the report. Anything the plan did not name goes into the stage-end report as the delta
+report, with the two questions asked there, beside the commit proposal.
+
 Only after confirmation:
 
 - Update the `architecture:` YAML in `AGENTS.md` (the only place it lives), and set the
