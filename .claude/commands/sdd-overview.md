@@ -30,11 +30,19 @@ Inspect the workspace and report, in `DocLanguage`:
   and a `done/` spec that is not `Baseline` whose `**Plan:**` line names no plan (beside it
   or in `.specs/plan-archive/`). Detection only — the fix belongs to `/sdd-lifecycle`.
 - If the snapshot comment names a `last deep scan` date: report it plus the count of `unmapped:` entries.
-- For every spec with a `**Ticket:**` line while `IssueTracker:` in `AGENTS.md` is not `none`:
-  read the remote ticket's current state and, **where it differs from the spec's status**,
-  show one line per ticket (`spec: In Progress · tracker: Done — /sdd-lifecycle proposes the
-  next move`). Identical states stay silent — this is drift visibility, not tracker
-  reporting (#20). Remote unreadable → one line saying so; the check never fails the overview.
+- If specs carry a `**Ticket:**` line while `IssueTracker:` in `AGENTS.md` is not `none`:
+  end your reply with one offer — "Compare the N tickets with the tracker? (read-only,
+  network)" — and read the remote states only on a yes, in one query where the tracker
+  allows. **Where a state differs from the spec's status**, show one line per ticket
+  (`spec: In Progress · tracker: Done — /sdd-lifecycle proposes the next move`). A ticket
+  whose state matches gets no line and no mention — this is drift visibility, not tracker
+  reporting. Remote unreadable → one line saying so; the check never fails the overview.
+- A key in the `AGENTS.md` settings block that its *Single source of truth* section does
+  not name: name it, a near-miss with the key it resembles ("`IssueTrackr` — did you mean
+  `IssueTracker`?") and with what that setting runs on now — its own line's value, or the
+  default when that line is missing. Detection only — `/sdd-setup` proposes the fix.
+- If `.memory-bank/` holds return notes (`activeContext.<…>.md`): name them — parallel work
+  that came back and is not integrated yet; `.claude/rules/parallel-work.md` says how.
 - If `.sdd-reverse/_worklist.md` exists: report its row counts per status and name the
   candidates still `validating` — detection only; `/sdd-reverse-specify` continues them.
 - Whether the working tree looks clean (run `git status --short`; if this is not a git

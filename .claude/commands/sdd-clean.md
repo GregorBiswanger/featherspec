@@ -25,7 +25,7 @@ Analyze all FeatherSpec-managed markdown; write only where this command has auth
 
 | Files | Authority |
 | --- | --- |
-| `.memory-bank/*.md` | analyze + compact here |
+| `.memory-bank/*.md` | analyze + compact here — except return notes (`activeContext.<…>.md`): report them, integration belongs to `.claude/rules/parallel-work.md` |
 | `.architecture/*.md` maps | analyze + compact here (≤ 40-line budget per `.claude/rules/architecture-map.md`) |
 | `architecture:` snapshot in `AGENTS.md` | analyze only; observed drift hands over to `/sdd-architecture-update` — its gate stays the snapshot's only write path |
 | `.specs/**` specs and plans | analyze, report findings only — their commands and rules own edits; `AC-` and `T-` IDs are never cleanup material |

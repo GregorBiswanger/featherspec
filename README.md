@@ -184,9 +184,34 @@ Since 1.7.0. The spec stays the source of truth; the board stays what your team 
    tracker's own — so a Jira API change is never a FeatherSpec update.
 
 Every write waits for your yes. A tracker that is down never blocks the flow: the spec is finished
-anyway and the failure lands in its *Open points*. Set the `**Ticket:**` line by hand to link an
-existing ticket. Setup per platform and the full behaviour:
+anyway and the failure lands in its *Open points*. Since 1.10.0 the agent reads the ticket before
+it writes: a ticket someone already moved is named, never silently overwritten, and
+`/sdd-overview` offers to compare all tickets with the board. Set the `**Ticket:**` line by hand
+to link an existing ticket. Setup per platform and the full behaviour:
 [Issue Tracker Link](https://github.com/GregorBiswanger/featherspec/wiki/Issue-Tracker-Link).
+
+---
+
+## Work in parallel — subagents or several agents
+
+Since 1.10.0. One plan, several workers, no server: the repository is the only shared state.
+
+1. **Read the plan.** `/sdd-plan` looks for independent steps in every plan. They appear
+   joined by `‖` under `## Stages`, each with its own files and its own test file — or the
+   plan says why nothing can run side by side.
+2. **Choose how — once.** The agent asks, says what each way changes and recommends one: in
+   sequence, with **subagents** (it starts up to three `sdd-implementer` workers itself —
+   exercised in Claude Code; the agent file for VS Code with GitHub Copilot ships too, but
+   that path has not been run end to end yet), or with **other agents** — it prints one line per
+   step,
+   `Implement T-003 of <plan> as a parallel worker.`, for you to paste into a second
+   session, another tool or model, or a git worktree.
+3. **One writer.** A worker writes only its step's files and one return note. The main
+   session re-runs every check on the combined tree, ticks the steps and deletes the notes —
+   plan, Memory Bank and git history never have two authors.
+
+It pays for large, separate slices; on a small feature, in sequence is just as fast. Step by
+step for each tool: [Parallel Work](https://github.com/GregorBiswanger/featherspec/wiki/Parallel-Work).
 
 ---
 
@@ -272,9 +297,11 @@ reason: always-true, event, state, unwanted behaviour, optional feature.
 ```
 
 This reads your finished spec **as a stranger** — no conversation history, no benefit of the
-doubt — and returns six lists: contradictions, terms you used in two senses, criteria nothing
-can decide, implementation details posing as intent, failure modes you never named, and
-assumptions posing as decisions. It does not fix them. It ends with one question: the thing whose being wrong would cost the most.
+doubt — and returns six short lists: contradictions, terms you used in two senses, criteria
+nothing can decide, implementation details posing as intent, failure modes you never named,
+and assumptions posing as decisions — then how many of them block planning. It does not fix
+them on its own. It offers to walk you through them, one question at a time, with options
+and a recommendation where the spec supports one; only what you confirm reaches the spec.
 
 Thirty seconds of reading here is the cheapest ambiguity you will ever remove. Left alone, every
 one of those gaps gets silently resolved by the planner's best guess and hardened into numbered
@@ -289,8 +316,9 @@ Unit tests with the built-in node:test runner. No database, no build step.
 ```
 
 This writes `0001-bill-splitter.plan.md` right next to the spec: numbered baby steps
-(`T-001`, `T-002`, …), each with a `Verify:` line you can actually run, plus a traceability
-table and a session-handoff block. Then it **stops** — planning never touches code.
+(`T-001`, `T-002`, …), each with a `Verify:` line you can actually run and grouped into a
+few **stages**, plus a traceability table and a session-handoff block. Then it **stops** —
+planning never touches code.
 
 ### ⑤ Read the plan
 
@@ -303,26 +331,32 @@ is missing, that the risky part comes first. A wrong step produces hundreds of w
 wrong line produces one. Two hundred lines of plan beats two thousand lines of diff.
 
 Say which steps look wrong before anything is implemented. Approving the plan approves the
-document, not the start of work — implementation begins on your explicit go ("Implement
-T-001"), and that go also moves the pair into `.specs/active/`: implementation happens
-there, not in the backlog.
+document, not the start of work — implementation begins on your explicit go ("Implement"),
+and that go also moves the pair into `.specs/active/`: implementation happens there, not in
+the backlog.
 
 ### ⑥ Implement, step by step
 
 ```text
-Implement T-001.
+Implement.
 ```
 
+The agent works the next step and stops: quality gates green, the step ticked with its
+recorded result, a short report, a commit proposal. Say `Implement.` again for the next one —
+or ask for the whole stage or the whole plan when it should run through. The plan groups its
+steps into **stages**; at a stage end plan and Memory Bank are brought level.
+
 With the default TDD working mode, a new behaviour starts as a test you get to see fail —
-and the agent stops after writing it, waiting for your go before any implementation.
-The agent then does one focused change, runs its `Verify:` line, and writes the result into
-the step's `Verified:` field — the command it ran and what came back — before it ticks the box.
-No recorded run, no tick: that one rule is what keeps a plan from becoming a list of good
-intentions. It records which files it touched in the same change set as the code, and refreshes
-`.memory-bank/activeContext.md` in that same change set, so the dashboard never lags the work.
-Before anything is called *done*, it reconciles plan, Memory Bank, and code — a step whose
-status did not move is not finished, whatever the code looks like. Repeat until the steps are
-done. Close a session mid-way and the next one resumes from the plan file, not from your memory.
+and the agent stops after writing it, waiting for your go before any implementation. It then
+makes one focused change, runs the step's `Verify:` line and ticks the box with the result —
+the command it ran and what came back. No recorded run, no tick: that one rule keeps a plan
+from becoming a list of good intentions. Traceability, the handoff and the Memory Bank are
+brought level when the stage ends, not after every step. Steps joined by `‖` can run side by
+side — [Work in parallel](#work-in-parallel--subagents-or-several-agents).
+
+Before anything is called *done*, the agent reconciles plan, Memory Bank, and code — a step
+whose status did not move is not finished, whatever the code looks like. Close a session
+mid-way and the next one resumes from the plan file, not from your memory.
 
 ### ⑦ Check it against your own criteria
 
@@ -348,6 +382,10 @@ shown as a command and its output, marks the criterion pending, whatever the tes
 the spec does not state stays a finding; the verdict is a function of your spec and your code,
 so the same code gets the same verdict tomorrow. A rule check lists breaches of `AGENTS.md`'s
 non-negotiables and style bullets, quoting the rule — findings for you to weigh, never verdict.
+
+Run it yourself, in a new session — the agent never starts it on its own — and best with a
+strong model from another model family than the one that implemented: a judge tends to pass
+what its own family wrote.
 
 The important discipline: you check against **the criteria you wrote**, not against a gut
 feeling. If "actually I'd also like X" comes up now, that is not a bug — it was never in the
@@ -376,7 +414,7 @@ moved files really left their old folder before proposing the commit.
 | `/sdd-overview` | Where am I? Workflow map, current spec status, command list |
 | `/sdd-setup` | One-time wizard: doc language, Memory Bank, architecture snapshot, working agreements, issue tracker |
 | `/sdd-specify` | Adaptive product-owner interview → a lean, testable spec (+ optional tracker ticket) |
-| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
+| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes; then an optional guided walkthrough of the findings |
 | `/sdd-plan` | Spec → a persisted plan of baby steps, with research and traceability |
 | `/sdd-compile` | Readiness check: verdict, evidence and spec fidelity per acceptance criterion, tests, rule check, docs sync |
 | `/sdd-lifecycle` | Move specs between `backlog/`, `active/`, `done/` — archiving the plan at completion, syncing the ticket if linked |
@@ -403,7 +441,7 @@ CHANGELOG.md           the template's release history (snapshot at adoption)
 .claude/settings.json  auto memory off, so the Memory Bank is the only project memory
 .github/prompts/       thin loaders so Copilot reaches the same bodies
 .github/instructions/  thin loaders so Copilot gets the path-scoped rules too
-.github/agents/        the Copilot persona, plus the two scout agents in VS Code dialect
+.github/agents/        the Copilot persona, plus the scout and worker agents in VS Code dialect
 .vscode/settings.json  Copilot wiring: instructions/prompts locations, local memory tool off
 
 .specs/                backlog/ · active/ · done/ · plan-archive/ — specs, plans, frozen plan history (ships empty)
@@ -429,7 +467,7 @@ Where a copy exists, it names `AGENTS.md` as the winner.
 ## Why one template for two tools
 
 - **VS Code Copilot reads most of Claude Code's configuration.** `AGENTS.md` natively, via
-  `chat.useAgentsMdFile`; the path-scoped rules through six thin loaders in
+  `chat.useAgentsMdFile`; the path-scoped rules through eight thin loaders in
   `.github/instructions/`, whose `applyTo` globs mirror each rule's `paths:` — the rule text
   itself stays single-source under `.claude/rules/`. FeatherSpec leans on the overlap
   instead of maintaining two copies.
@@ -458,6 +496,7 @@ Everything beyond this page lives in the **[Wiki](https://github.com/GregorBiswa
 | [Issue Tracker Link](https://github.com/GregorBiswanger/featherspec/wiki/Issue-Tracker-Link) | Link specs to Jira or GitHub Issues — setup per tool, what syncs when |
 | [Specify Method](https://github.com/GregorBiswanger/featherspec/wiki/Specify-Method) | The interview model behind `/sdd-specify` — origin and deliberate deviations |
 | [Specs & Plans](https://github.com/GregorBiswanger/featherspec/wiki/Specs-and-Plans) | Document structure, lifecycle, traceability |
+| [Parallel Work](https://github.com/GregorBiswanger/featherspec/wiki/Parallel-Work) | Subagents, a second session, another tool or a worktree on one plan — step by step |
 | [Memory Bank](https://github.com/GregorBiswanger/featherspec/wiki/Memory-Bank) | The four files and what belongs in each |
 | [Interop Matrix](https://github.com/GregorBiswanger/featherspec/wiki/Interop-Matrix) | What Copilot reads from `.claude/`, with sources |
 | [Configuration](https://github.com/GregorBiswanger/featherspec/wiki/Configuration) | Shared vs. local settings, auto memory, MCP, hooks |

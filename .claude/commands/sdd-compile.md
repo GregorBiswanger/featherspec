@@ -33,6 +33,12 @@ that produced a gap is the worst placed to find it. If delegation is impossible,
 line at the top of the brief and re-run every check yourself, trusting no note from your own
 session.
 
+This check runs only on the user's own `/sdd-compile` — never as the "next action" of a plan
+or on a "continue"; reached that way, stop and recommend it instead. It is strongest in a new
+session with a strong model from another model family than the one that implemented: a judge
+tends to pass what its own family wrote. When this session implemented the work, say that in
+one line at the top of the brief.
+
 ## Expected state and verdict rubric
 
 This check normally runs **before** the `done/` move: the state it certifies is the spec
@@ -87,8 +93,8 @@ stays `pending`.
   unchanged repository must return it unchanged.
 - **Plan state** — open vs. finished steps, and whether the traceability table names real code
   paths and a test per criterion. Flag any criterion no step covers, and any finished step whose
-  `Verified:` field is empty. For every test-adding step, check its `Verified:` records a red
-  run before the implementation; additionally stash-spot-check one criterion's test. A test
+  `Verified:` field is empty. For every test-adding step, check its `Verified:` records what
+  was red and the green result; additionally stash-spot-check one criterion's test. A test
   that cannot fail decides nothing.
 - **Scope check** — map each new or changed test in the diff to a criterion, or mark it
   `scaffolding`. An unmappable test is behaviour nobody ordered — name it as scope drift.

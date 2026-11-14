@@ -54,7 +54,8 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
   `done/` spec is valid legacy state from pre-1.5 layouts — archive it in passing with the
   same procedure, never delete it.
 - **Before `done/`:** check the plan too — every step ticked **and its `Verified:` field
-  filled**, the traceability table filled with real code paths and a test per criterion. Ask
+  filled**, the traceability table filled with real code paths and a test per criterion, and
+  no return note (`.memory-bank/activeContext.<…>.md`) left unintegrated. Ask
   for the evidence: a `/sdd-compile` brief whose verdict is `READY` (the
   `READY (manual items: n)` form counts), or the `Verified:` lines themselves. Ticked boxes with no recorded run are not evidence — name the criteria that lack
   it and stop. If steps are still open, say so and let the user decide before moving.
@@ -95,9 +96,11 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    successor link; changing again → reactivation back to `active/`). A spec carrying a
    `**Ticket:**` line names its tracker transition in this same proposal (step 4b);
    otherwise the proposal does not mention trackers.
-3. **Act — move first, edit second.** An edit made before the move leaves a dirty editor
-   buffer at the source path, and its next "save all" resurrects the file there — the
-   repeatedly observed duplicate mechanism. So: `git mv` first (one command per file, so
+3. **Act — move first, edit second.** (With a `**Ticket:**` line, step 4b's drift check
+   comes before this step: it can stop the run before anything moves.) An edit made before
+   the move leaves a dirty editor buffer at the source path, and its next "save all"
+   resurrects the file there — the repeatedly observed duplicate mechanism. So: `git mv`
+   first (one command per file, so
    the move is staged atomically and a late re-save shows up as a new untracked file),
    every metadata edit afterwards, at the destination path. Not a git repository — or the
    files untracked because no commit exists yet? Move on the file system, say so, and
@@ -131,25 +134,26 @@ Keep the spec set tidy: update status fields, move specs between `backlog/`, `ac
    the old path goes stale the moment the move lands.
 4b. **Ticket (only when the spec carries a `**Ticket:** KEY-42` line and `IssueTracker:` in
    `AGENTS.md` is not `none`):** fold the ticket transition into the step-2 move proposal —
-   name it in the same question ("move → active + KEY-42 → In Progress?") so one yes
-   covers both; the network write is still asked, just not twice. Into `done/`: the "Done"
-   equivalent plus a one-line completion comment; reactivation: back to "In Progress";
-   `Deprecated`: close with a one-line comment naming the successor. GitHub Issues have no
-   status field: a one-line comment marks the active move, close on done, reopen on
-   reactivation — never create labels. Never blocking; use whatever is connected (`gh`,
-   GitHub/Atlassian MCP, the tracker's own MCP server), resolve status IDs at runtime.
-   **Drift check, before proposing the transition (read-only, same tooling):** read the
-   remote ticket's current state and compare it with the transition this move is about to
-   fire — the same check a moment earlier would have been the write. Remote already in the
-   target state → name it and propose skipping the redundant transition. Remote ahead of
-   the spec (e.g. "Done" while the spec is `In Progress`) → say so, treat it as a hint,
-   never as evidence — propose `/sdd-compile`; the move stays gated on it. Remote behind or
-   reopened → the normal transition fires as today; a reopened remote additionally offers
-   the existing reactivation proposal. Remote unreadable → drift is unknown, proceed as
-   today; the write attempt itself reports failures as below. Divergence is named, never
-   silently overwritten (#20). On
-   failure record `Ticket sync: failed — <reason>` in the spec's *Open points* and continue.
-   With `none` or without a `**Ticket:**` line, say nothing about the tracker.
+   name it in the same question ("move → active + KEY-42 → In Progress?") and say that the
+   ticket's state is read first, so one yes covers all of it; the network access is still
+   asked, just not twice. Into `done/`: the "Done" equivalent plus a one-line completion
+   comment; reactivation: back to "In Progress"; `Deprecated`: close with a one-line comment
+   naming the successor. GitHub Issues have no status field: a one-line comment marks the
+   active move, close on done, reopen on reactivation — never create labels. Never blocking;
+   use whatever is connected (`gh`, GitHub/Atlassian MCP, the tracker's own MCP server),
+   resolve status IDs at runtime.
+   **Drift check — right after the yes, before anything moves (read-only, same tooling;
+   the yes to the transition covers this read):** read the remote ticket's current state
+   and compare it with the transition this move is about to fire. Remote already in the
+   target state → say so and skip the redundant transition and its comment. Remote ahead
+   of the spec (e.g. "Done" while the spec is `In Progress`) → name it and ask again before
+   going on: a hint, never evidence — propose `/sdd-compile`; a move into `done/` stays
+   gated on it. Remote behind or reopened → the normal transition fires; a reopened remote
+   additionally offers the reactivation proposal. Remote unreadable → drift is unknown,
+   proceed with the transition; the write attempt itself reports failures as below.
+   Divergence is named, never silently overwritten. On failure record
+   `Ticket sync: failed — <reason>` in the spec's *Open points* and continue. With `none`
+   or without a `**Ticket:**` line, say nothing about the tracker.
 5. **Final check, then commit** — the very last action of this run, after every edit and
    save: list the source folder(s) on the file system and verify the moved files are gone.
    Where a HEAD exists, `git status --short` must additionally match the expected list —

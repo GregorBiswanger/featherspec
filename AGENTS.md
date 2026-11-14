@@ -25,7 +25,7 @@ globs mirror the rules' `paths:` globs. On divergence this file wins.
 
 ```yaml
 DocLanguage: English # template default until /sdd-setup asks; governs docs and dialogue, wiring stays English.
-FeatherSpecVersion: 1.9.0 # managed by /sdd-featherspec-update; do not edit by hand
+FeatherSpecVersion: 1.10.0 # managed by /sdd-featherspec-update; do not edit by hand
 IssueTracker: none # none | github | jira | <other> — set by /sdd-setup
 ```
 
@@ -34,9 +34,9 @@ IssueTracker: none # none | github | jira | <other> — set by /sdd-setup
 **Always** — prefer small, testable steps over large refactors; keep changes consistent with
 the `architecture:` snapshot below.
 
-**Ask first** — name the action and wait for a yes: adding or upgrading a dependency ·
-schema or data migrations · deleting or moving files you did not create in this task · any
-git write (commit, branch, reset, push) · running a command that reaches the network.
+**Ask first** — name the action and wait for a yes: adding or upgrading a dependency · schema
+or data migrations · deleting or moving files this task did not create (integrated return
+notes excepted) · any git write (commit, branch, reset, push) · a network-reaching command.
 
 **Never** — request or include secrets (`.env`, keys, tokens) in chat or code; keep sensitive
 files out of context.
@@ -45,13 +45,13 @@ If uncertain, ask **one** targeted question; a non-blocking assumption is stated
 
 ### Progress & state sync (gate)
 
-This restates the sync duty from the path-scoped plan and Memory Bank rules (they load only
-when their file is open); stated here, it binds every session and any agent. **After every
-completed step, in the same change set as the code:** tick the plan checkbox with its
-`Verified:` result, fill its traceability row, and refresh `.memory-bank/activeContext.md` —
-code that moved while its docs did not is an unfinished step. **Before reporting anything as
-"done":** plan, `activeContext.md` and code must agree; if they diverge the code is the
-truth, so reconcile the docs first, then report.
+The plan and Memory Bank rules load only when their file is open; stated here, this duty binds
+every session and any agent. **After every completed step:** tick its plan checkbox with the
+`Verified:` result — one edit — and stop, unless the user asked for a whole stage or plan. **When a
+stage ends or work is blocked, and before reporting "done":** fill the traceability rows,
+refresh the plan's handoff and `.memory-bank/activeContext.md` — these and the code must agree;
+where they diverge the code is the truth, reconcile first. A **parallel worker** edits neither
+the plan nor `activeContext.md` — `.claude/rules/parallel-work.md`.
 
 ### Fast path
 
@@ -182,7 +182,7 @@ thin loader in `.github/prompts/`. This table is the **only** machine-facing com
 | `/sdd-overview` | Workflow overview, current spec status, command list |
 | `/sdd-setup` | Onboarding wizard: `DocLanguage`, Memory Bank, architecture snapshot, working agreements (quality gate, TDD working mode), issue tracker |
 | `/sdd-specify` | Adaptive product-owner interview → lean spec with testable acceptance criteria |
-| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes |
+| `/sdd-clarify` | Adversarial pass over a spec: contradictions, ambiguity, untestable criteria, implementation posing as intent, missing failure modes; then an optional guided walkthrough of the findings |
 | `/sdd-plan` | Spec → persisted baby-step plan file (research, resume, impact analysis) |
 | `/sdd-compile` | Readiness check: verdict, evidence and spec fidelity per acceptance criterion, tests, rule check, docs sync |
 | `/sdd-architecture-update` | Detect drift, update snapshot + Memory Bank (confirmation gate) |

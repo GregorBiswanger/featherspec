@@ -70,6 +70,12 @@ template's default, not the user's answer, and skipping the question because a v
 is the one way this step can silently fail.
 
 - If the user does not answer, infer it from the conversation language.
+- **Settings check — after the answer, before the first write:** a key in the `AGENTS.md`
+  settings block that its *Single source of truth* section does not name is a finding —
+  name it, a near-miss with the key it resembles ("`IssueTrackr` is not a FeatherSpec
+  setting — did you mean `IssueTracker`?") and with what that setting runs on now (its own
+  line's value, or the default when that line is missing), and propose: rename, remove, or
+  keep — a kept key is reported by every `/sdd-overview`. Never fix it unasked.
 - After a language is chosen, set `DocLanguage` in `AGENTS.md` (the **only** place it lives).
 - Then write all project docs (Memory Bank + specs) in that language, rewriting the default
   English templates if needed.
@@ -245,4 +251,5 @@ changes anything that follows — the command stays available at any later time.
 
 - Summarize what you created/updated and what you inferred.
 - Suggest 1–3 next commands: `/sdd-specify`, `/sdd-plan`, `/sdd-architecture-update`,
-  `/sdd-lifecycle` — for existing software also `/sdd-reverse-specify`.
+  `/sdd-lifecycle` — for existing software also `/sdd-reverse-specify` — and say that they
+  belong in a new session: one opened before this run still holds the old `AGENTS.md`.

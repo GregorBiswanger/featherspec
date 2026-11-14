@@ -238,8 +238,13 @@ every case**, adds included — a path under an absent half is skipped and liste
   bullets (a changed template *default* bullet applies only if P's list still equals the old
   default) · the `architecture:` block including its comment line · unknown-name command-table
   rows (row-wise merge by command name; a template row whose body file the project lacks is
-  *offered*, never auto-inserted — the table follows the file verdict). User sections with no
-  Base anchor stay in place untouched. Anchors unmatchable (translated, restructured, merged
+  *offered*, never auto-inserted — the table follows the file verdict). A key in P's
+  settings block that Target's block does not declare — a typo, a key a release renamed, a
+  hand-edit leftover — is a finding, never carried in silence and never fixed unasked:
+  name it, a near-miss with the key it resembles ("`IssueTrackr` is not a FeatherSpec
+  setting — did you mean `IssueTracker`?"), and ask: rename, remove, or keep. User
+  sections with no Base anchor stay in place untouched. Anchors unmatchable (translated,
+  restructured, merged
   into a larger constitution) → degrade to a guided section-by-section merge, each change
   proposed individually. Snapshot writes route through `/sdd-architecture-update`'s gate —
   never a second write path.
@@ -248,9 +253,10 @@ every case**, adds included — a path under an absent half is skipped and liste
   only; a user-changed value (e.g. re-enabled `autoMemoryEnabled`) is a per-key conflict
   defaulting to keep; user keys are invisible.
 - `CLAUDE.md` — ensure the `@AGENTS.md` line exists; keep every user addition.
-- Scout twins (`.claude/agents/sdd-scout.md` + `.github/agents/sdd-scout.agent.md`) — replace
-  bodies as a pair, preserve user-added frontmatter keys (a pinned `model:`), then verify the
-  two bodies are byte-identical; remind the user to re-check pinned model names.
+- Agent twins (`.claude/agents/<name>.md` + `.github/agents/<name>.agent.md` for `sdd-scout`,
+  `sdd-reverse-scout` and `sdd-implementer`) — replace bodies as a pair, preserve user-added
+  frontmatter keys (a pinned `model:`), then verify the two bodies of each pair are
+  byte-identical; remind the user to re-check pinned model names.
 - `.specs/README.md` and `.specs/*/.gitkeep` are template surface (normal matrix); everything
   else under `.specs/` is never-write. `.memory-bank/` seeds still byte-equal to Base are
   case 2; anything else there is never-write.
@@ -328,7 +334,7 @@ that have loaders) names and links it, the constitution table carries its row; w
 differ, existence and linkage may not; user-owned commands are advisory lines, never a
 miss · instructions loader ↔ rule link per `.claude/rules` file, each loader's `applyTo`
 equal to its rule's `paths:` globs (in shapes that have the Copilot
-half) · scout twin bodies byte-identical · `.vscode`
+half) · agent twin bodies byte-identical per pair · `.vscode`
 location keys · `.gitignore` template lines (including `.sdd-update/`) · the `@AGENTS.md`
 line where the shape has `CLAUDE.md` · the three byte-slots (managed-settings values,
 preference bullets, `architecture:` block) byte-equal to Phase 2 **except** bytes changed by
@@ -532,3 +538,46 @@ entries compose sequentially across skipped versions.
   resolve, never silently
 - data-notes: none — no artifact changes shape; briefs written by 1.8.0 stay valid
 - probes: `.claude/commands/sdd-compile.md` contains "the cases the spec itself states" ⇒ ≥1.9.0
+
+### 1.10.0 — minor (2026-11-14)
+- adds: `## Stages` (closed by a `Parallel:` / `No parallel stage:` line — `/sdd-plan` looks
+  for independent steps in every plan) and the one-line `- [ ] **Verified (T-NNN):**` step
+  layout in new plans ·
+  `.claude/rules/parallel-work.md` (+ its `.github/instructions/` loader) — worker contract,
+  return notes, integration; loaded on a read of `.memory-bank/activeContext.*.md` ·
+  `sdd-implementer` agents (both tools) · return-note report line in `/sdd-overview` and
+  return-note check before `done/` in `/sdd-lifecycle` · the agent-twin rule of this command
+  now names all three pairs · unknown-settings-key findings in `/sdd-overview`, `/sdd-setup`
+  and this command · the guided walkthrough in `/sdd-clarify`
+- semantic-flips: the sync gate in `AGENTS.md` splits — per finished step only the tick with
+  its `Verified:` result; traceability rows, plan handoff and `activeContext.md` when a stage
+  ends, work is blocked, or before reporting "done" (formerly all of it after every step) ·
+  work still stops after every step with a commit proposal; a whole stage or the whole plan
+  runs in one go only on request and stops at the end of what was asked for · a finished plan stops
+  with a recommendation — `/sdd-compile` runs only on the user's own command, best in a new
+  session with a model from another family · a step is
+  a behaviour slice of typically three to five criteria (formerly one or two), and docs sync
+  plus final gates form one closing step · the red run is recorded together with the green
+  result in one `Verified:` entry (formerly before the implementation landed) ·
+  `/sdd-architecture-update`'s confirmation adds no stop inside plan work: snapshot entries
+  the approved plan names are confirmed by that approval, anything else is asked in the
+  stage-end report · a parallel worker edits neither the plan nor `activeContext.md` ·
+  Ask-first exempts deleting an integrated return note · `/sdd-clean` leaves return notes
+  alone · `/sdd-clarify` lists one or two lines per finding, closes with the count, the
+  verdict and one offer (formerly one closing question), and on the user's confirmed
+  decisions writes them into the spec (formerly it only appended findings to *Open points*
+  on a yes) · `/sdd-lifecycle` reads the linked ticket's state right after the yes and
+  before anything moves, skips a redundant transition and asks again when the tracker is
+  ahead (formerly it wrote the transition unread) · `/sdd-overview` ends with an offer to
+  compare linked tickets with the tracker — a network read on a yes. A project that
+  customized the gate paragraph in `AGENTS.md`, or `sdd-plan.md`, `plans.md`,
+  `memory-bank.md`, `sdd-clarify.md`, `sdd-lifecycle.md`, `sdd-overview.md`, `sdd-setup.md`,
+  `sdd-compile.md`, `sdd-clean.md` or `sdd-architecture-update.md`, keeps its text as a
+  conflict to resolve, never silently
+- data-notes: plans written before 1.10 stay valid and are finished as written — no
+  `## Stages` means every step is its own stage, and their checkbox stays where it is
+  (detect: a `.plan.md` in `backlog/` or `active/` without `## Stages` · offer: none). The
+  *Quality gate* and *TDD* preference bullets are untouched: the gates still run before
+  every tick — in sequence after every step, in a `‖` stage once on the combined result
+  before any of its steps is ticked — and a TDD stop still stops
+- probes: `.claude/rules/parallel-work.md` present ⇒ ≥1.10.0
