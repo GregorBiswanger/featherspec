@@ -13,130 +13,91 @@ docs fixes that are safe to overwrite.
 
 ## [1.10.0] - 2026-11-15
 
-### Changed
-
-- **Plan work with lean bookkeeping: upkeep no longer rides on every step.** The
-  criticism was that working through a plan took too long. Measured on the benchmark tasks,
-  the time went neither into the quality gates nor into the code: it went into the number of
-  small steps and into the upkeep each one triggered — about three plan edits plus a
-  dashboard refresh per step. Three changes follow. **Steps are behaviour slices**: the test
-  and the code for the criteria the same tests decide, typically three to five, never split
-  by layer or file; docs sync and the final gate run form one closing step. **Per finished
-  step, one edit**: the checkbox now sits on the `Verified` line and carries the step ID, so
-  the tick and its recorded result are a single unambiguous edit — still no tick without a
-  recorded run. Traceability rows, the plan handoff and `activeContext.md` are brought level
-  when a stage ends, when work is blocked, and before anything is reported as done.
-  **Stages** (`## Stages` in the plan) group steps that need no human decision in between;
-  the stage end is where plan and Memory Bank are brought level. Work still stops after
-  every step — gates green, the tick, a short report, a commit proposal — and a whole stage
-  or the whole plan runs in one go only when you ask for it. A stop a working agreement asks
-  for, the test review above all, is never skipped, moved or collected in advance: the yes
-  that counts is the one given to the tests as written.
-  `/sdd-architecture-update` no longer adds a stop of its own inside plan work: snapshot
-  entries the approved plan names are confirmed by that approval. The *Quality gate* and
-  *TDD* working agreements are untouched — the gates still run before every tick (in
-  sequence after every step; in a parallel stage once, on the combined result, before any
-  of its steps is ticked), and a TDD stop still stops. Replayed against 1.9.0 on the released
-  wording — same approved
-  spec (17 criteria), same model, in a sandbox, the whole plan requested in one go, three
-  runs each side by side: implementation time fell from a median of 294 s (286 · 294 · 342;
-  nine or ten steps and one confirmation stop per run) to 204 s (194 · 204 · 232; five
-  steps, no stop) — about 30 % less. Hidden acceptance tests passed 26/26 in all six runs
-  and every 1.10.0 plan ended complete with a recorded run per step. Earlier series on
-  draft wordings showed a larger gap — 437 s against 232 s on the same feature, where the
-  1.9.0 plans had eleven or twelve steps and the reply latency at the stop was counted,
-  and about 720 s against 480 s on a brownfield task with a session switch, where the
-  handoff after the switch was correct. Small samples, one model, two small JavaScript
-  projects — a direction, not a guarantee.
-- `AGENTS.md` stays at 200 lines: the sync gate was rewritten in place.
-- **`/sdd-compile` is the user's command.** A finished plan stops with a recommendation and
-  the agent never starts the readiness check on a "continue". The recommendation names how
-  it is strongest: a new session, a strong model from another model family than the one
-  that implemented — a judge tends to pass what its own family wrote.
-- `/sdd-setup` closes by saying that the next commands belong in a new session — the one
-  that ran setup was opened with the `AGENTS.md` from before it.
+Plan work gets faster, several agents can work on one plan, `/sdd-clarify` walks you through
+its findings, and ticket moves check the tracker first. Implements #20, #21 and #24 and
+includes PR #23. Thank you, Michael (@TheEifelYeti), for designing and implementing the
+tracker drift check and for proposing #21.
 
 ### Added
 
-- **Parallel work on one plan, without a coordinator.** `/sdd-plan` looks for independent
-  steps in every plan and joins them with `‖` — separate files (a `Files:` line each),
-  separate tests, a shared file in its own step before or after them, each check passing
-  without the other — and closes the stage list with what it found (`Parallel: stage 2.`,
-  or `No parallel stage:` and the reason). Such a stage can run in sequence, with subagents,
-  or be handed to other agents: a second session, another tool or model, a git worktree.
-  The agent asks once per plan, says what each way changes and recommends one. One rule
-  keeps all of these conflict-free: the main session is the only writer of the plan,
-  `activeContext.md` and git history; a worker writes only its own step's files and one
-  return note, `.memory-bank/activeContext.<spec>-<step>.md`. The main session re-runs each
-  `Verify:`, runs the gates on the combined tree, ticks the steps and deletes the notes; a
-  note left lying around means parallel work came back and is not integrated, and
-  `/sdd-overview` and `/sdd-lifecycle` say so. A session is a worker when it was started
-  with the worker line or told that another session is on the plan; asked for a step whose
-  earlier steps are still open in its checkout, it asks which it is. A worker checks its
-  base first and never writes outside its checkout: a worktree holds committed files only,
-  so the main session proposes the commit that brings the tree level before it hands out
-  the start lines, and the worker's result comes back as one commit on its branch. New:
-  `.claude/rules/parallel-work.md` with
-  its loader (loads only when a return note is touched), and the `sdd-implementer` agent in
-  both dialects — give it another `model:` to put workers on a different model. Verified
-  with four concurrent worker sessions in one working tree (the *other agents* route), one
-  of them on a different model: no
-  write to the plan or the dashboard, all four notes integrated and removed, hidden tests
-  green. On a task this small parallel work was not faster than working in sequence — it is
-  for slices that are large and separate. Also exercised: two workers in their own git
-  worktrees created from the stage commit — each came back as one commit on its branch,
-  the main session merged, re-ran both checks and the gate, and only then ticked — and a
-  session started in free words in a worktree that lacked the earlier stage: it changed
-  nothing, named the missing base and asked which it was. Subagents ran end to end in
-  Claude Code 2.1.296 and have not been exercised in GitHub Copilot yet: the main session
-  delegated a two-step stage to two `sdd-implementer` workers at the same time, then
-  checked the changed files, ran both checks and the gate itself and ticked. A complete
-  parallel stage in Copilot is still to be exercised as well.
-- **Tracker drift check** (#20, #23): the tracker is where reality changes between two SDD
-  sessions — a colleague closes a ticket, a product owner reopens one — and until now the
-  next lifecycle move wrote its transition over whatever was there. `/sdd-lifecycle` now
-  reads the ticket's state before it writes: already in the target state → it says so and
-  skips the redundant transition; ahead of the spec ("Done" while the spec is still
-  `In Progress`) → it names that and asks again before anything moves — a hint, never
-  evidence, and a move into `done/` stays gated on `/sdd-compile`; reopened → the normal
-  transition plus the reactivation proposal; unreadable → drift is unknown and the move
-  proceeds as before. `/sdd-overview` offers to compare all linked tickets and then shows
-  one line per ticket whose state differs from its spec. Findings and proposals only: no automatic
-  move, no polling, no new setting, no
-  new file. Designed and implemented by @TheEifelYeti. Two adjustments on top, both from
-  the constitution's Ask-first rule for network commands: in `/sdd-lifecycle` the read
-  happens right after the yes to the move instead of before the proposal (that yes covers
-  it, so the usual case still takes one answer); `/sdd-overview` offers the comparison once
-  at the end of its report instead of reading unasked, and uses one query where the tracker
-  allows. Exercised against
-  a GitHub test double in seven runs: target state, normal transition, tracker ahead (three
-  times), tracker unreadable, and the overview comparison.
-- **Guided walkthrough in `/sdd-clarify`** (#24): a long report leaves the user alone with
-  the hard part — which finding first, and what to do about it. The six lists stay and stay
-  first, now one or two lines per finding, followed by the count ("9 findings, 5 block
-  planning") and the verdict. Then one offer — in the tool's question picker where it has
-  one: go through the findings one at a time. Each
-  message is one finding — the quote, what goes wrong if it stays open, two to four options
-  with their consequences. An option is marked recommended only where the spec, `AGENTS.md`,
-  the Memory Bank or the code supports it, with the support named; without a basis it says
-  so. The user picks, answers in their own words (read back before it counts), skips, or
-  stops; blocking findings come first, then one check-in whether to go on. Only confirmed
-  decisions are written into the spec, in one pass, the way `/sdd-specify` revises; skipped
-  and unreached findings land in *Open points* as open questions. No findings, no offer.
-  The command still never resolves anything on its own — finding stays the stranger's job,
-  deciding stays the user's. A finding that rests on `AGENTS.md` is checked against the file
-  on disk before it is listed: a session opened before `/sdd-setup` still holds the old one.
-  Compared with 1.9.0 on a spec with six seeded defects (three
-  runs of 1.9.0, four of the released wording): all six found in every run of both
-  versions; 15–19 findings per report against 20–24, the old form often listing one defect
-  under two or three headings.
-- **Unknown settings keys are named** (#21): a misspelled key in the `AGENTS.md` settings
-  block is not an error — `IssueTrackr: jira` simply behaves like `IssueTracker: none`, and
-  nothing says why ticket sync never runs. `/sdd-overview` now names a key the constitution
-  does not declare, a near-miss together with the key it resembles; `/sdd-setup` and
-  `/sdd-featherspec-update` propose rename, remove or keep. Nothing is fixed unasked; no
-  schema, no strict mode, no new setting. Proposed by @TheEifelYeti. Exercised in all three
-  commands, the updater as part of the 1.9.0 → 1.10.0 rehearsal.
+- **Parallel work on one plan.** Large features can be split across agents without one
+  overwriting the other.
+  - `/sdd-plan` looks for independent steps in every plan, joins them with `‖` and states
+    the result: `Parallel: stage 2.`, or `No parallel stage:` and the reason.
+  - A `‖` stage runs in sequence, with subagents, or with other agents — a second session,
+    another tool or model, a git worktree. The agent asks once per plan, says what each way
+    changes and recommends one.
+  - One writer: the main session owns the plan, `activeContext.md` and git. A worker writes
+    only its step's files and a return note. The main session re-runs every `Verify:`, runs
+    the gates on the combined result, ticks the steps and deletes the notes; a note left
+    behind is flagged by `/sdd-overview` and `/sdd-lifecycle`.
+  - New files: `.claude/rules/parallel-work.md` with its loader, and the `sdd-implementer`
+    agent in both dialects — add a `model:` line to run workers on another model.
+  - Exercised with separate sessions and with git worktrees. Subagents: exercised in
+    Claude Code, not yet in GitHub Copilot. It pays for large, separate slices: on small
+    tasks it was not faster than working in sequence.
+  - Step by step: [Parallel Work](https://github.com/GregorBiswanger/featherspec/wiki/Parallel-Work).
+- **Tracker drift check** (#20, PR #23 by @TheEifelYeti). A ticket that changed between two
+  sessions is no longer overwritten.
+  - `/sdd-lifecycle` reads the ticket before it writes. Already in the target state: the
+    redundant transition is skipped. Ahead of the spec: it names that and asks again — a
+    hint, never evidence; a move into `done/` stays gated on `/sdd-compile`. Reopened: the
+    normal transition plus the reactivation proposal. Unreadable: the move proceeds as
+    before.
+  - `/sdd-overview` offers to compare all linked tickets and lists those whose state
+    differs from their spec.
+  - Findings and proposals only: no automatic move, no polling, no new setting.
+  - Two adjustments on top of the contribution, both from the Ask-first rule for network
+    commands: the read happens after your yes to the move, and `/sdd-overview` offers the
+    comparison instead of reading unasked.
+  - Exercised against a GitHub test double in seven runs.
+- **Guided walkthrough in `/sdd-clarify`** (#24). You decide finding by finding instead of
+  facing one long report.
+  - The lists are shorter — one or two lines per finding — and end with a count and a
+    verdict.
+  - One offer follows: go through the findings one at a time, each with the quote, what
+    goes wrong if it stays open, and two to four options. An option is recommended only
+    where the spec, `AGENTS.md`, the Memory Bank or the code supports it.
+  - Only decisions you confirm are written into the spec; skipped and unreached findings
+    go to *Open points*. Findings that rest on `AGENTS.md` are checked against the file on
+    disk first.
+  - On a spec with six seeded defects, every run of 1.9.0 and 1.10.0 found all six; reports
+    shrank from 20–24 findings to 15–19.
+- **Unknown settings keys are named** (#21, proposed by @TheEifelYeti). A typo such as
+  `IssueTrackr` no longer switches ticket sync off without a word: `/sdd-overview` names the
+  key and the one it resembles; `/sdd-setup` and `/sdd-featherspec-update` offer rename,
+  remove or keep. Nothing is fixed unasked.
+
+### Changed
+
+- **Leaner plan work — about 30 % less implementation time in our benchmark.** The time
+  went into many small steps and their bookkeeping, not into code or quality gates.
+  - Steps are behaviour slices: the test and the code for the criteria the same tests
+    decide, typically three to five.
+  - A finished step costs one edit: the checkbox sits on the `Verified` line and carries
+    the step ID. Still no tick without a recorded run.
+  - Traceability, the plan handoff and `activeContext.md` are synced when a stage ends,
+    when work is blocked, and before anything is reported as done. `## Stages` in the plan
+    groups the steps.
+  - Measured on one feature (17 criteria), same approved spec and model, whole plan in one
+    go, three runs each: median 294 s on 1.9.0, 204 s on 1.10.0; hidden acceptance tests
+    26/26 in all six runs. A small sample — a direction, not a guarantee.
+- **One step, then stop.** After every step: gates green, the tick, a short report, a commit
+  proposal. A whole stage or the whole plan runs in one go only when you ask for it. A stop
+  that a working agreement asks for — the test review above all — is never skipped, moved
+  or collected in advance.
+- **`/sdd-compile` is your command.** A finished plan stops with a recommendation; the agent
+  never starts the readiness check itself. It is strongest in a new session with a strong
+  model from another model family than the one that implemented.
+- `/sdd-architecture-update` adds no stop of its own inside plan work: snapshot entries the
+  approved plan names are confirmed by that approval.
+- `/sdd-setup` ends by asking you to run the next commands in a new session — the one that
+  ran setup still holds the old `AGENTS.md`.
+- Unchanged: the *Quality gate* and *TDD* working agreements, and `AGENTS.md` at 200 lines.
+
+Upgrading from 1.9.0: run `/sdd-featherspec-update`. The release is additive — existing
+specs and plans stay valid — and the updater asks you to confirm the changed behaviour
+before it writes.
 
 ## [1.9.0] - 2026-09-27
 
